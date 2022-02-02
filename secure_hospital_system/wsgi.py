@@ -1,5 +1,5 @@
 """
-WSGI config for hospital_system project.
+WSGI config for secure_hospital_system project.
 
 It exposes the WSGI callable as a module-level variable named ``application``.
 
@@ -11,6 +11,6 @@ import os
 
 from django.core.wsgi import get_wsgi_application
 
-os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'hospital_system.settings')
+os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'secure_hospital_system.settings')
 
 application = get_wsgi_application()

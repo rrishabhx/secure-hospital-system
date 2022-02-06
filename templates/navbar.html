@@ -1,11 +1,6 @@
 <a href="/">
     <h1>Secure Hospital System</h1>
 </a>
-<form method="GET" action="{% url 'home' %}">
-    <label>
-        <input type="text" name="q" placeholder="Search Doctors..."/>
-    </label>
-</form>
 
 {% if request.user.is_authenticated %}
     <p>Hello {{ request.user }}</p>

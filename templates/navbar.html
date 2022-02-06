@@ -1,4 +1,22 @@
 <a href="/">
-    <h1>LOGO</h1>
+    <h1>Secure Hospital System</h1>
 </a>
+<form method="GET" action="{% url 'home' %}">
+    <label>
+        <input type="text" name="q" placeholder="Search Doctors..."/>
+    </label>
+</form>
+
+{% if request.user.is_authenticated %}
+    <p>Hello {{ request.user }}</p>
+    <a href="{% url 'logout' %}">Logout</a>
+{% else %}
+    <div>
+        <a href="{% url 'register' %}">Register</a>
+    </div>
+    <div>
+        <a href="{% url 'login' %}">Login</a>
+    </div>
+
+{% endif %}
 <hr>

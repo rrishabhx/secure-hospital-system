@@ -1,10 +1,8 @@
 from django.contrib.auth import authenticate, login, logout
-from django.contrib.auth.decorators import login_required
 from django.contrib import messages
 from django.shortcuts import render, redirect
 
 from .forms import BaseUserForm
-# from .models import User
 
 from django.contrib.auth import get_user_model
 
@@ -58,7 +56,3 @@ def register_user(request):
             messages.error(request, 'An error occurred during registration')
 
     return render(request, 'base/login_register.html', {'form': form})
-
-
-def home(request):
-    return render(request, 'base/home.html')

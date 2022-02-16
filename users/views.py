@@ -8,6 +8,32 @@ from django.contrib.auth import get_user_model
 
 User = get_user_model()
 
+appointments = [
+    {
+        'doctor': 'Dr. Mantis Tobbagan',
+        'title': 'Covid-19',
+        'description': 'No taste in food',
+        'date_posted': 'Feb 27, 2022'
+    },
+    {
+        'doctor': 'Dr. Jane Doe',
+        'title': 'Cancer',
+        'description': 'Too much blood loss',
+        'date_posted': 'Feb 18, 2022'
+    }
+]
+
+
+def home(request):
+    context = {
+        'appointments': appointments
+    }
+    return render(request, 'users/home.html', context)
+
+
+def about(request):
+    return render(request, 'users/about.html')
+
 
 def login_user(request):
     page = 'login'
@@ -33,7 +59,7 @@ def login_user(request):
             messages.error(request, 'Username or Password does not exist')
 
     context = {'page': page}
-    return render(request, 'base/login_register.html', context=context)
+    return render(request, 'users/login_register.html', context=context)
 
 
 def logout_user(request):
@@ -55,4 +81,4 @@ def register_user(request):
         else:
             messages.error(request, 'An error occurred during registration')
 
-    return render(request, 'base/login_register.html', {'form': form})
+    return render(request, 'users/login_register.html', {'form': form})

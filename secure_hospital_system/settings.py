@@ -37,6 +37,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'hospital.apps.HospitalConfig',
     'users.apps.UsersConfig',
+    'patients.apps.PatientsConfig',
 ]
 
 MIDDLEWARE = [
@@ -114,7 +115,6 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/4.0/howto/static-files/
 
 STATIC_URL = 'static/'
-
 
 # Custom Django auth settings
 

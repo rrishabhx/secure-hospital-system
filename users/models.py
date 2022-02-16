@@ -3,16 +3,13 @@ from django.db import models
 
 
 class User(AbstractUser):
-    is_admin = models.BooleanField(default=False)
-    is_hospital_staff = models.BooleanField(default=False)
-    is_doctor = models.BooleanField(default=False)
-    is_lab_staff = models.BooleanField(default=False)
-    is_insurance_staff = models.BooleanField(default=False)
-    is_patient = models.BooleanField(default=False)
+    USER_TYPE_CHOICES = (
+        ('patient', 'Patient'),
+        ('hospital_staff', 'Hospital Staff'),
+        ('doctor', 'Doctor'),
+        ('insurance_staff', 'Insurance Staff'),
+        ('lab_staff', 'Lab Staff'),
+        ('administrator', 'Administrator'),
+    )
 
-
-class Patient(models.Model):
-    user = models.OneToOneField(User, on_delete=models.CASCADE, primary_key=True)
-
-    def __str__(self):
-        return self.user.username
+    user_type = models.CharField(max_length=20, default='patient', choices=USER_TYPE_CHOICES)

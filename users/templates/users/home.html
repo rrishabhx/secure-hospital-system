@@ -1,0 +1,26 @@
+{% extends 'main.html' %}
+
+{% block content %}
+
+
+    <h1>Welcome to Dr. Yau's Clinic</h1>
+{#    <form action="" method="post">#}
+{#        <label for="your_name">Your name: </label>#}
+{#        <input id="your_name" type="text" name="your_name" value="{{ current_name }}">#}
+{#        <input type="submit" value="OK">#}
+{#    </form>#}
+
+    {% for appointment in appointments %}
+        <article class="media content-section">
+            <div class="media-body">
+                <div class="article-metadata">
+                    <a class="mr-2" href="#">{{ appointment.doctor }}</a>
+                    <small class="text-muted">{{ appointment.date_posted }}</small>
+                </div>
+                <h2><a class="article-title" href="#">{{ appointment.title }}</a></h2>
+                <p class="article-content">{{ appointment.description }}</p>
+            </div>
+        </article>
+    {% endfor %}
+
+{% endblock content %}

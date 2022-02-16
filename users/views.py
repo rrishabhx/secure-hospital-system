@@ -1,8 +1,8 @@
 from django.contrib.auth import authenticate, login, logout
 from django.contrib import messages
 from django.shortcuts import render, redirect
-
-from .forms import BaseUserForm
+from django.contrib.auth.decorators import login_required
+from .forms import UserRegisterForm
 
 from django.contrib.auth import get_user_model
 
@@ -36,10 +36,8 @@ def about(request):
 
 
 def login_user(request):
-    page = 'login'
-
     if request.user.is_authenticated:
-        return redirect('home')
+        return redirect('users-home')
 
     if request.method == 'POST':
         username = request.POST.get('username').lower()
@@ -54,12 +52,12 @@ def login_user(request):
 
         if user is not None:
             login(request, user)
-            return redirect('home')
+            return redirect('users-home')
         else:
             messages.error(request, 'Username or Password does not exist')
 
-    context = {'page': page}
-    return render(request, 'users/login_register.html', context=context)
+    context = {}
+    return render(request, 'users/login.html', context=context)
 
 
 def logout_user(request):
@@ -68,17 +66,23 @@ def logout_user(request):
 
 
 def register_user(request):
-    form = BaseUserForm()
+    form = UserRegisterForm()
 
     if request.method == 'POST':
-        form = BaseUserForm(request.POST)
+        form = UserRegisterForm(request.POST)
         if form.is_valid():
             user = form.save(commit=False)
             user.username = user.username.lower()
             user.save()
+            messages.success(request, f'Account created for {user.username}! You are not able to log in')
             login(request, user)
-            return redirect('home')
+            return redirect('login')
         else:
             messages.error(request, 'An error occurred during registration')
 
-    return render(request, 'users/login_register.html', {'form': form})
+    return render(request, 'users/register.html', {'form': form})
+
+
+@login_required
+def profile_user(request):
+    return render(request, 'users/profile.html')

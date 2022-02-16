@@ -38,6 +38,7 @@ INSTALLED_APPS = [
     'hospital.apps.HospitalConfig',
     'users.apps.UsersConfig',
     'patients.apps.PatientsConfig',
+    'crispy_forms',
 ]
 
 MIDDLEWARE = [
@@ -124,3 +125,8 @@ AUTH_USER_MODEL = 'users.User'
 # https://docs.djangoproject.com/en/4.0/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+CRISPY_TEMPLATE_PACK = 'bootstrap4'
+
+LOGIN_REDIRECT_URL = 'users-home'
+LOGIN_URL = 'login'

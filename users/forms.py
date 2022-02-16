@@ -3,8 +3,9 @@ from django import forms
 from .models import User
 
 
-class BaseUserForm(UserCreationForm):
+class UserRegisterForm(UserCreationForm):
+    email = forms.EmailField()
+
     class Meta:
         model = User
-        fields = ['username']
-
+        fields = ['user_type', 'username', 'first_name', 'last_name', 'email', 'password1', 'password2']

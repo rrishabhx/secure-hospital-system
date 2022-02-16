@@ -13,3 +13,6 @@ class User(AbstractUser):
     )
 
     user_type = models.CharField(max_length=20, default='patient', choices=USER_TYPE_CHOICES)
+    # date_of_birth =
+    # mobile_number =
+    # address =

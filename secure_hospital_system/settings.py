@@ -37,7 +37,12 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'hospital.apps.HospitalConfig',
     'users.apps.UsersConfig',
+    'administrators.apps.AdministratorsConfig',
     'patients.apps.PatientsConfig',
+    'doctors.apps.DoctorsConfig',
+    'hospital_staffs.apps.HospitalStaffsConfig',
+    'insurance_staffs.apps.InsuranceStaffsConfig',
+    'lab_staffs.apps.LabStaffsConfig',
     'crispy_forms',
 ]
 

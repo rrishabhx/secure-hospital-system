@@ -2,7 +2,7 @@ from django.contrib.auth import authenticate, login, logout
 from django.contrib import messages
 from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required
-from .forms import UserRegisterForm
+from .forms import UserRegisterForm, UserUpdateForm, PatientProfileUpdateForm
 
 from django.contrib.auth import get_user_model
 
@@ -85,8 +85,26 @@ def register_user(request):
 
 @login_required
 def profile_user(request):
-    print(f'User type: {request.user.user_type}')
+    if request.method == 'POST':
+        u_form = UserUpdateForm(request.POST, instance=request.user)
+        p_form = PatientProfileUpdateForm(request.POST, request.FILES, instance=request.user.patientprofile)
+
+        if u_form.is_valid() and p_form.is_valid():
+            u_form.save()
+            p_form.save()
+
+            messages.success(request, f'Your account has been updated!')
+            return redirect('profile')
+    else:
+        u_form = UserUpdateForm(instance=request.user)
+        p_form = PatientProfileUpdateForm(instance=request.user.patientprofile)
+
+    context = {
+        'u_form': u_form,
+        'p_form': p_form,
+    }
+
     if request.user.user_type == 'patient':
-        return render(request, 'patients/profile.html')
+        return render(request, 'patients/profile.html', context)
 
     return render(request, 'users/profile.html')

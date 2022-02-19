@@ -85,4 +85,8 @@ def register_user(request):
 
 @login_required
 def profile_user(request):
+    print(f'User type: {request.user.user_type}')
+    if request.user.user_type == 'patient':
+        return render(request, 'patients/profile.html')
+
     return render(request, 'users/profile.html')

@@ -1,3 +1,5 @@
+from datetime import date
+
 from django.contrib.auth.models import AbstractUser
 from django.db import models
 
@@ -13,6 +15,7 @@ class User(AbstractUser):
     )
 
     user_type = models.CharField(max_length=20, default='patient', choices=USER_TYPE_CHOICES)
-    # date_of_birth =
-    # mobile_number =
-    # address =
+    date_of_birth = models.DateField(default=date.today)
+
+    def __str__(self):
+        return f'User: {self.username}({self.user_type})'

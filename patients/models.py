@@ -1,10 +1,10 @@
 from django.db import models
+from django.conf import settings
 
-from users.models import User
 
-
-class Patient(models.Model):
-    user = models.OneToOneField(User, on_delete=models.CASCADE, primary_key=True)
+class PatientProfile(models.Model):
+    user = models.OneToOneField(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
+    image = models.ImageField(default='default.jpg', upload_to='profile_pics', blank=True)
 
     def __str__(self):
-        return self.user.username
+        return f'Profile: {self.user.username}({self.user.user_type})'

@@ -1,3 +1,5 @@
 from django.contrib import admin
 
-# Register your models here.
+from lab_staffs.models import LabStaffProfile
+
+admin.site.register(LabStaffProfile)

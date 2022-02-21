@@ -1,3 +1,5 @@
 from django.contrib import admin
 
-# Register your models here.
+from insurance_staffs.models import InsuranceStaffProfile
+
+admin.site.register(InsuranceStaffProfile)

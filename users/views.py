@@ -25,10 +25,8 @@ appointments = [
 
 
 def home(request):
-    context = {
-        'appointments': appointments
-    }
-    return render(request, 'users/home.html', context)
+    print("In home page")
+    return redirect('login')
 
 
 def about(request):
@@ -36,8 +34,13 @@ def about(request):
 
 
 def login_user(request):
+    page = 'login'
+
+    print(request)
     if request.user.is_authenticated:
-        return redirect('users-home')
+        print("User is authenticated")
+
+        return user_redirect(request)
 
     if request.method == 'POST':
         username = request.POST.get('username').lower()
@@ -52,11 +55,14 @@ def login_user(request):
 
         if user is not None:
             login(request, user)
-            return redirect('users-home')
+
+            print("User type: " + user.user_type)
+
+            return user_redirect(request)
         else:
             messages.error(request, 'Username or Password does not exist')
 
-    context = {}
+    context = {'page': page}
     return render(request, 'users/login.html', context=context)
 
 
@@ -71,11 +77,11 @@ def register_user(request):
     if request.method == 'POST':
         form = UserRegisterForm(request.POST)
         if form.is_valid():
-            user = form.save(commit=False)
-            user.username = user.username.lower()
-            user.save()
-            messages.success(request, f'Account created for {user.username}! You are not able to log in')
-            login(request, user)
+            form.save()
+            username = form.cleaned_data.get('username')
+            messages.success(request, f'Account created for {username}! You are now able to log in')
+            # login(request, user)
+
             return redirect('login')
         else:
             messages.error(request, 'An error occurred during registration')
@@ -108,3 +114,13 @@ def profile_user(request):
         return render(request, 'patients/profile.html', context)
 
     return render(request, 'users/profile.html')
+
+
+def user_redirect(request):
+    print(f"Redirecting [{request.user.user_type}] to home page: ")
+    if request.user.user_type == 'patient':
+        return redirect('patient-home')
+    elif request.user.user_type == 'doctor':
+        return redirect('doctor-home')
+    else:
+        return redirect('users-home')

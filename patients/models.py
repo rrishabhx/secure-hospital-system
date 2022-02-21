@@ -8,7 +8,7 @@ class PatientProfile(models.Model):
     image = models.ImageField(default='default.jpg', upload_to='profile_pics', blank=True)
 
     def __str__(self):
-        return f'Profile: {self.user.username}({self.user.user_type})'
+        return f'{self.user.user_type}: {self.user.username}'
 
     # Overriding save() method with image resizing
     def save(self):

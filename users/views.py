@@ -1,5 +1,6 @@
 from django.contrib.auth import authenticate, login, logout
 from django.contrib import messages
+from django.http import HttpResponse
 from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required
 from .forms import UserRegisterForm, UserUpdateForm, PatientProfileUpdateForm
@@ -117,10 +118,24 @@ def profile_user(request):
 
 
 def user_redirect(request):
-    print(f"Redirecting [{request.user.user_type}] to home page: ")
-    if request.user.user_type == 'patient':
+    utype = request.user.user_type
+
+    print(f"Redirecting [{utype}] to home page: ")
+
+    if utype == 'patient':
         return redirect('patient-home')
-    elif request.user.user_type == 'doctor':
+    elif utype == 'doctor':
         return redirect('doctor-home')
+    elif utype == 'hospital_staff':
+        return redirect('hospitalstaff-home')
+    elif utype == 'lab_staff':
+        return redirect('labstaff-home')
+    elif utype == 'insurance_staff':
+        return redirect('insurancestaff-home')
     else:
-        return redirect('users-home')
+        context = {
+            'reason': f'Invalid user type: {utype}'
+        }
+        response = render(request, context)
+        response.status_code = 400
+        return response

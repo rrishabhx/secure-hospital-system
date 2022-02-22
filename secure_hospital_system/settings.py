@@ -90,15 +90,15 @@ DATABASES = {
 
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
 
-        'NAME': 'hospital',
+        'NAME': '',
 
         'USER': 'postgres',
 
-        'PASSWORD': 'hello@electra',
+        'PASSWORD': '',
 
         'HOST': 'localhost',
 
-        'PORT': '5432',
+        'PORT': '',
 
     }
 }

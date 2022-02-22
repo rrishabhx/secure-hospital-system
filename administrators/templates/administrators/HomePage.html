@@ -1,0 +1,92 @@
+{% extends 'main.html' %}
+{% load bootstrap5 %}
+{% load bootstrap_icons %}
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-+0n0xVW2eSR5OomGNYDnhzAbDsOXxcvSN1TPprVMTNDbiYZCxYbOOl7+AMvyTG2x" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.5.0/font/bootstrap-icons.css">
+    <title>Admin - HomePage</title>
+
+</head>
+<body>
+    {% block content %}
+    <div class="container">
+        <div class="row">
+            <h1></h1>
+        </div>
+        <div class="row">
+            <div class="col-sm-12">
+                <h1>WELCOME ADMIN!!</h1>
+            </div>
+        </div>
+        <br>
+        <div class="row">
+            <button class="btn btn-primary" style="background-color: #7952B3;" onclick="myFunc()">Employee Options</button>
+        </div>
+        <br>
+        <div id="" class="row" style="border: #7952B3 0.5px solid; padding: 5px; border-radius: 5px;">
+            <div class="col-sm-3">
+                <button class="btn btn-success">Create Employee</button>
+            </div>
+            <div class="col-sm-3">
+                <button class="btn btn-primary">View Employees</button>
+            </div>
+            <div class="col-sm-3">
+                <button class="btn btn-warning">Modify Employee</button>
+            </div>
+            <div class="col-sm-3">
+                <button class="btn btn-danger">Delete Employee</button>
+            </div>
+            <br>
+            <br>
+            <hr>
+            <br>
+            <div class="row">
+                <h5>Create New Employee</h5>
+                <br>
+                <div class="row">
+                    <p>Form to be filled for creating</p>
+                </div>
+            </div>
+            <div class="row">
+                <h5>View Employees</h5>
+                <br>
+                <div class="row">
+                    <p>Div area to view all the details of employees</p>
+                </div>
+            </div>
+            <div class="row">
+                <h5>Modify Employee</h5>
+                <br>
+                <div class="row">
+                    <p>Section for modifying the existing employee</p>
+                </div>
+            </div>
+            <div class="row">
+                <h5>Delete Employee</h5>
+                <br>
+                <div class="row">
+                    <p>Section to delete employee</p>
+                </div>
+            </div>
+        </div>
+    </div>
+    <br>
+    <br>
+    {% endblock %}
+
+    <script 
+     integrity="sha384-gtEjrD/SeCtmISkJkNUaaKMoLD0//ElJ19smozuHV6z3Iehds+3Ulb9Bn9Plx0x4"
+      crossorigin="anonymous">
+        function myFunc(){
+            alert("Hello World!!");
+        }
+    </script>
+</body>
+</html>

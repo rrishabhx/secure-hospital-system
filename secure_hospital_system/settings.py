@@ -44,6 +44,8 @@ INSTALLED_APPS = [
     'insurance_staffs.apps.InsuranceStaffsConfig',
     'lab_staffs.apps.LabStaffsConfig',
     'crispy_forms',
+    'bootstrap5',
+    'django_bootstrap_icons',
 ]
 
 MIDDLEWARE = [

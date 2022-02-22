@@ -3,3 +3,4 @@ Django==4.0.1
 django-crispy-forms==1.14.0
 Pillow==9.0.1
 sqlparse==0.4.2
+django-bootstrap-v5==1.0.11

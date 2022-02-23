@@ -2,6 +2,7 @@
 {% load bootstrap5 %}
 {% load bootstrap_icons %}
 {% load static %}
+{% load crispy_forms_tags %}
 
 <!DOCTYPE html>
 <html lang="en">
@@ -12,14 +13,10 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-+0n0xVW2eSR5OomGNYDnhzAbDsOXxcvSN1TPprVMTNDbiYZCxYbOOl7+AMvyTG2x" crossorigin="anonymous">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.5.0/font/bootstrap-icons.css">
     <title>Admin - HomePage</title>
-
 </head>
 <body>
     {% block content %}
     <div class="container">
-        <div class="row">
-            <h1></h1>
-        </div>
         <div class="row">
             <div class="col-sm-12">
                 <h1>WELCOME ADMIN!!</h1>
@@ -27,66 +24,167 @@
         </div>
         <br>
         <div class="row">
-            <button class="btn btn-primary" style="background-color: #7952B3;" onclick="myFunc()">Employee Options</button>
+            <button type="button" class="btn btn-primary" style="background-color: #7952B3;" onclick="showContent()">Employee Options</button>
         </div>
         <br>
-        <div id="" class="row" style="border: #7952B3 0.5px solid; padding: 5px; border-radius: 5px;">
-            <div class="col-sm-3">
-                <button class="btn btn-success">Create Employee</button>
+        <div class="row" id="contentDIV">
+            <div class="col-sm-3" style="margin-bottom: 5px;">
+                <button class="btn btn-success" onclick="empCreate()">Create Employee</button>
             </div>
-            <div class="col-sm-3">
-                <button class="btn btn-primary">View Employees</button>
+            <div class="col-sm-3" style="margin-bottom: 5px;">
+                <button class="btn btn-primary" onclick="empView()">View Employees</button>
             </div>
-            <div class="col-sm-3">
-                <button class="btn btn-warning">Modify Employee</button>
+            <div class="col-sm-3" style="margin-bottom: 5px;">
+                <button class="btn btn-warning" onclick="empModify()">Modify Employee</button>
             </div>
-            <div class="col-sm-3">
-                <button class="btn btn-danger">Delete Employee</button>
+            <div class="col-sm-3" style="margin-bottom: 5px;">
+                <button class="btn btn-danger" onclick="empDelete()">Delete Employee</button>
             </div>
+        </div>
+        <hr>
+        <div class="row" id="empShow">
+            <div class="col-sm-12">
+                <h4 style="color: #7952B3;">Create New Employee</h4>
+                <div class="row">
+                    <div class="col-sm-12">
+                        <form action="" method="POST">
+                            {% csrf_token %}
+                            <fieldset class="form-group">
+                                {{ form|crispy }}
+                            </fieldset>
+                            <br>
+                            <button type="submit" class="btn btn-primary">Submit</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <br>
+        <div class="row" id="empViewDIV">
+            <div class="col-sm-12">
+                <h4 style="color: #7952B3;">View Employees</h4>
+                <div class="row">
+                    <div class="col-sm-12 table-responsive" style="overflow: auto;">
+                        <table class="table table-striped table-bordered">
+                            <thead>
+                                <tr>
+                                    <th>S No</th>
+                                    <th>First Name</th>
+                                    <th>Last Name</th>
+                                    <th>Employee Type</th>
+                                    <th>Birth Date</th>
+                                    <th>Email Address</th>
+                                    <th>Phone Number</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for i in empData %}
+                                <tr>
+                                    <td></td>
+                                    <td>{{ i.first_name }}</td>
+                                    <td>{{ i.last_name }}</td>
+                                    <td>{{ i.employee_type }}</td>
+                                    <td>{{ i.date_of_birth }}</td>
+                                    <td>{{ i.email }}</td>
+                                    <td>{{ i.phone_number }}</td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <br>
+        <div class="row" id="empModifyDIV">
+            <h4 style="color: #7952B3;">Modify Employee</h4>
             <br>
             <br>
-            <hr>
+            <div class="row">
+                <div class="col-sm-12">
+                    <i><label for="firstName">SELECT FIRSTNAME OF EMPLOYEE BELOW</label></i>
+                    <br><br>
+                    <div class="row">
+                        <div class="col-sm-4">
+                            <select name="firstName" id="" class="form-control">
+                                <option value="0">SELECT OPTION</option>
+                                {% for i in fnEmpData %}
+                                <option value="">{{ i }}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row" id="empDeleteDIV">
+            <h5>Delete Employee</h5>
             <br>
             <div class="row">
-                <h5>Create New Employee</h5>
-                <br>
-                <div class="row">
-                    <p>Form to be filled for creating</p>
-                </div>
+                <p>Section to delete employee</p>
             </div>
-            <div class="row">
-                <h5>View Employees</h5>
-                <br>
-                <div class="row">
-                    <p>Div area to view all the details of employees</p>
-                </div>
-            </div>
-            <div class="row">
-                <h5>Modify Employee</h5>
-                <br>
-                <div class="row">
-                    <p>Section for modifying the existing employee</p>
-                </div>
-            </div>
-            <div class="row">
-                <h5>Delete Employee</h5>
-                <br>
-                <div class="row">
-                    <p>Section to delete employee</p>
-                </div>
-            </div>
+        </div>
         </div>
     </div>
     <br>
     <br>
     {% endblock %}
 
-    <script 
-     integrity="sha384-gtEjrD/SeCtmISkJkNUaaKMoLD0//ElJ19smozuHV6z3Iehds+3Ulb9Bn9Plx0x4"
-      crossorigin="anonymous">
-        function myFunc(){
-            alert("Hello World!!");
+    <script>
+        function showContent(){
+            var x = document.getElementById("contentDIV");
+
+            if(x.style.display === "none"){
+                x.style.display = "block";
+            }
+            else{
+                x.style.display = "none";
+            }
+        }
+        function empCreate(){
+            var x = document.getElementById("empShow");
+
+            if(x.style.display === "none"){
+                x.style.display = "block";
+            }
+            else{
+                x.style.display = "none";
+            }
+        }
+        function empView(){
+            var x = document.getElementById("empViewDIV");
+            
+            if(x.style.display === "none"){
+                x.style.display = "block";
+            }
+            else{
+                x.style.display = "none";
+            }
+        }
+        function empModify(){
+            var x = document.getElementById("empModifyDIV");
+
+            if(x.style.display === "none"){
+                x.style.display = "block";
+            }
+            else{
+                x.style.display = "none";
+            }
+        }
+        function empDelete(){
+            var x = document.getElementById("empDeleteDIV");
+
+            if(x.style.display === "none"){
+                x.style.display = "block";
+            }
+            else{
+                x.style.display = "none";
+            }
         }
     </script>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"
+    integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM"
+    crossorigin="anonymous"></script>
 </body>
 </html>

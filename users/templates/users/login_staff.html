@@ -1,0 +1,52 @@
+{% extends 'main.html' %}
+{% load crispy_forms_tags %}
+
+{% block content %}
+
+<div class="content-section">
+    <form method="POST" action="">
+        {% csrf_token %}
+        <fieldset class="form-group">
+            <legend class="border-bottom mb-4">Staff Log In</legend>
+            <div class="row my-2">
+                <div class="col">
+                    <!-- <label>Select Staff Type</label> -->
+                    <label>
+                        <select name="staff" class="form-select" onselect="testing()">
+                            <option value="">Select Staff Type</option>
+                            <option value="hstaff">Hospital Staff</option>
+                            <option value="doc">Doctor</option>
+                            <option value="lstaff">Lab Staff</option>
+                            <option value="istaff">Insurance Staff</option>
+                            <option value="admin">Administrator</option>
+                        </select>
+                    </label>
+                </div>
+            </div>
+
+            <div class="row my-2">
+                <div class="col-4">
+                    <!-- <label>Username:</label> -->
+                    <label>
+                        <input class="form-control" type="text" name="username" placeholder="Enter Username" />
+                    </label>
+                </div>
+                <div class="col-4">
+                    <!-- <label>Password:</label> -->
+                    <label>
+                        <input class="form-control" type="password" name="password" placeholder="Enter Password" />
+                    </label>
+                </div>
+            </div>
+
+        </fieldset>
+        <div class="form-group">
+            <button class="btn btn-primary my-2" type="submit">Login</button>
+        </div>
+    </form>
+    <div class="border-top pt-3">
+        <small class="text-muted">Create An Account? <a class="ml-2" href="{% url 'register' %}">Sign Up
+                Now</a></small>
+    </div>
+</div>
+{% endblock content %}

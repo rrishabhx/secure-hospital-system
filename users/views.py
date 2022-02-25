@@ -27,15 +27,48 @@ appointments = [
 
 def home(request):
     print("In home page")
-    return redirect('login')
+    return redirect('login-patient')
 
 
 def about(request):
     return render(request, 'users/about.html')
 
 
-def login_user(request):
-    page = 'login'
+def login_staff(request):
+    page = 'login-staff'
+
+    print(request)
+    if request.user.is_authenticated:
+        print("User is authenticated")
+
+        return user_redirect(request)
+
+    if request.method == 'POST':
+        username = request.POST.get('username').lower()
+        password = request.POST.get('password')
+        staff = request.POST.get('staff')
+
+        try:
+            user = User.objects.get(username=username)
+        except:
+            messages.error(request, 'User does not exist')
+
+        user = authenticate(request, username=username, password=password)
+
+        if user is not None:
+            login(request, user)
+
+            print("User type: " + user.user_type)
+
+            return user_redirect(request)
+        else:
+            messages.error(request, 'Username or Password does not exist')
+
+    context = {'page': page}
+    return render(request, 'users/login_staff.html', context=context)
+
+def login_patient(request):
+    page = 'login-patient'
 
     print(request)
     if request.user.is_authenticated:
@@ -64,7 +97,7 @@ def login_user(request):
             messages.error(request, 'Username or Password does not exist')
 
     context = {'page': page}
-    return render(request, 'users/login.html', context=context)
+    return render(request, 'users/login_patient.html', context=context)
 
 
 def logout_user(request):

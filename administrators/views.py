@@ -21,7 +21,7 @@ def home(request):
             messages.error(request, 'An error occurred during creation')
 
     empData = Employee.objects.all()
-    fnEmpData = Employee.objects.values_list('first_name')
+    fnEmpData = Employee.objects.values('first_name', 'last_name')
     context = {
         'empData': empData,
         'form': form,

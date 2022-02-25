@@ -11,12 +11,12 @@ class Migration(migrations.Migration):
 
     dependencies = [
         migrations.swappable_dependency(settings.AUTH_USER_MODEL),
-        ('patients', '0001_initial'),
+        ('hospital_staffs', '0001_initial'),
     ]
 
     operations = [
         migrations.AddField(
-            model_name='patientprofile',
+            model_name='hospitalstaffprofile',
             name='user',
             field=models.OneToOneField(on_delete=django.db.models.deletion.CASCADE, to=settings.AUTH_USER_MODEL),
         ),

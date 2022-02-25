@@ -47,20 +47,20 @@
                 <h4 style="color: #7952B3;">Create New Employee</h4>
                 <div class="row">
                     <div class="col-sm-12">
-                        <form action="" method="POST">
+                        <form action="" method="POST" autocomplete="off">
                             {% csrf_token %}
                             <fieldset class="form-group">
                                 {{ form|crispy }}
                             </fieldset>
                             <br>
-                            <button type="submit" class="btn btn-primary">Submit</button>
+                            <button type="submit" class="btn btn-defult" style="background-color: #7952B3; color: white">Submit Employee Data</button>
                         </form>
                     </div>
                 </div>
             </div>
         </div>
         <br>
-        <div class="row" id="empViewDIV">
+        <div class="row" id="empViewDIV" style="display: none;">
             <div class="col-sm-12">
                 <h4 style="color: #7952B3;">View Employees</h4>
                 <div class="row">
@@ -96,35 +96,75 @@
             </div>
         </div>
         <br>
-        <div class="row" id="empModifyDIV">
+        <div class="row" id="empModifyDIV" style="display: none;">
             <h4 style="color: #7952B3;">Modify Employee</h4>
             <br>
             <br>
             <div class="row">
                 <div class="col-sm-12">
-                    <i><label for="firstName">SELECT FIRSTNAME OF EMPLOYEE BELOW</label></i>
+                    <label for="firstName">Select Firstname of Employee below</label>
                     <br><br>
                     <div class="row">
                         <div class="col-sm-4">
                             <select name="firstName" id="" class="form-control">
                                 <option value="0">SELECT OPTION</option>
                                 {% for i in fnEmpData %}
-                                <option value="">{{ i }}</option>
+                                <option value="">{{ i.first_name }}, {{ i.last_name }}</option>
                                 {% endfor %}
                             </select>
+                        </div>
+                    </div>
+                    <br>
+                    <div class="row">
+                        <div class="col-sm-4">
+                            <label for="emailModify">Enter Employee Email Address</label>
+                            <input type="text" name="emailModify" class="form-control">
+                        </div>
+                    </div>
+                    <br>
+                    <div class="row">
+                        <div class="col-sm-12">
+                            <button type="submit" class="btn btn-default" style="color: white; background-color: #7952B3">Get Employee Details</button>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
-        <div class="row" id="empDeleteDIV">
-            <h5>Delete Employee</h5>
+        <br>
+        <div class="row" id="empDeleteDIV" style="display: none;">
+            <h4 style="color: #7952B3;">Delete Employee</h4>
             <br>
             <div class="row">
-                <p>Section to delete employee</p>
+                <div class="col-sm-12">
+                    <label for="firstName">Select Firstname of Employee below</label>
+                    <br><br>
+                    <div class="row">
+                        <div class="col-sm-4">
+                            <select name="firstName" id="" class="form-control">
+                                <option value="0">SELECT OPTION</option>
+                                {% for i in fnEmpData %}
+                                <option value="">{{ i.first_name }},{{ i.last_name }}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                    </div>
+                    <br>
+                    <div class="row">
+                        <div class="col-sm-4">
+                            <label for="emailModify">Enter Employee Email Address</label>
+                            <input type="text" name="emailModify" class="form-control">
+                        </div>
+                    </div>
+                    <br>
+                    <div class="row">
+                        <div class="col-sm-12">
+                            <button type="submit" class="btn btn-default" style="background-color: #7952B3; color: white">Get Employee Details</button>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
-        </div>
+        <br>
     </div>
     <br>
     <br>
@@ -143,9 +183,15 @@
         }
         function empCreate(){
             var x = document.getElementById("empShow");
+            var y = document.getElementById("empViewDIV");
+            var z = document.getElementById("empModifyDIV");
+            var w = document.getElementById("empDeleteDIV");
 
             if(x.style.display === "none"){
                 x.style.display = "block";
+                y.style.display = "none";
+                z.style.display = "none";
+                w.style.display = "none";
             }
             else{
                 x.style.display = "none";
@@ -153,9 +199,15 @@
         }
         function empView(){
             var x = document.getElementById("empViewDIV");
+            var y = document.getElementById("empShow");
+            var z = document.getElementById("empModifyDIV");
+            var w = document.getElementById("empDeleteDIV");
             
             if(x.style.display === "none"){
                 x.style.display = "block";
+                y.style.display = "none";
+                z.style.display = "none";
+                w.style.display = "none";
             }
             else{
                 x.style.display = "none";
@@ -163,9 +215,15 @@
         }
         function empModify(){
             var x = document.getElementById("empModifyDIV");
+            var y = document.getElementById("empViewDIV");
+            var z = document.getElementById("empShow");
+            var w = document.getElementById("empDeleteDIV");
 
             if(x.style.display === "none"){
                 x.style.display = "block";
+                y.style.display = "none";
+                z.style.display = "none";
+                w.style.display = "none";
             }
             else{
                 x.style.display = "none";
@@ -173,9 +231,15 @@
         }
         function empDelete(){
             var x = document.getElementById("empDeleteDIV");
+            var y = document.getElementById("empViewDIV");
+            var z = document.getElementById("empShow");
+            var w = document.getElementById("empModifyDIV");
 
             if(x.style.display === "none"){
                 x.style.display = "block";
+                y.style.display = "none";
+                z.style.display = "none";
+                w.style.display = "none";
             }
             else{
                 x.style.display = "none";

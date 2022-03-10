@@ -4,6 +4,7 @@ bin/
 .idea/
 *.pyo
 .DS_Store
+#shs/
 
 
 # Django #

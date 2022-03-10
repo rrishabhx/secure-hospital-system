@@ -21,12 +21,25 @@ class Employee(models.Model):
     )
 
     employee_type = models.CharField(max_length=20, default='hospital_staff', choices=EMPLOYEE_TYPE_CHOICES)
-    date_of_birth = models.DateField()
+    date_of_birth = models.DateField(blank=True, null=True)
     phone_number = models.IntegerField(blank=True, null=True)
     first_name = models.CharField(max_length=30, blank=True, null=True)
     last_name = models.CharField(max_length=30, blank=True, null=True)
-    email = models.CharField(max_length=20, blank=True, null=True)
+    email = models.CharField(max_length=50, blank=True, null=True)
     # password = models.CharField(max_length=30, blank=True, null=True)
 
     def __str__(self):
         return self.employee_type
+
+class Deleted_Employees(models.Model):
+    first_name = models.CharField(max_length=30, blank=True, null=True)
+    last_name = models.CharField(max_length=30, blank=True, null=True)
+    employee_type = models.CharField(max_length=20)
+    date_of_birth = models.DateField(blank=True, null=True)
+    phone_number = models.IntegerField(blank=True, null=True)
+    email = models.CharField(max_length=50, blank=True, null=True)
+    deleted_date = models.DateTimeField(blank=True, null=True)
+
+    def __str__(self):
+        return self.first_name
+    

@@ -1,4 +1,7 @@
 # from administrators.models import Employee
+import re
+
+from django.http import HttpResponseRedirect
 from administrators.models import Employee
 from .forms import CreateEmployeeForm
 from django.contrib import messages
@@ -35,6 +38,9 @@ def home(request):
 #     return render(request, 'administrators/HomePage.html', {'empData': empData})
 
 
-# def modifyEmployees(request):
-#     data1 = Employee.objects.values_list('first_name')
-#     return render(request, 'administrators/HomePage.html', {'data1': data1})
+def deleteEmployees(request):
+    
+    # email_toDelete = request.GET['emailDelete']
+    # first_name = Employee.objects.raw("select first_name from employee where email = "+str(email_toDelete)+";")
+    variable = dict(request)
+    return render(request, 'administrators/test.html', variable)

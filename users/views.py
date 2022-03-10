@@ -77,6 +77,8 @@ def register_user(request):
 
     if request.method == 'POST':
         form = UserRegisterForm(request.POST)
+        print(f"Register form data: {form}")
+
         if form.is_valid():
             form.save()
             username = form.cleaned_data.get('username')

@@ -9,6 +9,7 @@ User = get_user_model()
 
 @receiver(post_save, sender=User)
 def create_patient_profile(sender, instance, created, **kwargs):
+    print("Inside patient creation signal")
     if created:
         if instance.user_type == 'patient':
             PatientProfile.objects.create(user=instance)
@@ -18,6 +19,7 @@ def create_patient_profile(sender, instance, created, **kwargs):
 
 @receiver(post_save, sender=User)
 def save_patient_profile(sender, instance, **kwargs):
+    print("Inside patient save signal")
     if instance.user_type == 'patient':
         instance.patientprofile.save()
     elif instance.user_type == 'doctor':

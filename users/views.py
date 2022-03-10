@@ -111,7 +111,9 @@ def profile_user(request):
         'p_form': p_form,
     }
 
+    print("Inside user profile view-1")
     if request.user.user_type == 'patient':
+        print("Inside user profile view-2")
         return render(request, 'patients/profile.html', context)
 
     return render(request, 'users/profile.html')

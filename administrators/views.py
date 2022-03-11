@@ -25,7 +25,6 @@ def home(request):
 
     empData = Employee.objects.all()
     fnEmpData = Employee.objects.values('first_name', 'last_name')
-    form = CreateEmployeeForm()
     context = {
         'empData': empData,
         'form': form,

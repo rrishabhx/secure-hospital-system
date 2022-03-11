@@ -110,6 +110,8 @@ def register_user(request):
 
     if request.method == 'POST':
         form = UserRegisterForm(request.POST)
+        print(f"Register form data: {form}")
+
         if form.is_valid():
             form.save()
             username = form.cleaned_data.get('username')
@@ -144,7 +146,9 @@ def profile_user(request):
         'p_form': p_form,
     }
 
+    print("Inside user profile view-1")
     if request.user.user_type == 'patient':
+        print("Inside user profile view-2")
         return render(request, 'patients/profile.html', context)
 
     return render(request, 'users/profile.html')

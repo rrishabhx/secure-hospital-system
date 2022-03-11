@@ -1,3 +1,5 @@
+from django.contrib.auth.decorators import login_required
+from users.decorators import patient_required
 from django.shortcuts import render
 from django.contrib.auth import get_user_model
 
@@ -19,7 +21,8 @@ appointments = [
 ]
 
 
-# Create your views here.
+@login_required
+@patient_required
 def home(request):
     context = {
         'appointments': appointments

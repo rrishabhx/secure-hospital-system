@@ -12,14 +12,13 @@ class Migration(migrations.Migration):
 
     operations = [
         migrations.CreateModel(
-            name='LabStaffProfile',
+            name='Log',
             fields=[
                 ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('testType', models.CharField(max_length=30, null=True)),
-                ('testResult', models.TextField(null=True)),
+                ('logDetails', models.TextField(null=True)),
             ],
             options={
-                'db_table': 'labtest',
+                'db_table': 'logs',
             },
         ),
     ]

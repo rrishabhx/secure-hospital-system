@@ -4,10 +4,12 @@ from django.http import HttpResponse
 from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required
 from .forms import UserRegisterForm, UserUpdateForm, PatientProfileUpdateForm
+import logging
 
 from django.contrib.auth import get_user_model
 
 User = get_user_model()
+logger = logging.getLogger(__name__)
 
 appointments = [
     {
@@ -26,7 +28,7 @@ appointments = [
 
 
 def home(request):
-    print("In home page")
+    logger.info("In home page. Redirecting to login page")
     return redirect('login-patient')
 
 
@@ -118,7 +120,7 @@ def register_user(request):
             messages.success(request, f'Account created for {username}! You are now able to log in')
             # login(request, user)
 
-            return redirect('login')
+            return redirect('login-patient')
         else:
             messages.error(request, 'An error occurred during registration')
 

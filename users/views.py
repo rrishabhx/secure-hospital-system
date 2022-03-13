@@ -129,7 +129,10 @@ def register_user(request):
 
 @login_required
 def profile_user(request):
+    logger.info("Inside user profile")
+
     if request.method == 'POST':
+        logger.info("Request type: POST")
         u_form = UserUpdateForm(request.POST, instance=request.user)
         p_form = PatientProfileUpdateForm(request.POST, request.FILES, instance=request.user.patientprofile)
 
@@ -140,6 +143,7 @@ def profile_user(request):
             messages.success(request, f'Your account has been updated!')
             return redirect('profile')
     else:
+        logger.info(f"Request type: GET")
         u_form = UserUpdateForm(instance=request.user)
         p_form = PatientProfileUpdateForm(instance=request.user.patientprofile)
 
@@ -148,9 +152,8 @@ def profile_user(request):
         'p_form': p_form,
     }
 
-    print("Inside user profile view-1")
     if request.user.user_type == 'patient':
-        print("Inside user profile view-2")
+        logger.info("User type: Patient")
         return render(request, 'patients/profile.html', context)
 
     return render(request, 'users/profile.html')

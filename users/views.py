@@ -4,10 +4,12 @@ from django.http import HttpResponse
 from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required
 from .forms import UserRegisterForm, UserUpdateForm, PatientProfileUpdateForm
+import logging
 
 from django.contrib.auth import get_user_model
 
 User = get_user_model()
+logger = logging.getLogger(__name__)
 
 appointments = [
     {
@@ -26,7 +28,7 @@ appointments = [
 
 
 def home(request):
-    print("In home page")
+    logger.info("In home page. Redirecting to login page")
     return redirect('login-patient')
 
 
@@ -118,7 +120,7 @@ def register_user(request):
             messages.success(request, f'Account created for {username}! You are now able to log in')
             # login(request, user)
 
-            return redirect('login')
+            return redirect('login-patient')
         else:
             messages.error(request, 'An error occurred during registration')
 
@@ -127,7 +129,10 @@ def register_user(request):
 
 @login_required
 def profile_user(request):
+    logger.info("Inside user profile")
+
     if request.method == 'POST':
+        logger.info("Request type: POST")
         u_form = UserUpdateForm(request.POST, instance=request.user)
         p_form = PatientProfileUpdateForm(request.POST, request.FILES, instance=request.user.patientprofile)
 
@@ -138,6 +143,7 @@ def profile_user(request):
             messages.success(request, f'Your account has been updated!')
             return redirect('profile')
     else:
+        logger.info(f"Request type: GET")
         u_form = UserUpdateForm(instance=request.user)
         p_form = PatientProfileUpdateForm(instance=request.user.patientprofile)
 
@@ -146,9 +152,8 @@ def profile_user(request):
         'p_form': p_form,
     }
 
-    print("Inside user profile view-1")
     if request.user.user_type == 'patient':
-        print("Inside user profile view-2")
+        logger.info("User type: Patient")
         return render(request, 'patients/profile.html', context)
 
     return render(request, 'users/profile.html')

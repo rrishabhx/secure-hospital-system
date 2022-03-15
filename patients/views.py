@@ -1,4 +1,6 @@
 from django.contrib.auth.decorators import login_required
+
+from hospital.forms import AppointmentCreationForm
 from users.decorators import patient_required
 from django.shortcuts import render
 from django.contrib.auth import get_user_model
@@ -24,7 +26,11 @@ appointments = [
 @login_required
 @patient_required
 def home(request):
+    appointment_form = AppointmentCreationForm()
+
     context = {
-        'appointments': appointments
+        'appointments': appointments,
+        'appointment_form': appointment_form
     }
+
     return render(request, 'patients/home.html', context)

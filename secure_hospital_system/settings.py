@@ -29,12 +29,15 @@ ALLOWED_HOSTS = []
 # Application definition
 
 INSTALLED_APPS = [
+    # built-in
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+
+    # SHS
     'hospital.apps.HospitalConfig',
     'users.apps.UsersConfig',
     'administrators.apps.AdministratorsConfig',
@@ -85,24 +88,9 @@ WSGI_APPLICATION = 'secure_hospital_system.wsgi.application'
 
 DATABASES = {
     'default': {
-       'ENGINE': 'django.db.backends.sqlite3',
-       'NAME': BASE_DIR / 'db.sqlite3',
+        'ENGINE': 'django.db.backends.sqlite3',
+        'NAME': BASE_DIR / 'db.sqlite3',
     }
-    # 'default': {
-    #
-    #     'ENGINE': 'django.db.backends.postgresql_psycopg2',
-    #
-    #     'NAME': '',
-    #
-    #     'USER': 'postgres',
-    #
-    #     'PASSWORD': '',
-    #
-    #     'HOST': 'localhost',
-    #
-    #     'PORT': '',
-    #
-    # }
 }
 
 # Password validation
@@ -123,12 +111,48 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
+# Logger settings
+LOGGING = {
+    'version': 1,
+    'disable_existing_loggers': False,
+    'loggers': {
+        # 'django': {
+        #     'handlers': ['console'],
+        #     'level': 'INFO',
+        #     'propagate': True,
+        # },
+        'root': {
+            'handlers': ['file'],
+            'level': 'INFO',
+            'propagate': True,
+        }
+    },
+    'handlers': {
+        'console': {
+            'class': 'logging.StreamHandler',
+        },
+        'file': {
+            'level': 'INFO',
+            'class': 'logging.FileHandler',
+            'filename': './shs.log',
+            'formatter': 'simpleRe',
+        }
+    },
+    'formatters': {
+        'simpleRe': {
+            'format': '[{asctime} {levelname} {module}/{funcName}():{lineno} {processName}:{threadName}] {message} '
+                      '|||| File Path: {pathname}',
+            'style': '{',
+        }
+    }
+}
+
 # Internationalization
 # https://docs.djangoproject.com/en/4.0/topics/i18n/
 
 LANGUAGE_CODE = 'en-us'
 
-TIME_ZONE = 'UTC'
+TIME_ZONE = 'US/Arizona'
 
 USE_I18N = True
 

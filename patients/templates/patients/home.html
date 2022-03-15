@@ -1,20 +1,42 @@
 {% extends 'main.html' %}
 
-{% block content %}
+{% block body-content %}
 
-
-    <h1>Welcome to Dr. Yau's Clinic</h1>
-    {% for appointment in appointments %}
-        <article class="media content-section">
-            <div class="media-body">
-                <div class="article-metadata">
-                    <a class="mr-2" href="#">{{ appointment.doctor }}</a>
-                    <small class="text-muted">{{ appointment.date_posted }}</small>
+    <div>
+        <h2>Book New Appointments here:</h2>
+        {% csrf_token %}
+        {{ appointment_form.as_p }}
+    </div>
+    <div>
+        <h2>Upcoming Appointments:</h2>
+        {% for appointment in appointments %}
+            <article class="media content-section">
+                <div class="media-body">
+                    <div class="article-metadata">
+                        <a class="mr-2" href="#">{{ appointment.doctor }}</a>
+                        <small class="text-muted">{{ appointment.date_posted }}</small>
+                    </div>
+                    <h2><a class="article-title" href="#">{{ appointment.title }}</a></h2>
+                    <p class="article-content">{{ appointment.description }}</p>
                 </div>
-                <h2><a class="article-title" href="#">{{ appointment.title }}</a></h2>
-                <p class="article-content">{{ appointment.description }}</p>
-            </div>
-        </article>
-    {% endfor %}
+            </article>
+        {% endfor %}
+    </div>
+    <div>
+        <h2></h2>
+    </div>
 
-{% endblock content %}
+{% endblock body-content %}
+
+
+{% block sidebar-content %}
+    <p class='text-muted'>Patient Details</p>
+    <ul class="list-group">
+        <li class="list-group-item list-group-item-light"><a href="#">Personal Records</a></li>
+        <li class="list-group-item list-group-item-light"><a href="#">Diagnosis</a></li>
+        <li class="list-group-item list-group-item-light"><a href="#">Prescriptions</a></li>
+        <li class="list-group-item list-group-item-light"><a href="#">Lab-Test Reports</a></li>
+        <li class="list-group-item list-group-item-light"><a href="#">Medical Insurance</a></li>
+        <li class="list-group-item list-group-item-light"><a href="#">Payments and Transactions</a></li>
+    </ul>
+{% endblock sidebar-content %}

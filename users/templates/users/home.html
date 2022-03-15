@@ -1,14 +1,14 @@
 {% extends 'main.html' %}
 
-{% block content %}
+{% block body-content %}
 
 
     <h1>Welcome to Dr. Yau's Clinic</h1>
-{#    <form action="" method="post">#}
-{#        <label for="your_name">Your name: </label>#}
-{#        <input id="your_name" type="text" name="your_name" value="{{ current_name }}">#}
-{#        <input type="submit" value="OK">#}
-{#    </form>#}
+    {#    <form action="" method="post">#}
+    {#        <label for="your_name">Your name: </label>#}
+    {#        <input id="your_name" type="text" name="your_name" value="{{ current_name }}">#}
+    {#        <input type="submit" value="OK">#}
+    {#    </form>#}
 
     {% for appointment in appointments %}
         <article class="media content-section">
@@ -23,4 +23,4 @@
         </article>
     {% endfor %}
 
-{% endblock content %}
+{% endblock body-content %}

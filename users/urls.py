@@ -5,8 +5,9 @@ from . import views
 urlpatterns = [
     path('', views.home, name='users-home'),
     path('about/', views.about, name='users-about'),  # delete this route
-    path('login-staff', views.login_staff, name='login-staff'),
-    path('login-patient', views.login_patient, name='login-patient'),
+    # path('login-staff', views.login_staff, name='login-staff'),
+    # path('login-patient', views.login_patient, name='login-patient'),
+    path('login-user/<str:usertype>', views.login_user, name='login-user'),
     # path('logout/', views.logout_user, name='logout'),
     # path('login/', auth_views.LoginView.as_view(template_name='users/login.html'), name='login'),
     path('logout/', auth_views.LogoutView.as_view(template_name='users/logout.html'), name='logout'),

@@ -50,8 +50,8 @@
                                 Login
                             </a>
                             <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
-                                <li><a class="dropdown-item" href="{% url 'login-patient' %}">Patient Login</a></li>
-                                <li><a class="dropdown-item" href="{% url 'login-staff' %}">Staff Login</a></li>
+                                <li><a class="dropdown-item" href="{% url 'login-user' usertype='patient' %}">Patient Login</a></li>
+                                <li><a class="dropdown-item" href="{% url 'login-user' usertype='staff' %}">Staff Login</a></li>
                             </ul>
                         </li>
                         <li class="nav-item">

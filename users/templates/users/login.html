@@ -1,0 +1,135 @@
+{% extends 'main.html' %}
+{% load crispy_forms_tags %}
+
+{% block content %}
+<div class="content-section">
+
+    <div id="patient" style="display: block;">
+        <form method="POST" action="">
+            {% csrf_token %}
+            <fieldset class="form-group">
+                <legend class="border-bottom mb-3">Patient Log In</legend>
+                <div class="row my-3">
+                    <div class="col-4">
+                        <label>Username:</label>
+                        <label>
+                            <input class="form-control" type="text" name="username" placeholder="Enter Username" />
+                        </label>
+                    </div>
+                    <div class="col-4">
+                        <label>Password:</label>
+                        <label>
+                            <input class="form-control" type="password" name="password" placeholder="Enter Password" />
+                        </label>
+                    </div>
+                </div>
+            </fieldset>
+            <div class="row form-group my-2">
+                <div class="col">
+                    <button class="btn btn-primary" type="submit">Login</button>
+                </div>
+            </div>
+        </form>
+        <div class="row border-top py-3">
+            <div class="col">
+                <small class="text-muted">Are you a staff? <a class="ml-2" onclick="switch_page()"
+                        style="cursor: pointer;">Login
+                        Here</a></small>
+            </div>
+            <div class="col">
+                <small class="text-muted">Create An Account? <a class="ml-2" href="{% url 'register' %}">Sign Up
+                        Now</a></small>
+            </div>
+        </div>
+    </div>
+
+    <div id="staff" style="display: none;">
+        <form id="loginform" method="POST" action="">
+            {% csrf_token %}
+            <fieldset class="form-group">
+                <legend class="border-bottom mb-4">Staff Log In</legend>
+                <div class="row my-2">
+                    <div class="col">
+                        <!-- <label>Select Staff Type</label> -->
+                        <label>
+                            <select name="staff" class="form-select" onchange="staffTypeSelected(value)">
+                                <option value="">Select Staff Type</option>
+                                <option value="hstaff">Hospital Staff</option>
+                                <option value="doc">Doctor</option>
+                                <option value="lstaff">Lab Staff</option>
+                                <option value="istaff">Insurance Staff</option>
+                                <option value="admin">Administrator</option>
+                            </select>
+                        </label>
+                    </div>
+                </div>
+
+                <div id="inputboxes" style="display: none;">
+                    <div class="row my-2">
+                        <div class="col-4">
+                            <!-- <label>Username:</label> -->
+                            <label>
+                                <input class="form-control" type="text" name="username" id="username"
+                                    placeholder="Enter Username" required />
+                            </label>
+                        </div>
+                        <div class="col-4">
+                            <!-- <label>Password:</label> -->
+                            <label>
+                                <input class="form-control" type="password" name="password" placeholder="Enter Password"
+                                    required />
+                            </label>
+                        </div>
+                    </div>
+                </div>
+
+            </fieldset>
+            <!-- <div class="form-group">
+                <button id="submitbutton" class="btn btn-primary my-2" disabled type="submit">Login</button>
+            </div> -->
+            <div class="row form-group my-2">
+                <div class="col">
+                    <button class="btn btn-primary" type="submit">Login</button>
+                </div>
+            </div>
+        </form>
+        <div class="row border-top py-3">
+            <div class="col">
+                <small class="text-muted">Are you a patient? <a class="ml-2" onclick="switch_page()"
+                        style="cursor: pointer;">Login
+                        Here</a></small>
+            </div>
+            <div class="col">
+                <small class="text-muted">Create An Account? <a class="ml-2" href="{% url 'register' %}">Sign Up
+                        Now</a></small>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<script type="text/javascript">
+    function switch_page() {
+        var patient = document.getElementById('patient');
+        var staff = document.getElementById('staff');
+        console.log("Function called");
+        if (patient.style.display === 'block') {
+            console.log("switching to staff");
+            patient.style.display = 'none';
+            staff.style.display = 'block';
+        } else {
+            console.log("switching to patient");
+            staff.style.display = 'none';
+            patient.style.display = 'block';
+        }
+    }
+
+    function staffTypeSelected(value) {
+        if (value !== '') {
+            document.getElementById('inputboxes').style.display = "block";
+        } else {
+            document.getElementById('inputboxes').style.display = "none";
+        }
+    }
+</script>
+{% endblock content %}

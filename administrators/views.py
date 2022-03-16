@@ -1,8 +1,7 @@
 # from administrators.models import Employee
-import re
-
+from datetime import date
 from django.http import HttpResponseRedirect
-from administrators.models import Employee
+from administrators.models import Deleted_Employees, Employee
 from .forms import CreateEmployeeForm
 from django.contrib import messages
 from django.shortcuts import render
@@ -25,6 +24,7 @@ def home(request):
 
     empData = Employee.objects.all()
     fnEmpData = Employee.objects.values('first_name', 'last_name')
+    form = CreateEmployeeForm()
     context = {
         'empData': empData,
         'form': form,
@@ -39,8 +39,46 @@ def home(request):
 
 
 def deleteEmployees(request):
+<<<<<<< Updated upstream
     
     # email_toDelete = request.GET['emailDelete']
     # first_name = Employee.objects.raw("select first_name from employee where email = "+str(email_toDelete)+";")
     variable = dict(request)
     return render(request, 'administrators/test.html', variable)
+=======
+    email_toDelete = request.GET['emailDelete']
+    first_name = request.GET['firstName']
+
+    data = "select * from administrators_employee where email = '"+str(email_toDelete)+"';"
+    obj = Employee.objects.raw(data)
+    
+    for i in obj:
+        fn = i.first_name
+        ln = i.last_name
+        db = i.date_of_birth
+        et = i.employee_type
+        pn = i.phone_number
+        em = i.email
+    
+
+    Deleted_Employees.objects.create(first_name=str(fn), last_name=str(ln), employee_type=str(et), date_of_birth="1998-04-12", phone_number=str(pn), email=str(em), deleted_date=date.today())
+    record = Employee.objects.get(email=str(email_toDelete))
+    record.delete()
+
+    context = {
+        'em' : email_toDelete,
+        'fn' : first_name,
+        'out' : obj
+    }
+    return render(request, 'administrators/test.html', context )
+
+
+def getEmployee(request):
+    # firstName = request.GET['firstName']
+    email_toModify = request.POST.get('emailModify', False)
+
+    data = "select * from administrators_employee where email = '"+str(email_toModify)+"';"
+    obj = Employee.objects.raw(data)
+
+    return HttpResponseRedirect(request.path_info, {'out1':obj})
+>>>>>>> Stashed changes

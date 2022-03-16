@@ -8,7 +8,7 @@ class CreateEmployeeForm(forms.ModelForm):
     first_name = forms.CharField(max_length=30, required=True)
     last_name = forms.CharField(max_length=30, required=True)
     email = forms.EmailField(label="Email Address", max_length=40, required=True)
-    dob = forms.DateField(label='Date of Birth', widget=forms.DateInput, required=True)
+    dob = forms.DateField(label='Date of Birth', widget=forms.DateInput(attrs={'type': 'date'}), required=True)
     phone_number = forms.IntegerField(label="Phone Number")
     # password = forms.CharField(widget=forms.PasswordInput)
 

@@ -57,9 +57,10 @@ def login(request):
         user = authenticate(request, username=username, password=password)
 
         if user is not None:
-            login(request, user)
+            # login(request)
+            # login(request, user)
 
-            print("User type: " + user.user_type)
+            # print("User type: " + user.user_type)
 
             return user_redirect(request)
         else:

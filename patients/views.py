@@ -23,8 +23,8 @@ appointments = [
 ]
 
 
-@login_required
-@patient_required
+# @login_required
+# @patient_required
 def home(request):
     appointment_form = AppointmentCreationForm()
 
@@ -34,3 +34,25 @@ def home(request):
     }
 
     return render(request, 'patients/home.html', context)
+
+
+def appointments(request):
+    return render(request,'patients/appointments.html')
+
+def diagnosis(request):
+    pass
+
+def prescriptions(request):
+    pass
+
+def reports(request):
+    pass
+
+def insurance(request):
+    pass
+
+def transactions(request):
+    pass
+
+def profile(request):
+    pass

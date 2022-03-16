@@ -9,9 +9,6 @@ class PatientProfile(models.Model):
     address = models.CharField(max_length=70, null=True, blank=True)
     insurance = models.TextField(null=True, blank=True)
 
-    # class Meta:
-    #     db_table = 'patient'
-
     def __str__(self):
         return f'{self.user.user_type}: {self.user.username}'
 

@@ -4,22 +4,31 @@
 
     <div>
         <h2>Book New Appointments here:</h2>
-        {% csrf_token %}
-        {{ appointment_form.as_p }}
+
+        <form method="POST" action="{% url 'hospital-request-apt' %}">
+            {% csrf_token %}
+            <fieldset class="form-group">
+                <legend class="border-bottom mb-4">Create Appointment</legend>
+                {{ appointment_form.as_p }}
+            </fieldset>
+            <div class="form-group">
+                <button class="btn btn-outline-info" type="submit">Submit</button>
+            </div>
+        </form>
     </div>
     <div>
         <h2>Upcoming Appointments:</h2>
         {% for appointment in appointments %}
-            <article class="media content-section">
-                <div class="media-body">
-                    <div class="article-metadata">
-                        <a class="mr-2" href="#">{{ appointment.doctor }}</a>
-                        <small class="text-muted">{{ appointment.date_posted }}</small>
-                    </div>
-                    <h2><a class="article-title" href="#">{{ appointment.title }}</a></h2>
-                    <p class="article-content">{{ appointment.description }}</p>
-                </div>
-            </article>
+            <div>
+                <h3>Appointment</h3>
+                <ul>
+                    <li>Doctor: {{ appointment.doctor.user.first_name }} {{ appointment.doctor.user.last_name }}</li>
+                    <li>Scheduled Date: {{ appointment.scheduled_date }}</li>
+                    <li>Appointment Status: {{ appointment.status }}</li>
+                    <li>Details: {{ appointment.appointment_details }}</li>
+                </ul>
+            </div>
+
         {% endfor %}
     </div>
     <div>

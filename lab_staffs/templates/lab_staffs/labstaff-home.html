@@ -1,0 +1,46 @@
+{% extends 'main.html' %}
+
+{% block body-content %}
+<body>
+<div class="content-labstaff-home">
+    <form id="labstaff-options" method="POST" action="">
+        <fieldset class="lab_test_report">
+            <legend>Lab test report</legend>
+            <button name="create test report" type="button" onclick="createReport()">Create</button>
+            <button name="update test report" type="button" onclick="updateReport()">update</button>
+            <button name="delete test report" type="button" onclick="deleteReport()">delete</button>
+        </fieldset>
+
+        <fieldset class="view patient diagnosis">
+            <legend>View patient diagnosis</legend>
+            <button name="view diagnosis button" type="button" onclick="viewDiagnosis()">View patient diagnosis</button>
+        </fieldset>
+
+        <fieldset class="lab test requests">
+            <legend>Lab test requests</legend>
+            <button name="view test requests" type="button" onclick="viewRequest()">View test requests</button>
+        </fieldset>
+    </form>
+</div>
+
+
+<script type="text/javascript">
+
+function creatReport()
+{}
+
+function deleteReport()
+{}
+
+function updateReport()
+{}
+
+function viewDiagnosis()
+{}
+
+function viewRequest()
+{}
+
+</script>
+</body>
+{% endblock body-content %}

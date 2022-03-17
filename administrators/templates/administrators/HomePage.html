@@ -17,9 +17,10 @@
 <body>
     {% block body-content %}
     <div class="container">
+        <br>
         <div class="row">
             <div class="col-sm-12">
-                <h1>WELCOME ADMIN!!</h1>
+                <h2>WELCOME TO THE ADMIN PORTAL...!!</h2>
             </div>
         </div>
         <br>
@@ -129,7 +130,7 @@
                 </div>
             </div>
             <br>
-            <div class="row">
+            <!-- <div class="row">
                 <div class="col-sm-12">
                     <form action="POST">
                         <div class="row">
@@ -178,7 +179,7 @@
                         </div>
                     </form>
                 </div>
-            </div>
+            </div> -->
         </div>
         <div class="row" id="empDeleteDIV" style="display: none;">
             <h4 style="color: #7952B3;">Delete Employee</h4>
@@ -208,7 +209,7 @@
                         <br>
                         <div class="row">
                             <div class="col-sm-12">
-                                <button type="submit" class="btn btn-default" style="background-color: #7952B3; color: white" onclick="deleteEmp()">Get Employee Details</button>
+                                <button type="submit" class="btn btn-default" style="background-color: #7952B3; color: white">Delete Employee</button>
                             </div>
                         </div>
                     </form>
@@ -308,7 +309,7 @@
         function deleteEmp(){
             var x = document.getElementById("emailDelete").value;
             var y = document.getElementById("firstName").value;
-            alert(x + " " + y);
+            alert("Record with name "+ y + " and email with emailID: " + y + " will be deleted");
         }
     </script>
 

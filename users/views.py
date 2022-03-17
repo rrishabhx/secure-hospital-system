@@ -29,26 +29,58 @@ appointments = [
 
 def home(request):
     logger.info("In home page. Redirecting to login page")
-    return redirect('login-patient')
+    return redirect('login-user', usertype='patient')
 
 
 def about(request):
     return render(request, 'users/about.html')
 
 
-def login_staff(request):
-    page = 'login-staff'
+# def login_staff(request):
+#     page = 'login-staff'
+#
+#     print(request)
+#     if request.user.is_authenticated:
+#         print("User is authenticated")
+#
+#         return user_redirect(request)
+#
+#     if request.method == 'POST':
+#         username = request.POST.get('username').lower()
+#         password = request.POST.get('password')
+#         staff = request.POST.get('staff')
+#
+#         try:
+#             user = User.objects.get(username=username)
+#         except:
+#             messages.error(request, 'User does not exist')
+#
+#         user = authenticate(request, username=username, password=password)
+#
+#         if user is not None:
+#             login(request, user)
+#
+#             print("User type: " + user.user_type)
+#
+#             return user_redirect(request)
+#         else:
+#             messages.error(request, 'Username or Password does not exist')
+#
+#     context = {'page': page}
+#     return render(request, 'users/login_staff.html', context=context)
 
-    print(request)
+
+def login_user(request, usertype):
+    logger.info("User trying to login")
+
     if request.user.is_authenticated:
-        print("User is authenticated")
+        logger.info("User authenticated")
 
         return user_redirect(request)
 
     if request.method == 'POST':
         username = request.POST.get('username').lower()
         password = request.POST.get('password')
-        staff = request.POST.get('staff')
 
         try:
             user = User.objects.get(username=username)
@@ -60,46 +92,14 @@ def login_staff(request):
         if user is not None:
             login(request, user)
 
-            print("User type: " + user.user_type)
+            logger.info("User type: " + user.user_type)
 
             return user_redirect(request)
         else:
             messages.error(request, 'Username or Password does not exist')
 
-    context = {'page': page}
-    return render(request, 'users/login_staff.html', context=context)
-
-def login_patient(request):
-    page = 'login-patient'
-
-    print(request)
-    if request.user.is_authenticated:
-        print("User is authenticated")
-
-        return user_redirect(request)
-
-    if request.method == 'POST':
-        username = request.POST.get('username').lower()
-        password = request.POST.get('password')
-
-        try:
-            user = User.objects.get(username=username)
-        except:
-            messages.error(request, 'User does not exist')
-
-        user = authenticate(request, username=username, password=password)
-
-        if user is not None:
-            login(request, user)
-
-            print("User type: " + user.user_type)
-
-            return user_redirect(request)
-        else:
-            messages.error(request, 'Username or Password does not exist')
-
-    context = {'page': page}
-    return render(request, 'users/login_patient.html', context=context)
+    page = 'patient' if usertype == 'patient' else 'staff'
+    return render(request, 'users/login.html', context={'page': page})
 
 
 def logout_user(request):
@@ -120,7 +120,7 @@ def register_user(request):
             messages.success(request, f'Account created for {username}! You are now able to log in')
             # login(request, user)
 
-            return redirect('login-patient')
+            return redirect('login-user', usertype='patient')
         else:
             messages.error(request, 'An error occurred during registration')
 
@@ -162,7 +162,7 @@ def profile_user(request):
 def user_redirect(request):
     utype = request.user.user_type
 
-    print(f"Redirecting [{utype}] to home page: ")
+    logger.info(f"Redirecting [{utype}] to home page: ")
 
     if utype == 'patient':
         return redirect('patient-home')

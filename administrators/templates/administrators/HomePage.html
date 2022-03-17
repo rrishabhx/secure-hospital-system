@@ -99,31 +99,84 @@
             <br>
             <div class="row">
                 <div class="col-sm-12">
-                    <label for="firstName">Select Firstname of Employee below</label>
-                    <br><br>
-                    <div class="row">
-                        <div class="col-sm-4">
-                            <select name="firstName" id="" class="form-control">
-                                <option value="0">SELECT OPTION</option>
-                                {% for i in fnEmpData %}
-                                <option value="">{{ i.first_name }}, {{ i.last_name }}</option>
-                                {% endfor %}
-                            </select>
+                    <form action="{% url 'get_employee' %}" autocomplete="off">
+                        <label for="firstName">Select Firstname of Employee below</label>
+                        <br><br>
+                        <div class="row">
+                            <div class="col-sm-6">
+                                <select name="firstName" id="" class="form-control">
+                                    <option value="0">SELECT OPTION</option>
+                                    {% for i in fnEmpData %}
+                                    <option value="{{i.first_name}}">{{ i.first_name }}, {{ i.last_name }}</option>
+                                    {% endfor %}
+                                </select>
+                            </div>
                         </div>
-                    </div>
-                    <br>
-                    <div class="row">
-                        <div class="col-sm-4">
-                            <label for="emailModify">Enter Employee Email Address</label>
-                            <input type="text" name="emailModify" class="form-control">
+                        <br>
+                        <div class="row">
+                            <div class="col-sm-6">
+                                <label for="emailModify">Enter Employee Email Address</label>
+                                <input type="email" id="emailModify" name="emailModify" class="form-control">
+                            </div>
                         </div>
-                    </div>
-                    <br>
-                    <div class="row">
-                        <div class="col-sm-12">
-                            <button type="submit" class="btn btn-default" style="color: white; background-color: #7952B3" onclick="clearForm()">Get Employee Details</button>
+                        <br>
+                        <div class="row">
+                            <div class="col-sm-12">
+                                <button type="submit" class="btn btn-default" style="color: white; background-color: #7952B3" onclick="clearForm()">Get Employee Details</button>
+                            </div>
                         </div>
-                    </div>
+                    </form>
+                </div>
+            </div>
+            <br>
+            <div class="row">
+                <div class="col-sm-12">
+                    <form action="POST">
+                        <div class="row">
+                            <div class="col-sm-6">
+                                <label for="first_name_modify">First Name</label>
+                                <input type="text" id="" name="first_name_modify" class="form-control">
+                            </div>
+                            <div class="col-sm-6">
+                                <label for="last_name_modify">Last Name</label>
+                                <input type="text" id="" name="last_name_modify" class="form-control">
+                            </div>
+                        </div>
+                        <br>
+                        <div class="row">
+                            <div class="col-sm-6">
+                                <label for="employee_type_modify">Employee Type</label>
+                                <select name="employee_type_modify" id="" class="form-control">
+                                    <option value="hospital_staff">Hospital Staff</option>
+                                    <option value="doctor">Doctor</option>
+                                    <option value="insurance_staff">Insurance Staff</option>
+                                    <option value="lab_staff">Lab Staff</option>
+                                    <option value="administrators">Administrators</option>
+                                </select>
+                            </div>
+                            <div class="col-sm-6">
+                                <label for="dob_modify">Date of Birth</label>
+                                <input type="date" name="dob_modify" id="" class="form-control">
+                            </div>
+                        </div>
+                        <br>
+                        <div class="row">
+                            <div class="col-sm-6">
+                                <label for="email_modify">Email Address</label>
+                                <input type="text" name="email_modify" id="" class="form-control">
+                            </div>
+                            <div class="col-sm-6">
+                                <label for="phone_modify">Phone Number</label>
+                                <input type="number" name="phone_modify" id="" class="form-control">
+                            </div>
+                        </div>
+                        <br>
+                        <div class="row">
+                            <div class="col-sm-12">
+                                <button type="button" class="btn btn-default" style="color: white; background-color: #7952B3">Update Employee Details</button>
+                            </div>
+                        </div>
+                    </form>
                 </div>
             </div>
         </div>
@@ -132,12 +185,12 @@
             <br>
             <div class="row">
                 <div class="col-sm-12">
-                    <form action="{% url 'delete_employee' %}">
+                    <form action="{% url 'delete_employee' %}" autocomplete="off">
                         <label for="firstName">Select Firstname of Employee below</label>
                         <br><br>
                         <div class="row">
-                            <div class="col-sm-4">
-                                <select name="firstName" id="" class="form-control">
+                            <div class="col-sm-6">
+                                <select name="firstName" id="firstName" class="form-control">
                                     <option value="0">SELECT OPTION</option>
                                     {% for i in fnEmpData %}
                                     <option value="{{ i.first_name }}">{{ i.first_name }},{{ i.last_name }}</option>
@@ -147,15 +200,15 @@
                         </div>
                         <br>
                         <div class="row">
-                            <div class="col-sm-4">
+                            <div class="col-sm-6">
                                 <label for="emailDelete">Enter Employee Email Address</label>
-                                <input type="email" name="emailDelete" class="form-control">
+                                <input type="email" name="emailDelete" class="form-control"  id="emailDelete">
                             </div>
                         </div>
                         <br>
                         <div class="row">
                             <div class="col-sm-12">
-                                <button type="submit" class="btn btn-default" style="background-color: #7952B3; color: white">Get Employee Details</button>
+                                <button type="submit" class="btn btn-default" style="background-color: #7952B3; color: white" onclick="deleteEmp()">Get Employee Details</button>
                             </div>
                         </div>
                     </form>
@@ -250,6 +303,12 @@
             else{
                 x.style.display = "none";
             }
+        }
+        
+        function deleteEmp(){
+            var x = document.getElementById("emailDelete").value;
+            var y = document.getElementById("firstName").value;
+            alert(x + " " + y);
         }
     </script>
 

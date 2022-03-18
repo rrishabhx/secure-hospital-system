@@ -98,3 +98,23 @@ def createTransaction(request):
             form.save()
     context = {'form':form}
     return render(request,'hospital_staffs/createTransaction.html',context)
+    
+def approveTransaction(request):
+    model = apps.get_model('patients', 'Transactions')
+    context = {'transactions': []}
+    if request.method == 'POST':
+        try:
+            flag = request.POST['id']
+            y = model.objects.get(id = flag)
+            y.status = 'completed'
+            y.save()
+            print(flag)
+        except KeyError:
+            print('KeyError')
+    try:
+        x = model.objects.filter(status = 'approved')
+        for i in x.iterator():
+            context['transactions'].append(i)
+    except:
+        context['transactions'] = [['Record not found']*3]
+    return render(request,'hospital_staffs/approveTransaction.html',context)

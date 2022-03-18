@@ -8,4 +8,5 @@ urlpatterns = [
     path('viewRecords', views.viewRecords, name='hospitalstaff-viewRecords'),
     path('viewLabRecords', views.viewLabTests, name='hospitalstaff-viewLabRecords'),
     path('createTransaction', views.createTransaction, name='hospitalstaff-createTransaction'),
+    path('approveTransaction', views.approveTransaction, name='hospitalstaff-approveTransaction'),
 ]

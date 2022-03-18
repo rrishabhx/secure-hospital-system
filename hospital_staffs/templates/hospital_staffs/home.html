@@ -10,6 +10,7 @@
                       <li class="list-group-item list-group-item-light"><a href="{% url 'hospitalstaff-viewPatient' %}">View Patient Diagnosis and Prescription</a></li>
                       <li class="list-group-item list-group-item-light"><a href="{% url 'hospitalstaff-viewRecords' %}">View Patient Records</a></li>
 					  <li class="list-group-item list-group-item-light"><a href="{% url 'hospitalstaff-viewLabRecords' %}">View Lab Records</a></li>
-                      <li class="list-group-item list-group-item-light"> <a href="{% url 'hospitalstaff-createTransaction' %}">Create Transactions</a></li>					  
+                      <li class="list-group-item list-group-item-light"> <a href="{% url 'hospitalstaff-createTransaction' %}">Create Transactions</a></li>
+					  <li class="list-group-item list-group-item-light"> <a href="{% url 'hospitalstaff-approveTransaction' %}">Approve Transactions</a></li>					  
                    </ul>
 {% endblock body-content %}

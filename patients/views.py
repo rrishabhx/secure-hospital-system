@@ -11,27 +11,11 @@ from django.urls import reverse
 from django.contrib import messages
 from django.contrib.auth import get_user_model
 from .models import PatientProfile
-from.forms import ProfileForm, InsuranceForm, AppointmentForm
-
+from .forms import ProfileForm, InsuranceForm, AppointmentForm
 
 User = get_user_model()
 
 logger = logging.getLogger(__name__)
-
-appointments_list = [
-    {
-        'doctor': 'Dr. Mantis Tobbagan',
-        'title': 'Covid-19',
-        'description': 'No taste in food',
-        'date_posted': 'Feb 27, 2022'
-    },
-    {
-        'doctor': 'Dr. Jane Doe',
-        'title': 'Cancer',
-        'description': 'Too much blood loss',
-        'date_posted': 'Feb 18, 2022'
-    }
-]
 
 patients = [
     {
@@ -156,17 +140,16 @@ reports_list = [
 ]
 
 
-# @login_required
-# @patient_required
+@login_required
+@patient_required
 def home(request):
-
     logger.info(f"Inside home of {request.user}")
-    user = get_object_or_404(PatientProfile, user=request.user)
-    logger.info(f"User object: {user}")
+    patient = request.user.patientprofile
+    logger.info(f"User object: {patient}")
 
     appointment_form = AppointmentCreationForm()
     context = {
-        'appointments': appointments_list,
+        'appointments': Appointment.objects.filter(patient=patient),
         'profile': profile,
         'appointment_form': appointment_form,
         'uform': ''
@@ -175,18 +158,18 @@ def home(request):
 
 
 def appointments(request):
-    if(request.method == 'POST'):
+    if request.method == 'POST':
         form = AppointmentForm(request.POST)
-        if(form.is_valid()):
+        if form.is_valid():
             data = form.cleaned_data
             print(data)
             messages.success(request, 'New Appointment Requested')
-            return redirect(reverse('patients:patient-home'))
+            return redirect(reverse('home'))
     else:
         form = AppointmentForm()
 
     context = {
-        'appointments': appointments_list,
+        'appointments': Appointment.objects.filter(patient=request.user.patientprofile),
         'form': form
     }
     return render(request, 'patients/appointments.html', context=context)
@@ -217,13 +200,13 @@ def reports(request):
 
 
 def insurance(request):
-    if(request.method == 'POST'):
+    if request.method == 'POST':
         form = InsuranceForm(request.POST)
-        if(form.is_valid()):
+        if form.is_valid():
             data = form.cleaned_data
             print(data)
             messages.success(request, 'New Insurance Claim Filed')
-            return redirect(reverse('patients:patient-home'))
+            return redirect(reverse('home'))
     else:
         form = InsuranceForm()
 

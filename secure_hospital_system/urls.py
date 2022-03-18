@@ -9,10 +9,10 @@ urlpatterns = [
     path('hospital/', include('hospital.urls')),
     path('patients/', include('patients.urls')),
     path('doctors/', include('doctors.urls')),
-    path('hospitalstaffs/', include('hospital_staffs.urls')),
-    path('labstaffs/', include('lab_staffs.urls')),
-    path('insurancestaffs/', include('insurance_staffs.urls')),
-    path('adminstaff/', include('administrators.urls')),
+    path('hospital-staffs/', include('hospital_staffs.urls')),
+    path('lab-staffs/', include('lab_staffs.urls')),
+    path('insurance-staffs/', include('insurance_staffs.urls')),
+    path('administrators/', include('administrators.urls')),
 ]
 
 if settings.DEBUG:

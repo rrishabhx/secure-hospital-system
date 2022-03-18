@@ -59,10 +59,10 @@ def deleteEmployees(request):
         record = Employee.objects.get(email=str(email_toDelete))
         record.delete()
         messages.success(request, f'Record for {first_name} is deleted!')
-        return redirect('admin-home')
+        return redirect('administrators:home')
     else:
         messages.warning(request, f'Record for {first_name} is not deleted! Please check the email address given')
-        return redirect('admin-home')
+        return redirect('administrators:home')
 
 def getEmployee(request):
     # firstName = request.GET['firstName']
@@ -107,4 +107,4 @@ def save_modify(request):
     record.save()
 
     messages.success(request, f'Record for {modify_fn} was updated!')
-    return redirect('admin-home')
+    return redirect('administrators:home')

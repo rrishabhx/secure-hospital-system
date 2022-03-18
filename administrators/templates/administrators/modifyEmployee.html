@@ -32,7 +32,7 @@
         </div>
         <div class="row">
             <div class="col-sm-12">
-                <form action="{% url 'save-modify' %}" method="POST" autocomplete="off">
+                <form action="{% url 'administrators:save-modify' %}" method="POST" autocomplete="off">
                     {% csrf_token %}
                     <div class="row">
                         <div class="col-sm-6">

@@ -57,8 +57,7 @@ def login_user(request, usertype):
         user = authenticate(request, username=username, password=password)
 
         if user is not None:
-            # login(request)
-            # login(request, user)
+            login(request, user)
 
             logger.info("User type: " + user.user_type)
 
@@ -135,15 +134,15 @@ def user_redirect(request):
     logger.info(f"Redirecting [{utype}] to home page: ")
 
     if utype == 'patient':
-        return redirect('patient-home')
+        return redirect('patients:home')
     elif utype == 'doctor':
-        return redirect('doctor-home')
+        return redirect('doctors:home')
     elif utype == 'hospital_staff':
-        return redirect('hospitalstaff-home')
+        return redirect('hospital_staffs:home')
     elif utype == 'lab_staff':
-        return redirect('labstaff-home')
+        return redirect('lab_staffs:home')
     elif utype == 'insurance_staff':
-        return redirect('insurancestaff-home')
+        return redirect('insurance_staffs:home')
     else:
         context = {
             'reason': f'Invalid user type: {utype}'

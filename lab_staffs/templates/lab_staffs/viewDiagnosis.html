@@ -1,10 +1,22 @@
+{% extends 'main.html' %}
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Title</title>
+    <title>Try view diagnosis</title>
 </head>
+{% block body-content %}
 <body>
 
+    <form id="labstaff-options" method="POST" action="">
+        <fieldset class="">
+            <legend>Patient diagnosis</legend>
+            {{Error}}
+            <legend>{{patientID}}</legend>
+        </fieldset>
+    </form>
+
 </body>
+{% endblock body-content %}
 </html>

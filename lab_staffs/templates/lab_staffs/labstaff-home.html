@@ -4,6 +4,7 @@
 <body>
 <div class="content-labstaff-home">
     <form id="labstaff-options" method="POST" action="">
+        {% csrf_token %}
         <fieldset class="lab_test_report">
             <legend>Lab test report</legend>
             <button name="create test report" type="button" onclick="createReport()">Create</button>
@@ -23,23 +24,101 @@
     </form>
 </div>
 
+<div id="create-report" style="display:none;">
+    <br><br>
+    <form action="">
+        {% csrf_token %}
+        Staff ID:<br>
+        <input type="text" name="staffID" value="Enter staff ID">
+        <br>
+        Patient ID:<br>
+        <input type="text" name="patientID" value="Enter patient ID">
+        <br>
+        Description:<br>
+        <input type="text" name="Description" value="Enter report description">
+        <br>
+        <br><br>
+        <input type="submit" value="Submit report">
+    </form>
+</div>
+
+<div id="update-report" style="display:none;">
+    <br><br>
+    <form action="">
+        {% csrf_token %}
+        Staff ID:<br>
+        <input type="text" name="staffID" value="Enter staff ID">
+        <br>
+        Patient ID:<br>
+        <input type="text" name="patientID" value="Enter patient ID">
+        <br>
+        Description:<br>
+        <input type="text" name="Description" value="Enter report description">
+        <br>
+        <br><br>
+        <input type="submit" value="Update report">
+    </form>
+</div>
+
+<div id="delete-report" style="display:none;">
+    <br><br>
+    <form action="">
+        {% csrf_token %}
+        Patient ID:<br>
+        <input type="text" name="patientID" value="Enter patient ID">
+        <br><br>
+        <input type="submit" value="Delete report">
+    </form>
+</div>
+
+<div id="view-diagnosis" style="display:none;">
+    <br><br>
+    <form action="viewdiagnosis">
+        {% csrf_token %}
+        Patient ID:<br>
+        <input type="text" name="patientID" value="Enter patient ID">
+        <br><br>
+        <input type="submit" value="View Diagnosis">
+    </form>
+</div>
 
 <script type="text/javascript">
 
-function creatReport()
-{}
+function createReport()
+{
+    document.getElementById('create-report').style.display='block';
+    document.getElementById('update-report').style.display='none';
+    document.getElementById('delete-report').style.display='none';
+}
 
 function deleteReport()
-{}
+{
+    document.getElementById('create-report').style.display='none';
+    document.getElementById('update-report').style.display='none';
+    document.getElementById('delete-report').style.display='block';
+}
 
 function updateReport()
-{}
+{
+    document.getElementById('create-report').style.display='none';
+    document.getElementById('update-report').style.display='block';
+    document.getElementById('delete-report').style.display='none';
+}
 
 function viewDiagnosis()
-{}
+{
+    document.getElementById('create-report').style.display='none';
+    document.getElementById('update-report').style.display='none';
+    document.getElementById('delete-report').style.display='none';
+    document.getElementById('view-diagnosis').style.display='block';
+}
 
 function viewRequest()
-{}
+{
+    document.getElementById('create-report').style.display='none';
+    document.getElementById('update-report').style.display='none';
+    document.getElementById('delete-report').style.display='none';
+}
 
 </script>
 </body>

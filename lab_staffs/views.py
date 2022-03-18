@@ -5,12 +5,17 @@ from patients.models import PatientRecords
 
 # Create your views here.
 def home(request):
-    context = {}
+    patientRecord = PatientRecords.objects.all()
+    context = {'patientRecords':patientRecord}
     return render(request, "lab_staffs/labstaff-home.html", context)
 
-def viewDiagnosis(request, patientID):
-    patientRecord = get_list_or_404(PatientRecords, id = patientID)
-    context = {}
+def viewDiagnosis(request):
+    if 'patientID' in request.GET and request.GET['patientID']:
+        patientID = request.GET['patientID']
+        patientRecord = get_list_or_404(PatientRecords, id = patientID)
+        context = {"patientRecord":patientRecord}
+    else:
+        context= {'Error':'Error, empty patient ID'}
     return render(request, "lab_staffs/viewDiagnosis.html", context)
 
 def createReport(request, patientID, authorization):

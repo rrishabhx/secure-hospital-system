@@ -39,12 +39,11 @@
 
 <div class="row my-3">
     <div class="col">
-        <h3>My Appointments</h3>
         {% if appointments %}
         <table class="table">
             <thead>
                 <!-- <th scope="col">S.No.</th> -->
-                <th scope="col">Title</th>
+                <th scope="col">Status</th>
                 <th scope="col">Description</th>
                 <th scope="col">Doctor</th>
                 <th scope="col">Date Posted</th>
@@ -52,10 +51,10 @@
             <tbody>
                 {% for app in appointments %}
                 <tr>
-                    <td>{{ app.title }}</td>
-                    <td>{{ app.description }}</td>
-                    <td>{{ app.doctor }}</td>
-                    <td>{{ app.date_posted }}</td>
+                    <td>{{ app.status }}</td>
+                    <td>{{ app.appointment_details }}</td>
+                    <td>{{ app.doctor.user.first_name }} {{ app.doctor.user.last_name }}</td>
+                    <td>{{ app.scheduled_date }}</td>
                 </tr>
                 {% endfor %}
             </tbody>

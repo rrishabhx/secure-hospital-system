@@ -44,8 +44,15 @@
                             <a class="nav-link" href="{% url 'logout' %}">Logout</a>
                         </li>
                         {% else %}
-                        <li class="nav-item">
-                            <a class="nav-link" href="{% url 'login' %}">Login</a>
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button"
+                                data-bs-toggle="dropdown" aria-expanded="false">
+                                Login
+                            </a>
+                            <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+                                <li><a class="dropdown-item" href="{% url 'login-user' usertype='patient' %}">Patient Login</a></li>
+                                <li><a class="dropdown-item" href="{% url 'login-user' usertype='staff' %}">Staff Login</a></li>
+                            </ul>
                         </li>
                         <li class="nav-item">
                             <a class="nav-link" href="{% url 'register' %}">Register</a>
@@ -61,15 +68,16 @@
         <div class="row">
             <!-- <div class="col-md-4">
                 <div class="content-section">
-                    <h3>Sidebar Template</h3>
-                    <p class='text-muted'>You can put any information here you'd like.
-                    <ul class="list-group">
-                        <li class="list-group-item list-group-item-light">Latest News</li>
-                        <li class="list-group-item list-group-item-light">Announcements</li>
-                        <li class="list-group-item list-group-item-light">Calendars</li>
-                        <li class="list-group-item list-group-item-light">etc</li>
-                    </ul>
-                    </p>
+                    <h3>Important Links</h3>
+                    {% block sidebar-content %}{% endblock %}
+{#                    <p class='text-muted'>You can put any information here you'd like.#}
+{#                    <ul class="list-group">#}
+{#                        <li class="list-group-item list-group-item-light">Latest News</li>#}
+{#                        <li class="list-group-item list-group-item-light">Announcements</li>#}
+{#                        <li class="list-group-item list-group-item-light">Calendars</li>#}
+{#                        <li class="list-group-item list-group-item-light">etc</li>#}
+{#                    </ul>#}
+{#                    </p>#}
                 </div>
             </div> -->
             <div class="col">
@@ -82,7 +90,7 @@
                 </ul>
                 {% endif %}
 
-                {% block content %}{% endblock %}
+                {% block body-content %}{% endblock %}
             </div>
         </div>
     </main>

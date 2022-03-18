@@ -140,8 +140,9 @@ LOGGING = {
     },
     'formatters': {
         'simpleRe': {
-            'format': '[{asctime} {levelname} {module}/{funcName}():{lineno} {processName}:{threadName}] {message} '
-                      '|||| File Path: {pathname}',
+            'format': '[{asctime} {levelname} {module}/{funcName}():{lineno} {processName}:{threadName}] {message}',
+            # 'format': '[{asctime} {levelname} {module}/{funcName}():{lineno} {processName}:{threadName}] {message} '
+            #           '|||| File Path: {pathname}',
             'style': '{',
         }
     }

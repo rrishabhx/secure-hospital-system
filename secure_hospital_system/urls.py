@@ -6,12 +6,13 @@ from django.conf.urls.static import static
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('', include('users.urls')),
+    path('hospital/', include('hospital.urls')),
     path('patients/', include('patients.urls')),
     path('doctors/', include('doctors.urls')),
     path('hospitalstaffs/', include('hospital_staffs.urls')),
     path('labstaffs/', include('lab_staffs.urls')),
     path('insurancestaffs/', include('insurance_staffs.urls')),
-    path('admin_hospital/', include('administrators.urls')),
+    path('adminstaff/', include('administrators.urls')),
 ]
 
 if settings.DEBUG:

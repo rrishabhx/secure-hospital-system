@@ -18,4 +18,4 @@ class User(AbstractUser):
     date_of_birth = models.DateField(default=date.today)
 
     def __str__(self):
-        return f'User: {self.username}({self.user_type})'
+        return f'{self.username}'

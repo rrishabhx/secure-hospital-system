@@ -1,7 +1,7 @@
 {% extends 'main.html' %}
 {% load crispy_forms_tags %}
 
-{% block content %}
+{% block body-content %}
 
     <div class="content-section">
         <form method="POST" action="">
@@ -15,9 +15,9 @@
             </div>
         </form>
         <div class="border-top pt-3">
-            <small class="text-muted">Already Have An Account? <a class="ml-2" href="{% url 'login' %}">Sign In</a></small>
+            <small class="text-muted">Already Have An Account? <a class="ml-2" href="{% url 'login-user' usertype='patient' %}">Sign In</a></small>
         </div>
     </div>
 
 
-{% endblock content %}
+{% endblock body-content %}

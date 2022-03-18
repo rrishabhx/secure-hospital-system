@@ -1,8 +1,12 @@
+import logging
+
 from django.contrib.auth.decorators import login_required
 
 from hospital.forms import AppointmentCreationForm
+from hospital.models import Appointment, Diagnosis, LabTest
+from patients.models import PatientProfile
 from users.decorators import patient_required
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 from django.urls import reverse
 from django.contrib import messages
 from django.contrib.auth import get_user_model
@@ -11,6 +15,8 @@ from.forms import ProfileForm, InsuranceForm, AppointmentForm
 
 
 User = get_user_model()
+
+logger = logging.getLogger(__name__)
 
 appointments_list = [
     {
@@ -153,16 +159,17 @@ reports_list = [
 # @login_required
 # @patient_required
 def home(request):
-    profile = PatientProfile.objects.all()[0]
-    profile_form = ProfileForm()
+
+    logger.info(f"Inside home of {request.user}")
+    user = get_object_or_404(PatientProfile, user=request.user)
+    logger.info(f"User object: {user}")
 
     appointment_form = AppointmentCreationForm()
     context = {
         'appointments': appointments_list,
         'profile': profile,
         'appointment_form': appointment_form,
-        'uform': '',
-        'pform': profile_form
+        'uform': ''
     }
     return render(request, 'patients/home.html', context=context)
 
@@ -237,22 +244,23 @@ def transactions(request):
 
 
 def profile(request):
-    profile = PatientProfile.objects.all()[0]
-    form = ProfileForm(initial={'username': profile.user.username, 'email': profile.user.email,
-                                'address': profile.address, 'insurance': profile.insurance})
+    form = ProfileForm()
+    # profile = PatientProfile.objects.all()[0]
+    # form = ProfileForm(initial={'username': profile.user.username, 'email': profile.user.email,
+    #                             'address': profile.address, 'insurance': profile.insurance})
 
-    if(request.method == 'POST'):
-        form = ProfileForm(request.POST)
-        if(form.is_valid()):
-            data = form.cleaned_data
-            profile.address = data['address']
-            profile.insurance = data['insurance']
-            profile.save()
-            messages.success(request, 'Profile Updated')
-            return redirect(reverse('patients:patient-home'))
-        else:
-            form = ProfileForm(initial={'username': profile.user.username, 'email': profile.user.email,
-                                        'address': profile.address, 'insurance': profile.insurance})
+    # if(request.method == 'POST'):
+    #     form = ProfileForm(request.POST)
+    #     if(form.is_valid()):
+    #         data = form.cleaned_data
+    #         profile.address = data['address']
+    #         profile.insurance = data['insurance']
+    #         profile.save()
+    #         messages.success(request, 'Profile Updated')
+    #         return redirect(reverse('patients:patient-home'))
+    #     else:
+    #         form = ProfileForm(initial={'username': profile.user.username, 'email': profile.user.email,
+    #                                     'address': profile.address, 'insurance': profile.insurance})
 
     context = {
         'form': form,

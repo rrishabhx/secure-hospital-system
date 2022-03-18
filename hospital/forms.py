@@ -3,7 +3,7 @@ from .models import Appointment
 
 
 class AppointmentCreationForm(forms.ModelForm):
-    scheduled_date = forms.DateField(label='What is your birth date?',
+    scheduled_date = forms.DateField(label='Please choose a date',
                                      widget=forms.DateInput(attrs={'type': 'date'}))
 
     class Meta:

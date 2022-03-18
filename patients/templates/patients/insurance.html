@@ -40,6 +40,7 @@
 <div class="row my-3">
     <div class="col">
         <h3>My Insurance Claims</h3>
+        {% if insurance_claims %}
         <table class="table">
             <thead>
                 <!-- <th scope="col">S.No.</th> -->
@@ -71,6 +72,10 @@
                 {% endfor %}
             </tbody>
         </table>
+        {% else %}
+        <h4>No Insurance Claim Records found</h4>
+        {% endif %}
+
     </div>
 </div>
 

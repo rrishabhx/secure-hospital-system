@@ -32,6 +32,33 @@
         {% endfor %}
     </div>
     <div>
+        <h2>Previous Diagnosis:</h2>
+        {% for d in diagnosis %}
+            <div>
+                <h3>Diagnosis</h3>
+                <ul>
+                    <li>Doctor: {{ d.doctor.user.first_name }} {{ d.doctor.user.last_name }}</li>
+                    <li>Diagnosis Details: {{ d.details }}</li>
+                    <li>Prescription: {{ d.prescription }}</li>
+                </ul>
+            </div>
+
+        {% endfor %}
+    </div>
+    <div>
+        <h2>Previous Lab Test Reports:</h2>
+        {% for lt in lab_tests %}
+            <div>
+                <h3>Lab Test</h3>
+                <ul>
+                    <li>Test type: {{ lt.test_type }}</li>
+                    <li>Report: {{ lt.lab_test_report }}</li>
+                </ul>
+            </div>
+
+        {% endfor %}
+    </div>
+    <div>
         <h2></h2>
     </div>
 

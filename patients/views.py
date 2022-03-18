@@ -7,7 +7,7 @@ from django.urls import reverse
 from django.contrib import messages
 from django.contrib.auth import get_user_model
 from .models import PatientProfile
-from.forms import ProfileForm, InsuranceForm
+from.forms import ProfileForm, InsuranceForm, AppointmentForm
 
 
 User = get_user_model()
@@ -74,6 +74,81 @@ insurance_claims = [
     }
 ]
 
+transactions_list = [
+    {
+        'Id': 1,
+        'status': 'Rejected',
+        'transactionAmount': 1525.55,
+        'patientID_Id': 1,
+        'stafID_Id': 3
+    },
+    {
+        'Id': 2,
+        'status': 'Accepted',
+        'transactionAmount': 454.55,
+        'patientID_Id': 1,
+        'stafID_Id': 3
+    },
+    {
+        'Id': 3,
+        'status': 'Accepted',
+        'transactionAmount': 564.55,
+        'patientID_Id': 1,
+        'stafID_Id': 3
+    },
+    {
+        'Id': 4,
+        'status': 'Pending',
+        'transactionAmount': 454564.55,
+        'patientID_Id': 1,
+        'stafID_Id': 3
+    },
+    {
+        'Id': 5,
+        'status': 'Accepted',
+        'transactionAmount': 456465444.55,
+        'patientID_Id': 1,
+        'stafID_Id': 3
+    }
+]
+
+diagnosis_list = []
+prescriptions_list = []
+reports_list = [
+    {
+        'Id': 1,
+        'testType': 'Type1',
+        'testResult': 'All Ok',
+        'patientID_Id': 1,
+        'staffID_Id': 3,
+        'userID_Id': 1
+    },
+    {
+        'Id': 2,
+        'testType': 'Type1',
+        'testResult': 'All Ok',
+        'patientID_Id': 1,
+        'staffID_Id': 3,
+        'userID_Id': 1
+    },
+    {
+        'Id': 3,
+        'testType': 'Type1',
+        'testResult': 'All Ok',
+        'patientID_Id': 1,
+        'staffID_Id': 3,
+        'userID_Id': 1
+    },
+    {
+        'Id': 4,
+        'testType': 'Type1',
+        'testResult': 'All Ok',
+        'patientID_Id': 1,
+        'staffID_Id': 3,
+        'userID_Id': 1
+    },
+]
+
 
 # @login_required
 # @patient_required
@@ -93,10 +168,45 @@ def home(request):
 
 
 def appointments(request):
+    if(request.method == 'POST'):
+        form = AppointmentForm(request.POST)
+        if(form.is_valid()):
+            data = form.cleaned_data
+            print(data)
+            messages.success(request, 'New Appointment Requested')
+            return redirect(reverse('patients:patient-home'))
+    else:
+        form = AppointmentForm()
+
     context = {
         'appointments': appointments_list,
+        'form': form
     }
     return render(request, 'patients/appointments.html', context=context)
+
+
+def diagnosis(request):
+    context = {
+        'diagnosis': diagnosis_list
+    }
+
+    return render(request, 'patients/diagnosis.html', context=context)
+
+
+def prescriptions(request):
+    context = {
+        'prescriptions': prescriptions_list
+    }
+
+    return render(request, 'patients/prescriptions.html', context=context)
+
+
+def reports(request):
+    context = {
+        'reports': reports_list
+    }
+
+    return render(request, 'patients/reports.html', context=context)
 
 
 def insurance(request):
@@ -116,6 +226,14 @@ def insurance(request):
     }
 
     return render(request, 'patients/insurance.html', context=context)
+
+
+def transactions(request):
+    context = {
+        'transactions': transactions_list
+    }
+
+    return render(request, 'patients/transactions.html', context=context)
 
 
 def profile(request):

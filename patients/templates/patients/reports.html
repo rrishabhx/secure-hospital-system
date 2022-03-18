@@ -1,0 +1,39 @@
+{% extends 'patients/main.html' %}
+{% load static %}
+{% load crispy_forms_tags %}
+
+{% block patientcontent %}
+
+<div class="row mb-3">
+    <div class="col">
+        <h2>Reports</h2>
+    </div>
+</div>
+
+<div class="row my-3">
+    <div class="col">
+        {% if reports %}
+        <table class="table">
+            <thead>
+                <th scope="col">Test ID</th>
+                <th scope="col">Test Type</th>
+                <th scope="col">Test Result</th>
+            </thead>
+            <tbody>
+                {% for r in reports %}
+                <tr>
+                    <td>${{ r.Id }}</td>
+                    <td>{{ r.testType }}</td>
+                    <td>{{ r.testResult }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        {% else %}
+        <h4>No Reports found</h4>
+        {% endif %}
+
+    </div>
+</div>
+
+{% endblock patientcontent %}

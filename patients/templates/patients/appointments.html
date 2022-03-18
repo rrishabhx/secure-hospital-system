@@ -4,24 +4,67 @@
 
 {% block patientcontent %}
 
-
-<div class="container">
-
-    <h2>Appointments</h2>
-    {% for appointment in appointments %}
-    <article class="media content-section">
-        <div class="media-body">
-            <div class="article-metadata">
-                <a class="mr-2" href="#">{{ appointment.doctor }}</a>
-                <small class="text-muted">{{ appointment.date_posted }}</small>
-            </div>
-            <h2><a class="article-title" href="#">{{ appointment.title }}</a></h2>
-            <p class="article-content">{{ appointment.description }}</p>
-        </div>
-    </article>
-    {% endfor %}
-
+<div class="row mb-3">
+    <div class="col">
+        <h2>Appointments</h2>
+    </div>
+    <div class="col text-end">
+        <button class="btn btn-info" onclick="newAppointment()">Create New Appointment</button>
+    </div>
 </div>
 
+<div class="row my-3 d-none" id="new-appointment-block">
+    <div class="col">
+
+        <form action="" method="post">
+            {% csrf_token %}
+            <div class="row">
+                <div class="col">
+                    <h3>Create New Appointment</h3>
+                </div>
+                <div class="col text-end">
+                    <button class="btn btn-primary">Submit</button>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col">
+                    {{ form | crispy }}
+                </div>
+            </div>
+        </form>
+
+    </div>
+</div>
+
+<div class="row my-3">
+    <div class="col">
+        <h3>My Appointments</h3>
+        {% if appointments %}
+        <table class="table">
+            <thead>
+                <!-- <th scope="col">S.No.</th> -->
+                <th scope="col">Title</th>
+                <th scope="col">Description</th>
+                <th scope="col">Doctor</th>
+                <th scope="col">Date Posted</th>
+            </thead>
+            <tbody>
+                {% for app in appointments %}
+                <tr>
+                    <td>{{ app.title }}</td>
+                    <td>{{ app.description }}</td>
+                    <td>{{ app.doctor }}</td>
+                    <td>{{ app.date_posted }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        {% else %}
+        <h4>No Appointments found!</h4>
+        {% endif %}
+
+    </div>
+</div>
 
 {% endblock patientcontent %}

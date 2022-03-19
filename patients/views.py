@@ -102,7 +102,6 @@ transactions_list = [
     }
 ]
 
-prescriptions_list = []
 reports_list = [
     {
         'Id': 1,
@@ -196,19 +195,27 @@ def diagnosis(request):
 
 
 def prescriptions(request):
-    context = {
-        'prescriptions': prescriptions_list
-    }
+    logger.info(f"{request.user}: Prescriptions page")
 
+    diagnosis_list = Diagnosis.objects.filter(patient=request.user.patientprofile)
+    logger.info(f"{request.user}: Previous diagnosis: {diagnosis_list}")
+
+    context = {
+        'diagnosis_list': diagnosis_list,
+    }
     return render(request, 'patients/prescriptions.html', context=context)
 
 
-def reports(request):
-    context = {
-        'reports': reports_list
-    }
+def lab_test_reports(request):
+    logger.info(f"{request.user}: Lab Test Reports page")
 
-    return render(request, 'patients/reports.html', context=context)
+    lab_tests = LabTest.objects.filter(patient=request.user.patientprofile)
+    logger.info(f"{request.user}: Previous Lab Reports: {lab_tests}")
+
+    context = {
+        'lab_tests': lab_tests,
+    }
+    return render(request, 'patients/lab_test_reports.html', context=context)
 
 
 def insurance(request):

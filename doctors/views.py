@@ -12,6 +12,7 @@ from doctors.models import DoctorProfile
 from users.decorators import doctor_required
 from django.shortcuts import render, get_object_or_404
 from .forms import ProfileForm
+from django.contrib import messages
 
 from django.contrib.auth import get_user_model
 

@@ -46,7 +46,7 @@ class Diagnosis(models.Model):
     patient = models.ForeignKey(PatientProfile, on_delete=models.CASCADE)
     details = models.TextField(null=True, blank=True)
     prescription = models.TextField(null=True, blank=True)
-    lab_test_recommended = models.BooleanField(default=False)
+    lab_tests_recommended = models.TextField(null=True, blank=True)
     created = models.DateTimeField(auto_now_add=True, blank=True)
 
 

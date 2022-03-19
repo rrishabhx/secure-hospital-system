@@ -102,7 +102,6 @@ transactions_list = [
     }
 ]
 
-diagnosis_list = []
 prescriptions_list = []
 reports_list = [
     {
@@ -185,10 +184,14 @@ def appointments(request):
 
 
 def diagnosis(request):
-    context = {
-        'diagnosis': diagnosis_list
-    }
+    logger.info(f"{request.user}: Diagnosis page")
 
+    diagnosis_list = Diagnosis.objects.filter(patient=request.user.patientprofile)
+    logger.info(f"{request.user}: Previous diagnosis: {diagnosis_list}")
+
+    context = {
+        'diagnosis_list': diagnosis_list,
+    }
     return render(request, 'patients/diagnosis.html', context=context)
 
 

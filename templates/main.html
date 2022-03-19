@@ -66,19 +66,7 @@
 
     <main role="main" class="container">
         <div class="row">
-            <div class="col-md-8">
-                <!-- Flash Messages -->
-                {% if messages %}
-                <ul class="messages">
-                    {% for message in messages %}
-                    <div class="alert alert-{{ message.tags }}">{{ message }}</div>
-                    {% endfor %}
-                </ul>
-                {% endif %}
-
-                {% block body-content %}{% endblock %}
-            </div>
-            <div class="col-md-4">
+            <!-- <div class="col-md-4">
                 <div class="content-section">
                     <h3>Important Links</h3>
                     {% block sidebar-content %}{% endblock %}
@@ -91,6 +79,18 @@
 {#                    </ul>#}
 {#                    </p>#}
                 </div>
+            </div> -->
+            <div class="col">
+                <!-- Flash Messages -->
+                {% if messages %}
+                <ul class="messages">
+                    {% for message in messages %}
+                    <div class="alert alert-{{ message.tags }}">{{ message }}</div>
+                    {% endfor %}
+                </ul>
+                {% endif %}
+
+                {% block body-content %}{% endblock %}
             </div>
         </div>
     </main>

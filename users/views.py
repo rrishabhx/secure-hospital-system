@@ -84,7 +84,8 @@ def register_user(request):
         if form.is_valid():
             form.save()
             username = form.cleaned_data.get('username')
-            messages.success(request, f'Account created for {username}! You are now able to log in')
+            messages.success(
+                request, f'Account created for {username}! You are now able to log in')
             # login(request, user)
 
             return redirect('login-user', usertype='patient')
@@ -101,7 +102,8 @@ def profile_user(request):
     if request.method == 'POST':
         logger.info("Request type: POST")
         u_form = UserUpdateForm(request.POST, instance=request.user)
-        p_form = PatientProfileUpdateForm(request.POST, request.FILES, instance=request.user.patientprofile)
+        p_form = PatientProfileUpdateForm(
+            request.POST, request.FILES, instance=request.user.patientprofile)
 
         if u_form.is_valid() and p_form.is_valid():
             u_form.save()
@@ -132,15 +134,15 @@ def user_redirect(request):
     logger.info(f"Redirecting [{utype}] to home page: ")
 
     if utype == 'patient':
-        return redirect('patient-home')
+        return redirect('patients:home')
     elif utype == 'doctor':
-        return redirect('doctor-home')
+        return redirect('doctors:home')
     elif utype == 'hospital_staff':
-        return redirect('hospitalstaff-home')
+        return redirect('hospital_staffs:home')
     elif utype == 'lab_staff':
-        return redirect('labstaff-home')
+        return redirect('lab_staffs:home')
     elif utype == 'insurance_staff':
-        return redirect('insurancestaff-home')
+        return redirect('insurance_staffs:home')
     else:
         context = {
             'reason': f'Invalid user type: {utype}'

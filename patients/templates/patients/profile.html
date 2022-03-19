@@ -1,23 +1,23 @@
-{% extends 'main.html' %}
+{% extends 'patients/main.html' %}
 {% load crispy_forms_tags %}
 
-{% block body-content %}
+{% block patientcontent %}
 
     <div class="content-section">
         <div class="media">
-            <img class="rounded-circle account-img" src="{{ user.patientprofile.image.url }}" alt="">
-            <div class="media-body">
-                <h2 class="account-heading">{{ user.username }}</h2>
-                <p class="text-secondary">{{ user.email }}</p>
-            </div>
+            <img class="rounded-circle account-img" src="{{ profile.user.patientprofile.image.url }}" alt="">
+            <!-- <div class="media-body">
+                <h2 class="account-heading">{{ profile.user.username }}</h2>
+                <p class="text-secondary">{{ profile.user.email }}</p>
+            </div> -->
         </div>
         <!-- FORM HERE -->
         <form method="POST" action="" enctype="multipart/form-data">
             {% csrf_token %}
             <fieldset class="form-group">
                 <legend class="border-bottom mb-4">Profile Info</legend>
-                {{ u_form|crispy }}
-                {{ p_form|crispy }}
+                {{ form|crispy }}
+                <!-- {{ p_form|crispy }} -->
             </fieldset>
             <div class="form-group">
                 <button class="btn btn-outline-info" type="submit">Update Profile</button>
@@ -25,4 +25,4 @@
         </form>
     </div>
 
-{% endblock body-content %}
+{% endblock patientcontent %}

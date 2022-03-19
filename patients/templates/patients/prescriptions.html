@@ -1,0 +1,38 @@
+{% extends 'patients/main.html' %}
+{% load static %}
+{% load crispy_forms_tags %}
+
+{% block patientcontent %}
+
+<div class="row mb-3">
+    <div class="col">
+        <h2>Prescriptions</h2>
+    </div>
+</div>
+
+<div class="row my-3">
+    <div class="col">
+        <!-- <h3>My Insurance Claims</h3> -->
+        {% if prescriptions %}
+        <table class="table">
+            <thead>
+                <th scope="col">Transaction Amount</th>
+                <th scope="col">Status</th>
+            </thead>
+            <tbody>
+                {% for p in prescriptions %}
+                <tr>
+                    <td>${{ t.transactionAmount }}</td>
+                    <td>{{ t.status }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        {% else %}
+        <h4>No Prescriptions found</h4>
+        {% endif %}
+
+    </div>
+</div>
+
+{% endblock patientcontent %}

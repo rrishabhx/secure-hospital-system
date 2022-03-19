@@ -158,13 +158,22 @@ def home(request):
 
 
 def appointments(request):
+    logger.info(f"{request.user}: Appointments page")
     if request.method == 'POST':
         form = AppointmentForm(request.POST)
+
         if form.is_valid():
-            data = form.cleaned_data
-            print(data)
+            appointment_data = form.cleaned_data
+            appointment_data['patient'] = request.user.patientprofile
+
+            logger.info(f"{request.user}: New appointment details- {appointment_data}")
+            appointment_obj = Appointment(**appointment_data)
+            appointment_obj.save()
+
             messages.success(request, 'New Appointment Requested')
-            return redirect(reverse('home'))
+            return redirect('patients:appointments')
+        else:
+            logger.error(f"{request.user}: Invalid form data- {form.data}")
     else:
         form = AppointmentForm()
 

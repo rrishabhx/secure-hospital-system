@@ -1,6 +1,6 @@
 from django import forms
 from .models import Appointment
-
+from .models import Diagnosis
 
 class AppointmentCreationForm(forms.ModelForm):
     scheduled_date = forms.DateField(label='Please choose a date',
@@ -10,3 +10,8 @@ class AppointmentCreationForm(forms.ModelForm):
         model = Appointment
 
         fields = ('doctor', 'scheduled_date', 'appointment_details')
+
+class LabTestRecommendationForm(forms.ModelForm):
+    class Meta:
+        model = Diagnosis
+        fields = ('patient', 'appointment', 'prescription','lab_tests_recommended')

@@ -1,6 +1,21 @@
 {% extends 'main.html' %}
 
 {% block body-content %}
+   <div>
+        <h2> Provide prescriptions and Lab tests:</h2>
+
+        <form method="POST" action="{% url 'hospital-diagnosis-apt' %}">
+            {% csrf_token %}
+            <fieldset class="form-group">
+                {{ recommendation_form.as_p }}
+            </fieldset>
+            <div class="form-group">
+                <button class="btn btn-outline-info" type="submit">Submit</button>
+            </div>
+        </form>
+    </div>
+
+
     <div>
         <h2>Upcoming Appointments:</h2>
         {% for appointment in appointments %}

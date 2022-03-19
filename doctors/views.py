@@ -6,7 +6,7 @@ import logging
 
 from django.contrib.auth.decorators import login_required
 
-from hospital.forms import AppointmentCreationForm
+from hospital.forms import LabTestRecommendationForm
 from hospital.models import Appointment, Diagnosis, LabTest
 from doctors.models import DoctorProfile
 from users.decorators import doctor_required
@@ -25,9 +25,13 @@ def home(request):
     logger.info(f"Inside home of {request.user}")
     user = get_object_or_404(DoctorProfile, user=request.user)
     logger.info(f"User object: {user}")
+
+    recommendation_form = LabTestRecommendationForm()
+
     context = {
         'appointments': Appointment.objects.filter(doctor=user),
         'diagnosis': Diagnosis.objects.filter(doctor=user),
         'lab_tests': LabTest.objects.filter(doctor=user),
+        'recommendation_form': recommendation_form
     }
     return render(request, 'doctors/home.html', context)

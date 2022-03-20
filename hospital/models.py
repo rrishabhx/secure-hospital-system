@@ -53,6 +53,6 @@ class Diagnosis(models.Model):
 class LabTest(models.Model):
     doctor = models.ForeignKey(DoctorProfile, on_delete=models.CASCADE)
     patient = models.ForeignKey(PatientProfile, on_delete=models.CASCADE)
-    test_type = models.CharField(max_length=150)
+    lab_tests_recommended = models.OneToOneField(Diagnosis, on_delete=models.CASCADE)
     lab_test_report = models.TextField(null=True, blank=True)
     created = models.DateTimeField(auto_now_add=True, blank=True)

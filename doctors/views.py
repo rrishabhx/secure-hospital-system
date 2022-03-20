@@ -102,7 +102,7 @@ def prescriptions(request):
             obj.save()
 
             messages.success(request, 'New Prescripotion Created')
-            return redirect('doctors:prescriptions')
+            # return redirect('doctors:prescriptions')
         else:
             logger.error(f"{request.user}: Invalid form data- {form.data}")
     else:

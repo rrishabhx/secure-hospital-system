@@ -1,0 +1,17 @@
+{% extends 'main.html' %}
+{% load crispy_forms_tags %}
+
+{% block body-content %}
+<h3>Tasks</h3>
+                    {% block sidebar-content %}{% endblock %}
+<p class='text-muted'> Navigate to task
+                  <ul class="list-group">
+					  <li class="list-group-item list-group-item-light"> <a href="{% url 'hospital_staffs:createPatient' %}">Create Patient Records</a></li>
+                      <li class="list-group-item list-group-item-light"><a href="{% url 'hospital_staffs:viewPatient' %}">View Patient Diagnosis and Prescription</a></li>
+                      <li class="list-group-item list-group-item-light"><a href="{% url 'hospital_staffs:viewRecords' %}">View Patient Records</a></li>
+					  <li class="list-group-item list-group-item-light"><a href="{% url 'hospital_staffs:viewLabRecords' %}">View Lab Records</a></li>
+                      <li class="list-group-item list-group-item-light"> <a href="{% url 'hospital_staffs:createTransaction' %}">Create Transactions</a></li>
+					  <li class="list-group-item list-group-item-light"> <a href="{% url 'hospital_staffs:approveTransaction' %}">Approve Transactions</a></li>					  
+                   	  <li class="list-group-item list-group-item-light"> <a href="{% url 'hospital_staffs:approveAppointment' %}">Approve Appointments</a></li>	
+                   </ul>
+{% endblock body-content %}

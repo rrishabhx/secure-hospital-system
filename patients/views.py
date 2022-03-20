@@ -9,7 +9,9 @@ from django.shortcuts import render, redirect
 from django.urls import reverse
 from django.contrib import messages
 from django.contrib.auth import get_user_model
-from .forms import ProfileForm, InsuranceForm, AppointmentForm
+
+from users.forms import UserUpdateForm
+from .forms import PatientProfileUpdateForm, InsuranceForm, AppointmentForm
 
 User = get_user_model()
 
@@ -231,7 +233,6 @@ def insurance(request):
         form = InsuranceForm(request.POST)
         if form.is_valid():
             data = form.cleaned_data
-            print(data)
             messages.success(request, 'New Insurance Claim Filed')
             return redirect(reverse('home'))
     else:
@@ -258,26 +259,28 @@ def transactions(request):
 @login_required
 @patient_required
 def profile(request):
-    form = ProfileForm()
-    # profile = PatientProfile.objects.all()[0]
-    # form = ProfileForm(initial={'username': profile.user.username, 'email': profile.user.email,
-    #                             'address': profile.address, 'insurance': profile.insurance})
+    logger.info("Inside patient profile")
 
-    # if(request.method == 'POST'):
-    #     form = ProfileForm(request.POST)
-    #     if(form.is_valid()):
-    #         data = form.cleaned_data
-    #         profile.address = data['address']
-    #         profile.insurance = data['insurance']
-    #         profile.save()
-    #         messages.success(request, 'Profile Updated')
-    #         return redirect(reverse('patients:patient-home'))
-    #     else:
-    #         form = ProfileForm(initial={'username': profile.user.username, 'email': profile.user.email,
-    #                                     'address': profile.address, 'insurance': profile.insurance})
+    if request.method == 'POST':
+        logger.info("Request type: POST")
+        u_form = UserUpdateForm(request.POST, instance=request.user)
+        p_form = PatientProfileUpdateForm(
+            request.POST, request.FILES, instance=request.user.patientprofile)
+
+        if u_form.is_valid() and p_form.is_valid():
+            u_form.save()
+            p_form.save()
+
+            messages.success(request, f'Your account has been updated!')
+            return redirect('profile')
+    else:
+        logger.info(f"Request type: GET")
+        u_form = UserUpdateForm(instance=request.user)
+        p_form = PatientProfileUpdateForm(instance=request.user.patientprofile)
 
     context = {
-        'form': form,
-        'profile': profile
+        'u_form': u_form,
+        'p_form': p_form,
     }
-    return render(request, 'patients/profile.html', context=context)
+
+    return render(request, 'patients/profile.html', context)

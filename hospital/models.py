@@ -35,7 +35,6 @@ class Appointment(models.Model):
 
     class Meta:
         ordering = ['-scheduled_date', '-created']
-        db_table = 'appointment'
 
     def __str__(self):
         return f"{self.patient},{self.doctor},{self.appointment_details}"
@@ -49,8 +48,6 @@ class Diagnosis(models.Model):
     prescription = models.TextField(null=True, blank=True)
     lab_tests_recommended = models.TextField(null=True, blank=True)
     created = models.DateTimeField(auto_now_add=True, blank=True)
-    class Meta:
-        db_table = 'diagnosis'
 
 
 class LabTest(models.Model):
@@ -59,6 +56,3 @@ class LabTest(models.Model):
     lab_tests_recommended = models.OneToOneField(Diagnosis, on_delete=models.CASCADE)
     lab_test_report = models.TextField(null=True, blank=True)
     created = models.DateTimeField(auto_now_add=True, blank=True)
-    
-    class Meta:
-        db_table = 'labtests'

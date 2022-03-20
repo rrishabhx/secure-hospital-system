@@ -102,8 +102,6 @@ transactions_list = [
     }
 ]
 
-diagnosis_list = []
-prescriptions_list = []
 reports_list = [
     {
         'Id': 1,
@@ -158,13 +156,22 @@ def home(request):
 
 
 def appointments(request):
+    logger.info(f"{request.user}: Appointments page")
     if request.method == 'POST':
         form = AppointmentForm(request.POST)
+
         if form.is_valid():
-            data = form.cleaned_data
-            print(data)
+            appointment_data = form.cleaned_data
+            appointment_data['patient'] = request.user.patientprofile
+
+            logger.info(f"{request.user}: New appointment details- {appointment_data}")
+            appointment_obj = Appointment(**appointment_data)
+            appointment_obj.save()
+
             messages.success(request, 'New Appointment Requested')
-            return redirect(reverse('home'))
+            return redirect('patients:appointments')
+        else:
+            logger.error(f"{request.user}: Invalid form data- {form.data}")
     else:
         form = AppointmentForm()
 
@@ -176,27 +183,39 @@ def appointments(request):
 
 
 def diagnosis(request):
-    context = {
-        'diagnosis': diagnosis_list
-    }
+    logger.info(f"{request.user}: Diagnosis page")
 
+    diagnosis_list = Diagnosis.objects.filter(patient=request.user.patientprofile)
+    logger.info(f"{request.user}: Previous diagnosis: {diagnosis_list}")
+
+    context = {
+        'diagnosis_list': diagnosis_list,
+    }
     return render(request, 'patients/diagnosis.html', context=context)
 
 
 def prescriptions(request):
-    context = {
-        'prescriptions': prescriptions_list
-    }
+    logger.info(f"{request.user}: Prescriptions page")
 
+    diagnosis_list = Diagnosis.objects.filter(patient=request.user.patientprofile)
+    logger.info(f"{request.user}: Previous diagnosis: {diagnosis_list}")
+
+    context = {
+        'diagnosis_list': diagnosis_list,
+    }
     return render(request, 'patients/prescriptions.html', context=context)
 
 
-def reports(request):
-    context = {
-        'reports': reports_list
-    }
+def lab_test_reports(request):
+    logger.info(f"{request.user}: Lab Test Reports page")
 
-    return render(request, 'patients/reports.html', context=context)
+    lab_tests = LabTest.objects.filter(patient=request.user.patientprofile)
+    logger.info(f"{request.user}: Previous Lab Reports: {lab_tests}")
+
+    context = {
+        'lab_tests': lab_tests,
+    }
+    return render(request, 'patients/lab_test_reports.html', context=context)
 
 
 def insurance(request):

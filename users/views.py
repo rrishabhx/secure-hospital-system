@@ -28,7 +28,7 @@ appointments = [
 
 
 def home(request):
-    logger.info("In home page. Redirecting to login page")
+    logger.info("In landing page. Redirecting user to login page")
     return redirect('login-user', usertype='patient')
 
 

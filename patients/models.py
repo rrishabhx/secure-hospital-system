@@ -30,8 +30,6 @@ class PatientProfile(models.Model):
             output_size = (300, 300)
             img.thumbnail(output_size)
             img.save(self.image.path)
-    class Meta:
-        db_table = 'patients'
 
 
 class PatientRecords(models.Model):
@@ -41,15 +39,9 @@ class PatientRecords(models.Model):
     doctorId = models.ForeignKey('hospital_staffs.HospitalStaffProfile', on_delete=models.CASCADE, null=True)
     labTestId = models.ForeignKey('lab_staffs.LabStaffProfile', on_delete=models.CASCADE, null=True)
 
-    class Meta:
-        db_table = 'patientrecords'
-
 
 class Transactions(models.Model):
     patientID = models.ForeignKey(PatientProfile, on_delete=models.CASCADE, null=True)
     staffId = models.ForeignKey('hospital_staffs.HospitalStaffProfile', on_delete=models.CASCADE, null=True)
     status = models.BooleanField(null=True, blank=True)
     transactionAmount = models.DecimalField(max_digits=12, decimal_places=4, null=True)
-
-    class Meta:
-        db_table = 'transactions'

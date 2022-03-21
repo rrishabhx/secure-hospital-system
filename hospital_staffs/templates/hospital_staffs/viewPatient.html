@@ -1,28 +1,51 @@
-{% extends 'main.html' %}
+
+{% extends 'hospital_staffs/home.html' %}
+{% load static %}
 {% load crispy_forms_tags %}
 
-{% block body-content %}
-<form action="" method="get">
-	{% csrf_token %}
-	{{ form}}
-	<input type="submit">
-	
-</form>
+{% block patientcontent %}
 
-<h4> Prescriptions: </h4>
-{% for i in prescription %}
 
-<ul class="list-group">
-                      <li class="list-group-item list-group-item-light">{{ i }}</li>
-</ul>
-{% endfor %}
 
-<br>
-<h4> Diagnosis: </h4>
-{% for j in diagnosis %}
-<ul class="list-group">
-                      <li class="list-group-item list-group-item-light">{{ j }}</li>
-</ul>
-{% endfor %}
+        <form action="" method="post">
+            {% csrf_token %}
+            <div class="row">
+                <div class="col">
+                    <h3>View Diagnosis and Prescription</h3>
+                </div>
+                <div class="col text-end">
+                    <button class="btn btn-primary">Submit</button>
+                </div>
+            </div>
 
-{% endblock body-content %}
+            <div class="row">
+                <div class="col">
+                    {{ form | crispy }}
+                </div>
+            </div>
+        </form>
+		
+		<br>
+		
+		<h4> Prescriptions: </h4>
+	{% for i in prescription %}
+
+	<ul class="list-group">
+					  <li class="list-group-item list-group-item-light">{{ i }}</li>
+	</ul>
+	{% endfor %}
+
+	<br>
+	<h4> Diagnosis: </h4>
+	{% for j in diagnosis %}
+	<ul class="list-group">
+					  <li class="list-group-item list-group-item-light">{{ j }}</li>
+	</ul>
+	{% endfor %}
+
+
+
+
+
+
+{% endblock patientcontent %}

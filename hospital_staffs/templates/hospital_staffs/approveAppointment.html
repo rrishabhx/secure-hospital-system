@@ -1,7 +1,10 @@
-{% extends 'main.html' %}
+{% extends 'hospital_staffs/home.html' %}
+{% load static %}
 {% load crispy_forms_tags %}
 
-{% block body-content %}
+{% block patientcontent %}
+
+
 <h4> Records: </h4>
 {% for i in transactions %}
 <ul class="list-group">
@@ -19,4 +22,8 @@
 </ul>
 {% endfor %}
 
-{% endblock body-content %}
+
+
+
+
+{% endblock patientcontent %}

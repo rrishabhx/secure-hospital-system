@@ -18,5 +18,3 @@ class insuranceClaim(models.Model):
     patientId = models.ForeignKey('patients.PatientProfile',on_delete=models.CASCADE,null=True)
     def __str__(self):
         return f'{self.user.user_type}: {self.user.username}'
-    class Meta:
-        db_table = 'insuranceclaim'

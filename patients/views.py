@@ -4,14 +4,14 @@ from django.contrib.auth.decorators import login_required
 
 from hospital.forms import AppointmentCreationForm
 from hospital.models import Appointment, Diagnosis, LabTest
-from patients.models import PatientProfile
 from users.decorators import patient_required
-from django.shortcuts import render, redirect, get_object_or_404
+from django.shortcuts import render, redirect
 from django.urls import reverse
 from django.contrib import messages
 from django.contrib.auth import get_user_model
-from .models import PatientProfile
-from .forms import ProfileForm, InsuranceForm, AppointmentForm
+
+from users.forms import UserUpdateForm
+from .forms import PatientProfileUpdateForm, InsuranceForm, AppointmentForm
 
 User = get_user_model()
 
@@ -155,6 +155,8 @@ def home(request):
     return render(request, 'patients/home.html', context=context)
 
 
+@login_required
+@patient_required
 def appointments(request):
     logger.info(f"{request.user}: Appointments page")
     if request.method == 'POST':
@@ -182,6 +184,8 @@ def appointments(request):
     return render(request, 'patients/appointments.html', context=context)
 
 
+@login_required
+@patient_required
 def diagnosis(request):
     logger.info(f"{request.user}: Diagnosis page")
 
@@ -194,6 +198,8 @@ def diagnosis(request):
     return render(request, 'patients/diagnosis.html', context=context)
 
 
+@login_required
+@patient_required
 def prescriptions(request):
     logger.info(f"{request.user}: Prescriptions page")
 
@@ -206,6 +212,8 @@ def prescriptions(request):
     return render(request, 'patients/prescriptions.html', context=context)
 
 
+@login_required
+@patient_required
 def lab_test_reports(request):
     logger.info(f"{request.user}: Lab Test Reports page")
 
@@ -218,12 +226,13 @@ def lab_test_reports(request):
     return render(request, 'patients/lab_test_reports.html', context=context)
 
 
+@login_required
+@patient_required
 def insurance(request):
     if request.method == 'POST':
         form = InsuranceForm(request.POST)
         if form.is_valid():
             data = form.cleaned_data
-            print(data)
             messages.success(request, 'New Insurance Claim Filed')
             return redirect(reverse('home'))
     else:
@@ -237,6 +246,8 @@ def insurance(request):
     return render(request, 'patients/insurance.html', context=context)
 
 
+@login_required
+@patient_required
 def transactions(request):
     context = {
         'transactions': transactions_list
@@ -245,27 +256,31 @@ def transactions(request):
     return render(request, 'patients/transactions.html', context=context)
 
 
+@login_required
+@patient_required
 def profile(request):
-    form = ProfileForm()
-    # profile = PatientProfile.objects.all()[0]
-    # form = ProfileForm(initial={'username': profile.user.username, 'email': profile.user.email,
-    #                             'address': profile.address, 'insurance': profile.insurance})
+    logger.info("Inside patient profile")
 
-    # if(request.method == 'POST'):
-    #     form = ProfileForm(request.POST)
-    #     if(form.is_valid()):
-    #         data = form.cleaned_data
-    #         profile.address = data['address']
-    #         profile.insurance = data['insurance']
-    #         profile.save()
-    #         messages.success(request, 'Profile Updated')
-    #         return redirect(reverse('patients:patient-home'))
-    #     else:
-    #         form = ProfileForm(initial={'username': profile.user.username, 'email': profile.user.email,
-    #                                     'address': profile.address, 'insurance': profile.insurance})
+    if request.method == 'POST':
+        logger.info("Request type: POST")
+        u_form = UserUpdateForm(request.POST, instance=request.user)
+        p_form = PatientProfileUpdateForm(
+            request.POST, request.FILES, instance=request.user.patientprofile)
+
+        if u_form.is_valid() and p_form.is_valid():
+            u_form.save()
+            p_form.save()
+
+            messages.success(request, f'Your account has been updated!')
+            return redirect('profile')
+    else:
+        logger.info(f"Request type: GET")
+        u_form = UserUpdateForm(instance=request.user)
+        p_form = PatientProfileUpdateForm(instance=request.user.patientprofile)
 
     context = {
-        'form': form,
-        'profile': profile
+        'u_form': u_form,
+        'p_form': p_form,
     }
-    return render(request, 'patients/profile.html', context=context)
+
+    return render(request, 'patients/profile.html', context)

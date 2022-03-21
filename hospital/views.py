@@ -12,50 +12,50 @@ from users.decorators import patient_required, doctor_required
 logger = logging.getLogger(__name__)
 
 
-@login_required
-@patient_required
-def request_appointment(request):
-    appointment_form = AppointmentCreationForm()
-
-    if request.method == 'POST':
-        logger.info("Patient requesting appointment")
-
-        appointment_form = AppointmentCreationForm(request.POST)
-        if appointment_form.is_valid():
-            logger.info("Valid Patient:Appointment form")
-
-            appointment_data = appointment_form.cleaned_data
-            appointment_data['patient'] = PatientProfile.objects.get(user=request.user)
-
-            logger.info(f"Appointment form data: {appointment_data}")
-
-            appointment_obj = Appointment(**appointment_data)
-            appointment_obj.save()
-        else:
-            logger.error("Patient: Appointment form INVALID")
-
-    return redirect('patient-home')
-
-
-@login_required
-@doctor_required
-def request_diagnosis(request):
-
-    if request.method == 'POST':
-        logger.info("Doctor creating diagnosis")
-
-        recommendation_form = LabTestRecommendationForm(request.POST)
-        if recommendation_form.is_valid():
-            logger.info("Valid Doctor:Diagnosis form")
-
-            data = recommendation_form.cleaned_data
-            data['doctor'] = DoctorProfile.objects.get(user=request.user)
-
-            logger.info(f"Diagnosis form data: {data}")
-
-            diagnosis_obj = Diagnosis(**data)
-            diagnosis_obj.save()
-        else:
-            logger.error("Doctor: Diagnosis form INVALID")
-
-    return redirect('doctor-home')
+# @login_required
+# @patient_required
+# def request_appointment(request):
+#     appointment_form = AppointmentCreationForm()
+#
+#     if request.method == 'POST':
+#         logger.info("Patient requesting appointment")
+#
+#         appointment_form = AppointmentCreationForm(request.POST)
+#         if appointment_form.is_valid():
+#             logger.info("Valid Patient:Appointment form")
+#
+#             appointment_data = appointment_form.cleaned_data
+#             appointment_data['patient'] = PatientProfile.objects.get(user=request.user)
+#
+#             logger.info(f"Appointment form data: {appointment_data}")
+#
+#             appointment_obj = Appointment(**appointment_data)
+#             appointment_obj.save()
+#         else:
+#             logger.error("Patient: Appointment form INVALID")
+#
+#     return redirect('patient-home')
+#
+#
+# @login_required
+# @doctor_required
+# def request_diagnosis(request):
+#
+#     if request.method == 'POST':
+#         logger.info("Doctor creating diagnosis")
+#
+#         recommendation_form = LabTestRecommendationForm(request.POST)
+#         if recommendation_form.is_valid():
+#             logger.info("Valid Doctor:Diagnosis form")
+#
+#             data = recommendation_form.cleaned_data
+#             data['doctor'] = DoctorProfile.objects.get(user=request.user)
+#
+#             logger.info(f"Diagnosis form data: {data}")
+#
+#             diagnosis_obj = Diagnosis(**data)
+#             diagnosis_obj.save()
+#         else:
+#             logger.error("Doctor: Diagnosis form INVALID")
+#
+#     return redirect('doctor-home')

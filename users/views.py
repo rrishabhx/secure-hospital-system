@@ -28,7 +28,7 @@ appointments = [
 
 
 def home(request):
-    logger.info("In home page. Redirecting to login page")
+    logger.info("In landing page. Redirecting user to login page")
     return redirect('login-user', usertype='patient')
 
 
@@ -79,7 +79,6 @@ def register_user(request):
 
     if request.method == 'POST':
         form = UserRegisterForm(request.POST)
-        print(f"Register form data: {form}")
 
         if form.is_valid():
             form.save()
@@ -97,55 +96,29 @@ def register_user(request):
 
 @login_required
 def profile_user(request):
-    logger.info("Inside user profile")
+    logger.info("Opening user profile. Redirecting to user-type")
 
-    if request.method == 'POST':
-        logger.info("Request type: POST")
-        u_form = UserUpdateForm(request.POST, instance=request.user)
-        p_form = PatientProfileUpdateForm(
-            request.POST, request.FILES, instance=request.user.patientprofile)
-
-        if u_form.is_valid() and p_form.is_valid():
-            u_form.save()
-            p_form.save()
-
-            messages.success(request, f'Your account has been updated!')
-            return redirect('profile')
-    else:
-        logger.info(f"Request type: GET")
-        u_form = UserUpdateForm(instance=request.user)
-        p_form = PatientProfileUpdateForm(instance=request.user.patientprofile)
-
-    context = {
-        'u_form': u_form,
-        'p_form': p_form,
-    }
-
-    if request.user.user_type == 'patient':
-        logger.info("User type: Patient")
-        return render(request, 'patients/profile.html', context)
-
-    return render(request, 'users/profile.html')
+    return user_redirect(request, 'profile')
 
 
-def user_redirect(request):
-    utype = request.user.user_type
+def user_redirect(request, redirect_page='home'):
+    user_type = request.user.user_type
 
-    logger.info(f"Redirecting [{utype}] to home page: ")
+    logger.info(f"Redirecting [{user_type}] to home page: ")
 
-    if utype == 'patient':
-        return redirect('patients:home')
-    elif utype == 'doctor':
-        return redirect('doctors:home')
-    elif utype == 'hospital_staff':
-        return redirect('hospital_staffs:home')
-    elif utype == 'lab_staff':
-        return redirect('lab_staffs:home')
-    elif utype == 'insurance_staff':
-        return redirect('insurance_staffs:home')
+    if user_type == 'patient':
+        return redirect(f'patients:{redirect_page}')
+    elif user_type == 'doctor':
+        return redirect(f'doctors:{redirect_page}')
+    elif user_type == 'hospital_staff':
+        return redirect(f'hospital_staffs:{redirect_page}')
+    elif user_type == 'lab_staff':
+        return redirect(f'lab_staffs:{redirect_page}')
+    elif user_type == 'insurance_staff':
+        return redirect(f'insurance_staffs:{redirect_page}')
     else:
         context = {
-            'reason': f'Invalid user type: {utype}'
+            'reason': f'Invalid user type: {user_type}'
         }
         response = render(request, context)
         response.status_code = 400

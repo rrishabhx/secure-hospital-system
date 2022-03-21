@@ -1,18 +1,14 @@
 from django import forms
-from datetime import datetime
 
 from doctors.models import DoctorProfile
 from hospital.models import Appointment
+from patients.models import PatientProfile
 
 
-class ProfileForm(forms.Form):
-    username = forms.CharField(
-        label='Username', max_length=100, required=False, disabled=True)
-    email = forms.CharField(label='Email', max_length=100,
-                            required=False, disabled=True)
-    address = forms.CharField(label='Address', max_length=100, required=False)
-    insurance = forms.CharField(
-        label='Insurance', max_length=100, required=False)
+class PatientProfileUpdateForm(forms.ModelForm):
+    class Meta:
+        model = PatientProfile
+        fields = ['image', 'address', 'insurance']
 
 
 class AppointmentForm(forms.ModelForm):

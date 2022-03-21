@@ -39,15 +39,9 @@ class PatientRecords(models.Model):
     doctorId = models.ForeignKey('hospital_staffs.HospitalStaffProfile', on_delete=models.CASCADE, null=True)
     labTestId = models.ForeignKey('lab_staffs.LabStaffProfile', on_delete=models.CASCADE, null=True)
 
-    class Meta:
-        db_table = 'patientrecords'
-
 
 class Transactions(models.Model):
     patientID = models.ForeignKey(PatientProfile, on_delete=models.CASCADE, null=True)
     staffId = models.ForeignKey('hospital_staffs.HospitalStaffProfile', on_delete=models.CASCADE, null=True)
-    status = models.CharField(max_length=30, null=True)
-    transactionAmount = models.DecimalField(max_digits=6, decimal_places=4, null=True)
-
-    class Meta:
-        db_table = 'transactions'
+    status = models.BooleanField(null=True, blank=True)
+    transactionAmount = models.DecimalField(max_digits=12, decimal_places=4, null=True)

@@ -5,19 +5,15 @@
 
     <div class="content-section">
         <div class="media">
-            <img class="rounded-circle account-img" src="{{ profile.user.patientprofile.image.url }}" alt="">
-            <!-- <div class="media-body">
-                <h2 class="account-heading">{{ profile.user.username }}</h2>
-                <p class="text-secondary">{{ profile.user.email }}</p>
-            </div> -->
+            <img class="rounded-circle account-img" src="{{ user.patientprofile.image.url }}" alt="">
         </div>
         <!-- FORM HERE -->
         <form method="POST" action="" enctype="multipart/form-data">
             {% csrf_token %}
             <fieldset class="form-group">
                 <legend class="border-bottom mb-4">Profile Info</legend>
-                {{ form|crispy }}
-                <!-- {{ p_form|crispy }} -->
+                {{ u_form|crispy }}
+                {{ p_form|crispy }}
             </fieldset>
             <div class="form-group">
                 <button class="btn btn-outline-info" type="submit">Update Profile</button>

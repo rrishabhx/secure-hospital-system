@@ -50,6 +50,7 @@ class Diagnosis(models.Model):
     details = models.TextField(null=True, blank=True)
     prescription = models.TextField(null=True, blank=True)
     lab_tests_recommended = models.TextField(null=True, blank=True)
+    lab_test_status = models.BooleanField(null=True, blank=True)
     created = models.DateTimeField(auto_now_add=True, blank=True)
 
 

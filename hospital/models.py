@@ -1,6 +1,6 @@
 from django.utils import timezone
 
-from django.core.validators import MinValueValidator
+from django.core.validators import MinValueValidator, MaxValueValidator
 from django.db import models
 
 from patients.models import PatientProfile
@@ -59,4 +59,17 @@ class LabTest(models.Model):
     patient = models.ForeignKey(PatientProfile, on_delete=models.CASCADE)
     lab_tests_recommended = models.OneToOneField(Diagnosis, on_delete=models.CASCADE)
     lab_test_report = models.TextField(null=True, blank=True)
+    created = models.DateTimeField(auto_now_add=True, blank=True)
+
+
+class InsurancePolicy(models.Model):
+    name = models.CharField(max_length=100)
+    max_amount = models.PositiveSmallIntegerField(default=100,
+                                                  validators=[MinValueValidator(1), MaxValueValidator(1000)])
+
+
+class InsuranceClaim(models.Model):
+    patient = models.OneToOneField(PatientProfile, on_delete=models.CASCADE)
+    insurance_policy = models.ForeignKey(InsurancePolicy, on_delete=models.CASCADE)
+    status = models.BooleanField(null=True, blank=True)
     created = models.DateTimeField(auto_now_add=True, blank=True)

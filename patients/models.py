@@ -4,12 +4,10 @@ from PIL import Image
 
 
 # TODO: Add models for Payments and Transactions
-from hospital.models import InsuranceClaim
-
 
 class PatientProfile(models.Model):
     user = models.OneToOneField(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, primary_key=True)
-    insurance = models.OneToOneField(InsuranceClaim, null=True, blank=True, on_delete=models.SET_NULL)
+    # insurance = models.OneToOneField(InsurancePolicy, null=True, blank=True, on_delete=models.SET_NULL)
     image = models.ImageField(default='default.jpg', upload_to='profile_pics', blank=True)
     address = models.TextField(null=True, blank=True)
 
@@ -26,14 +24,6 @@ class PatientProfile(models.Model):
             output_size = (300, 300)
             img.thumbnail(output_size)
             img.save(self.image.path)
-
-
-class PatientRecords(models.Model):
-    patientID = models.ForeignKey(PatientProfile, on_delete=models.CASCADE, null=True)
-    diagnosis = models.TextField(null=True)
-    prescription = models.TextField(null=True)
-    doctorId = models.ForeignKey('hospital_staffs.HospitalStaffProfile', on_delete=models.CASCADE, null=True)
-    labTestId = models.ForeignKey('lab_staffs.LabStaffProfile', on_delete=models.CASCADE, null=True)
 
 
 class Transactions(models.Model):

@@ -23,7 +23,7 @@ class UserUpdateForm(forms.ModelForm):
         fields = ['username', 'email', 'date_of_birth']
 
 
-class PatientProfileUpdateForm(forms.ModelForm):
-    class Meta:
-        model = PatientProfile
-        fields = ['image']
+# class PatientProfileUpdateForm(forms.ModelForm):
+#     class Meta:
+#         model = PatientProfile
+#         fields = ['image']

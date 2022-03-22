@@ -1,14 +1,20 @@
 from django import forms
 
 from doctors.models import DoctorProfile
-from hospital.models import Appointment
+from hospital.models import Appointment, InsuredPatient
 from patients.models import PatientProfile
 
 
 class PatientProfileUpdateForm(forms.ModelForm):
     class Meta:
         model = PatientProfile
-        fields = ['image', 'address', 'insurance']
+        fields = ['image', 'address']
+
+
+class InsurancePolicyUpdateForm(forms.ModelForm):
+    class Meta:
+        model = InsuredPatient
+        fields = ['insurance_policy']
 
 
 class AppointmentForm(forms.ModelForm):

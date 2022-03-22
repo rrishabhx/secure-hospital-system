@@ -3,7 +3,7 @@ import logging
 from django.contrib.auth.decorators import login_required
 
 from hospital.forms import AppointmentCreationForm
-from hospital.models import Appointment, Diagnosis, LabTest
+from hospital.models import Appointment, Diagnosis, LabTest, InsuredPatient
 from users.decorators import patient_required
 from django.shortcuts import render, redirect
 from django.urls import reverse
@@ -11,7 +11,7 @@ from django.contrib import messages
 from django.contrib.auth import get_user_model
 
 from users.forms import UserUpdateForm
-from .forms import PatientProfileUpdateForm, InsuranceForm, AppointmentForm
+from .forms import PatientProfileUpdateForm, InsurancePolicyUpdateForm, InsuranceForm, AppointmentForm
 
 User = get_user_model()
 
@@ -260,27 +260,38 @@ def transactions(request):
 @patient_required
 def profile(request):
     logger.info("Inside patient profile")
+    user = request.user
+    patient_profile = request.user.patientprofile
 
     if request.method == 'POST':
         logger.info("Request type: POST")
-        u_form = UserUpdateForm(request.POST, instance=request.user)
+        u_form = UserUpdateForm(request.POST, instance=user)
         p_form = PatientProfileUpdateForm(
-            request.POST, request.FILES, instance=request.user.patientprofile)
+            request.POST, request.FILES, instance=patient_profile)
 
-        if u_form.is_valid() and p_form.is_valid():
+        i_form = InsurancePolicyUpdateForm(request.POST, instance=patient_profile.insuredpatient)
+
+        if u_form.is_valid() and p_form.is_valid() and i_form.is_valid():
             u_form.save()
             p_form.save()
+            i_form.save()
 
             messages.success(request, f'Your account has been updated!')
             return redirect('profile')
     else:
         logger.info(f"Request type: GET")
-        u_form = UserUpdateForm(instance=request.user)
-        p_form = PatientProfileUpdateForm(instance=request.user.patientprofile)
+        u_form = UserUpdateForm(instance=user)
+        p_form = PatientProfileUpdateForm(instance=patient_profile)
+        i_form = InsurancePolicyUpdateForm()
+
+        if hasattr(patient_profile, 'insuredpatient'):
+            logger.info(f"{patient_profile} has the 'insuredpatient' attribute")
+            i_form = InsurancePolicyUpdateForm(instance=patient_profile.insuredpatient)
 
     context = {
         'u_form': u_form,
         'p_form': p_form,
+        'i_form': i_form,
     }
 
     return render(request, 'patients/profile.html', context)

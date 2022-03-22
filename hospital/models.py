@@ -67,9 +67,18 @@ class InsurancePolicy(models.Model):
     max_amount = models.PositiveSmallIntegerField(default=100,
                                                   validators=[MinValueValidator(1), MaxValueValidator(1000)])
 
+    def __str__(self):
+        return self.name
 
-class InsuranceClaim(models.Model):
+
+class InsuredPatient(models.Model):
     patient = models.OneToOneField(PatientProfile, on_delete=models.CASCADE)
     insurance_policy = models.ForeignKey(InsurancePolicy, on_delete=models.CASCADE)
+    amount_available = models.SmallIntegerField(null=True, blank=True,
+                                                validators=[MinValueValidator(1), MaxValueValidator(1000)])
+
+
+class InsuranceClaim(models.Model):
+    insured_patient = models.ForeignKey(InsuredPatient, on_delete=models.CASCADE)
     status = models.BooleanField(null=True, blank=True)
     created = models.DateTimeField(auto_now_add=True, blank=True)

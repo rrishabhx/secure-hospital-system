@@ -1,0 +1,29 @@
+{% extends 'hospital_staffs/home.html' %}
+{% load static %}
+{% load crispy_forms_tags %}
+
+{% block patientcontent %}
+
+
+<h4> Records: </h4>
+{% for i in transactions %}
+<ul class="list-group">
+					  <li class="list-group-item list-group-item-dark">Record : {{ forloop.counter }}</li>
+					  <form id="myform{{ forloop.counter }}" method="post">
+							{% csrf_token %}
+							<input type="hidden" name="id" value={{i.id}} />
+							<a href="{% url 'hospitalstaff-approveTransaction'}" onclick="document.forms[{{ forloop.counter0 }}].submit();return false;">Approve</a>
+					  </form>
+                      <li class="list-group-item list-group-item-light">Appointment Details : {{ i.appointment_details }}</li>
+					  <li class="list-group-item list-group-item-light">Patient Id: {{ i.patientID }}</li>
+					  <li class="list-group-item list-group-item-light">Doctor Id: {{ i.staffId }}</li>
+					  <li class="list-group-item list-group-item-light">Scheduled Date: {{ i.scheduled_date }}</li>
+					  <br>
+</ul>
+{% endfor %}
+
+
+
+
+
+{% endblock patientcontent %}

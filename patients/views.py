@@ -3,15 +3,15 @@ import logging
 from django.contrib.auth.decorators import login_required
 
 from hospital.forms import AppointmentCreationForm
-from hospital.models import Appointment, Diagnosis, LabTest
-from patients.models import PatientProfile
+from hospital.models import Appointment, Diagnosis, LabTest, InsuredPatient
 from users.decorators import patient_required
-from django.shortcuts import render, redirect, get_object_or_404
+from django.shortcuts import render, redirect
 from django.urls import reverse
 from django.contrib import messages
 from django.contrib.auth import get_user_model
-from .models import PatientProfile
-from .forms import ProfileForm, InsuranceForm, AppointmentForm
+
+from users.forms import UserUpdateForm
+from .forms import PatientProfileUpdateForm, InsurancePolicyUpdateForm, InsuranceForm, AppointmentForm
 
 User = get_user_model()
 
@@ -102,8 +102,6 @@ transactions_list = [
     }
 ]
 
-diagnosis_list = []
-prescriptions_list = []
 reports_list = [
     {
         'Id': 1,
@@ -157,14 +155,25 @@ def home(request):
     return render(request, 'patients/home.html', context=context)
 
 
+@login_required
+@patient_required
 def appointments(request):
+    logger.info(f"{request.user}: Appointments page")
     if request.method == 'POST':
         form = AppointmentForm(request.POST)
+
         if form.is_valid():
-            data = form.cleaned_data
-            print(data)
+            appointment_data = form.cleaned_data
+            appointment_data['patient'] = request.user.patientprofile
+
+            logger.info(f"{request.user}: New appointment details- {appointment_data}")
+            appointment_obj = Appointment(**appointment_data)
+            appointment_obj.save()
+
             messages.success(request, 'New Appointment Requested')
-            return redirect(reverse('home'))
+            return redirect('patients:appointments')
+        else:
+            logger.error(f"{request.user}: Invalid form data- {form.data}")
     else:
         form = AppointmentForm()
 
@@ -175,36 +184,55 @@ def appointments(request):
     return render(request, 'patients/appointments.html', context=context)
 
 
+@login_required
+@patient_required
 def diagnosis(request):
-    context = {
-        'diagnosis': diagnosis_list
-    }
+    logger.info(f"{request.user}: Diagnosis page")
 
+    diagnosis_list = Diagnosis.objects.filter(patient=request.user.patientprofile)
+    logger.info(f"{request.user}: Previous diagnosis: {diagnosis_list}")
+
+    context = {
+        'diagnosis_list': diagnosis_list,
+    }
     return render(request, 'patients/diagnosis.html', context=context)
 
 
+@login_required
+@patient_required
 def prescriptions(request):
-    context = {
-        'prescriptions': prescriptions_list
-    }
+    logger.info(f"{request.user}: Prescriptions page")
 
+    diagnosis_list = Diagnosis.objects.filter(patient=request.user.patientprofile)
+    logger.info(f"{request.user}: Previous diagnosis: {diagnosis_list}")
+
+    context = {
+        'diagnosis_list': diagnosis_list,
+    }
     return render(request, 'patients/prescriptions.html', context=context)
 
 
-def reports(request):
+@login_required
+@patient_required
+def lab_test_reports(request):
+    logger.info(f"{request.user}: Lab Test Reports page")
+
+    lab_tests = LabTest.objects.filter(patient=request.user.patientprofile)
+    logger.info(f"{request.user}: Previous Lab Reports: {lab_tests}")
+
     context = {
-        'reports': reports_list
+        'lab_tests': lab_tests,
     }
+    return render(request, 'patients/lab_test_reports.html', context=context)
 
-    return render(request, 'patients/reports.html', context=context)
 
-
+@login_required
+@patient_required
 def insurance(request):
     if request.method == 'POST':
         form = InsuranceForm(request.POST)
         if form.is_valid():
             data = form.cleaned_data
-            print(data)
             messages.success(request, 'New Insurance Claim Filed')
             return redirect(reverse('home'))
     else:
@@ -218,6 +246,8 @@ def insurance(request):
     return render(request, 'patients/insurance.html', context=context)
 
 
+@login_required
+@patient_required
 def transactions(request):
     context = {
         'transactions': transactions_list
@@ -226,27 +256,42 @@ def transactions(request):
     return render(request, 'patients/transactions.html', context=context)
 
 
+@login_required
+@patient_required
 def profile(request):
-    form = ProfileForm()
-    # profile = PatientProfile.objects.all()[0]
-    # form = ProfileForm(initial={'username': profile.user.username, 'email': profile.user.email,
-    #                             'address': profile.address, 'insurance': profile.insurance})
+    logger.info("Inside patient profile")
+    user = request.user
+    patient_profile = request.user.patientprofile
 
-    # if(request.method == 'POST'):
-    #     form = ProfileForm(request.POST)
-    #     if(form.is_valid()):
-    #         data = form.cleaned_data
-    #         profile.address = data['address']
-    #         profile.insurance = data['insurance']
-    #         profile.save()
-    #         messages.success(request, 'Profile Updated')
-    #         return redirect(reverse('patients:patient-home'))
-    #     else:
-    #         form = ProfileForm(initial={'username': profile.user.username, 'email': profile.user.email,
-    #                                     'address': profile.address, 'insurance': profile.insurance})
+    if request.method == 'POST':
+        logger.info("Request type: POST")
+        u_form = UserUpdateForm(request.POST, instance=user)
+        p_form = PatientProfileUpdateForm(
+            request.POST, request.FILES, instance=patient_profile)
+
+        i_form = InsurancePolicyUpdateForm(request.POST, instance=patient_profile.insuredpatient)
+
+        if u_form.is_valid() and p_form.is_valid() and i_form.is_valid():
+            u_form.save()
+            p_form.save()
+            i_form.save()
+
+            messages.success(request, f'Your account has been updated!')
+            return redirect('profile')
+    else:
+        logger.info(f"Request type: GET")
+        u_form = UserUpdateForm(instance=user)
+        p_form = PatientProfileUpdateForm(instance=patient_profile)
+        i_form = InsurancePolicyUpdateForm()
+
+        if hasattr(patient_profile, 'insuredpatient'):
+            logger.info(f"{patient_profile} has the 'insuredpatient' attribute")
+            i_form = InsurancePolicyUpdateForm(instance=patient_profile.insuredpatient)
 
     context = {
-        'form': form,
-        'profile': profile
+        'u_form': u_form,
+        'p_form': p_form,
+        'i_form': i_form,
     }
-    return render(request, 'patients/profile.html', context=context)
+
+    return render(request, 'patients/profile.html', context)

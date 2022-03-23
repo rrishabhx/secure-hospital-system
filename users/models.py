@@ -1,6 +1,7 @@
 from datetime import date
 
 from django.contrib.auth.models import AbstractUser
+from django.core.validators import MaxValueValidator
 from django.db import models
 
 
@@ -15,7 +16,7 @@ class User(AbstractUser):
     )
 
     user_type = models.CharField(max_length=20, default='patient', choices=USER_TYPE_CHOICES)
-    date_of_birth = models.DateField(default=date.today)
+    date_of_birth = models.DateField(default=date.today, validators=[MaxValueValidator(limit_value=date.today)])
 
     def __str__(self):
         return f'{self.username}'

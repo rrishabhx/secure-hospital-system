@@ -1,0 +1,42 @@
+{% extends 'doctors/main.html' %}
+{% load static %}
+{% load crispy_forms_tags %}
+
+{% block doctorcontent %}
+
+<div class="row mb-3">
+    <div class="col">
+        <h2>Diagnosis Summary</h2>
+    </div>
+</div>
+
+<div class="row my-3">
+    <div class="col">
+        {% if diagnosis_list %}
+        <table class="table">
+            <thead>
+                <th scope="col">Patient</th>
+                <th scope="col">Comments</th>
+                <th scope="col">Prescription</th>
+                <th scope="col">Date</th>
+            </thead>
+            <tbody>
+                {% for d in diagnosis_list %}
+                <tr>
+                    <td>${{ "50" }}</td>
+                    <td>{{ d.patient.user.first_name }} {{ d.patient.user.last_name }}</td>
+                    <td>{{ d.details }}</td>
+                    <td>{{ d.prescription }}</td>
+                    <td>{{ d.created }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        {% else %}
+        <h4>No Diagnosis found</h4>
+        {% endif %}
+
+    </div>
+</div>
+
+{% endblock doctorcontent %}

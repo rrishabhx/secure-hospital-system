@@ -39,30 +39,13 @@
                         <li id="profile" onclick="switchPage('profile')">My Profile</li>
                     </ul> -->
                     <ul class="nav flex-column">
-                        <li class="nav-item">
-                            <a class="nav-link" href="{% url 'patients:home' %}">Home</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="{% url 'patients:appointments' %}">Appointments</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="{% url 'patients:diagnosis' %}">Diagnosis</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="{% url 'patients:prescriptions' %}">Prescriptions</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="{% url 'patients:lab-test-reports' %}">Reports</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="{% url 'patients:insurance' %}">Insurance</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="{% url 'patients:transactions' %}">Transactions</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="{% url 'patients:profile' %}">Profile</a>
-                        </li>
+                        <li class="nav-item"> <a class="nav-link"  href="{% url 'hospital_staffs:createPatient' %}">Create Patient Records</a></li>
+                      <li class="nav-item"><a class="nav-link"  href="{% url 'hospital_staffs:viewPatient' %}">View Patient Diagnosis and Prescription</a></li>
+                      <li class="nav-item"><a  class="nav-link"  href="{% url 'hospital_staffs:viewRecords' %}">View Patient Records</a></li>
+					  <li class="nav-item"><a class="nav-link"  href="{% url 'hospital_staffs:viewLabRecords' %}">View Lab Records</a></li>
+                      <li class="nav-item"> <a  class="nav-link" href="{% url 'hospital_staffs:createTransaction' %}">Create Transactions</a></li>
+					  <li class="nav-item"> <a  class="nav-link" href="{% url 'hospital_staffs:approveTransaction' %}">Approve Transactions</a></li>					  
+                   	  <li class="nav-item"> <a  class="nav-link" href="{% url 'hospital_staffs:approveAppointment' %}">Approve Appointments</a></li>
                     </ul>
                 </div>
             </div>

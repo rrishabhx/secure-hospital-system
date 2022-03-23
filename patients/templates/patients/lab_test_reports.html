@@ -6,32 +6,33 @@
 
     <div class="row mb-3">
         <div class="col">
-            <h2>Prescriptions</h2>
+            <h2>Lab Test Reports</h2>
         </div>
     </div>
 
     <div class="row my-3">
         <div class="col">
-            <!-- <h3>My Insurance Claims</h3> -->
-            {% if diagnosis_list %}
+            {% if lab_tests %}
                 <table class="table">
                     <thead>
-                    <th scope="col">Prescription</th>
-                    <th scope="col">Prescribed by (Doctor)</th>
+                    <th scope="col">Recommended by (Doctor)</th>
+                    <th scope="col">Test Type</th>
+                    <th scope="col">Test Report</th>
                     <th scope="col">Date</th>
                     </thead>
                     <tbody>
-                    {% for d in diagnosis_list %}
+                    {% for lt in lab_tests %}
                         <tr>
-                            <td>{{ d.prescription }}</td>
-                            <td>{{ d.doctor.user.first_name }} {{ d.doctor.user.last_name }}</td>
-                            <td>{{ d.created }}</td>
+                            <td>{{ lt.doctor.user.first_name }} {{ lt.doctor.user.last_name }}</td>
+                            <td>{{ lt.test_type }}</td>
+                            <td>{{ lt.lab_test_report }}</td>
+                            <td>{{ lt.created }}</td>
                         </tr>
                     {% endfor %}
                     </tbody>
                 </table>
             {% else %}
-                <h4>No Diagnosis found</h4>
+                <h4>No Reports found</h4>
             {% endif %}
 
         </div>

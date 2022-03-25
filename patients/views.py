@@ -2,8 +2,7 @@ import logging
 
 from django.contrib.auth.decorators import login_required
 
-from hospital.forms import AppointmentCreationForm
-from hospital.models import Appointment, Diagnosis, LabTest, InsuredPatient
+from hospital.models import Appointment, Diagnosis, LabTest, InsuredPatient, Transaction, InsuranceClaim
 from users.decorators import patient_required
 from django.shortcuts import render, redirect
 from django.urls import reverse
@@ -11,148 +10,17 @@ from django.contrib import messages
 from django.contrib.auth import get_user_model
 
 from users.forms import UserUpdateForm
-from .forms import PatientProfileUpdateForm, InsurancePolicyUpdateForm, InsuranceForm, AppointmentForm
+from .forms import PatientProfileUpdateForm, InsuredPatientForm, AppointmentForm, InsuranceClaimForm, TransactionForm
 
 User = get_user_model()
 
 logger = logging.getLogger(__name__)
-
-patients = [
-    {
-        'address': '1090440',
-        'insurance': '1021039123',
-        'user_id': '1',
-        'id': 1,
-        'image': '111'
-    },
-    {
-        'address': '1090440',
-        'insurance': '1021039123',
-        'user_id': '1',
-        'id': 1,
-        'image': '111'
-    }
-]
-
-insurance_claims = [
-    {
-        'id': 1,
-        'claimAmount': 1999,
-        'status': 'Rejected',
-        'testResult': 'Pass',
-        'PatientId_Id': 1,
-        'staffId_Id': 2,
-        'user_Id': 1
-    },
-    {
-        'id': 2,
-        'claimAmount': 2012,
-        'status': 'Accepted',
-        'testResult': 'Pass',
-        'PatientId_Id': 1,
-        'staffId_Id': 2,
-        'user_Id': 1
-    },
-    {
-        'id': 3,
-        'claimAmount': 5455,
-        'status': 'Pending',
-        'testResult': 'Pass',
-        'PatientId_Id': 1,
-        'staffId_Id': 2,
-        'user_Id': 1
-    }
-]
-
-transactions_list = [
-    {
-        'Id': 1,
-        'status': 'Rejected',
-        'transactionAmount': 1525.55,
-        'patientID_Id': 1,
-        'stafID_Id': 3
-    },
-    {
-        'Id': 2,
-        'status': 'Accepted',
-        'transactionAmount': 454.55,
-        'patientID_Id': 1,
-        'stafID_Id': 3
-    },
-    {
-        'Id': 3,
-        'status': 'Accepted',
-        'transactionAmount': 564.55,
-        'patientID_Id': 1,
-        'stafID_Id': 3
-    },
-    {
-        'Id': 4,
-        'status': 'Pending',
-        'transactionAmount': 454564.55,
-        'patientID_Id': 1,
-        'stafID_Id': 3
-    },
-    {
-        'Id': 5,
-        'status': 'Accepted',
-        'transactionAmount': 456465444.55,
-        'patientID_Id': 1,
-        'stafID_Id': 3
-    }
-]
-
-reports_list = [
-    {
-        'Id': 1,
-        'testType': 'Type1',
-        'testResult': 'All Ok',
-        'patientID_Id': 1,
-        'staffID_Id': 3,
-        'userID_Id': 1
-    },
-    {
-        'Id': 2,
-        'testType': 'Type1',
-        'testResult': 'All Ok',
-        'patientID_Id': 1,
-        'staffID_Id': 3,
-        'userID_Id': 1
-    },
-    {
-        'Id': 3,
-        'testType': 'Type1',
-        'testResult': 'All Ok',
-        'patientID_Id': 1,
-        'staffID_Id': 3,
-        'userID_Id': 1
-    },
-    {
-        'Id': 4,
-        'testType': 'Type1',
-        'testResult': 'All Ok',
-        'patientID_Id': 1,
-        'staffID_Id': 3,
-        'userID_Id': 1
-    },
-]
 
 
 @login_required
 @patient_required
 def home(request):
     logger.info(f"Inside home of {request.user}")
-    # patient = request.user.patientprofile
-    # logger.info(f"User object: {patient}")
-    #
-    # appointment_form = AppointmentCreationForm()
-    # context = {
-    #     'appointments': Appointment.objects.filter(patient=patient),
-    #     'profile': profile,
-    #     'appointment_form': appointment_form,
-    #     'uform': ''
-    # }
-    # return render(request, 'patients/home.html', context=context)
     return redirect('patients:appointments')
 
 
@@ -230,19 +98,40 @@ def lab_test_reports(request):
 @login_required
 @patient_required
 def insurance(request):
+    logger.info(f"{request.user}: Insurance page")
+
+    patient_profile = request.user.patientprofile
+    insured_patient = None
+    if hasattr(patient_profile, 'insuredpatient'):
+        insured_patient = request.user.patientprofile.insuredpatient
+
     if request.method == 'POST':
-        form = InsuranceForm(request.POST)
+        form = InsuranceClaimForm(request.POST)
         if form.is_valid():
-            data = form.cleaned_data
-            messages.success(request, 'New Insurance Claim Filed')
-            return redirect(reverse('home'))
+            insurance_claim_data = form.cleaned_data
+            if insured_patient:
+                insurance_claim_data['insured_patient'] = insured_patient
+
+                insurance_claim_obj = InsuranceClaim(**insurance_claim_data)
+                insurance_claim_obj.save()
+
+                messages.success(request, 'New Insurance Claim Filed')
+            else:
+                logger.error(f"{request.user}: Patient not insured. Only God can save you!!")
+                messages.error(request, 'Patient not insured. Only God can save you!!')
+
+            return redirect('patients:insurance')
+        else:
+            logger.error(f"{request.user}: Invalid insurance form data- {form.data}")
     else:
-        form = InsuranceForm()
+        form = InsuranceClaimForm()
 
     context = {
-        'insurance_claims': insurance_claims,
         'form': form
     }
+
+    if insured_patient:
+        context['insurance_claims'] = InsuranceClaim.objects.filter(insured_patient=insured_patient)
 
     return render(request, 'patients/insurance.html', context=context)
 
@@ -250,8 +139,20 @@ def insurance(request):
 @login_required
 @patient_required
 def transactions(request):
+    logger.info(f"{request.user}: Transactions page")
+
+    if request.method == 'POST':
+        form = TransactionForm(request.POST)
+        if form.is_valid():
+            data = form.cleaned_data
+            messages.success(request, 'Transaction complete')
+            return redirect('patients:transactions')
+    else:
+        form = TransactionForm()
+
     context = {
-        'transactions': transactions_list
+        'transactions': Transaction.objects.filter(patient=request.user.patientprofile),
+        'form': form
     }
 
     return render(request, 'patients/transactions.html', context=context)
@@ -270,7 +171,7 @@ def profile(request):
         p_form = PatientProfileUpdateForm(
             request.POST, request.FILES, instance=patient_profile)
 
-        i_form = InsurancePolicyUpdateForm(request.POST, instance=patient_profile.insuredpatient)
+        i_form = InsuredPatientForm(request.POST, instance=patient_profile.insuredpatient)
 
         if u_form.is_valid() and p_form.is_valid() and i_form.is_valid():
             u_form.save()
@@ -283,11 +184,11 @@ def profile(request):
         logger.info(f"Request type: GET")
         u_form = UserUpdateForm(instance=user)
         p_form = PatientProfileUpdateForm(instance=patient_profile)
-        i_form = InsurancePolicyUpdateForm()
+        i_form = InsuredPatientForm()
 
         if hasattr(patient_profile, 'insuredpatient'):
             logger.info(f"{patient_profile} has the 'insuredpatient' attribute")
-            i_form = InsurancePolicyUpdateForm(instance=patient_profile.insuredpatient)
+            i_form = InsuredPatientForm(instance=patient_profile.insuredpatient)
 
     context = {
         'u_form': u_form,

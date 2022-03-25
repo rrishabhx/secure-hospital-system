@@ -1,7 +1,7 @@
 from django import forms
 
 from doctors.models import DoctorProfile
-from hospital.models import Appointment, InsuredPatient
+from hospital.models import Appointment, InsuredPatient, InsuranceClaim, Transaction
 from patients.models import PatientProfile
 
 
@@ -9,12 +9,6 @@ class PatientProfileUpdateForm(forms.ModelForm):
     class Meta:
         model = PatientProfile
         fields = ['image']
-
-
-class InsurancePolicyUpdateForm(forms.ModelForm):
-    class Meta:
-        model = InsuredPatient
-        fields = ['insurance_policy']
 
 
 class AppointmentForm(forms.ModelForm):
@@ -29,5 +23,19 @@ class AppointmentForm(forms.ModelForm):
         fields = ('doctor', 'scheduled_date', 'appointment_details')
 
 
-class InsuranceForm(forms.Form):
-    claimAmount = forms.IntegerField(label='Claim Amount')
+class InsuredPatientForm(forms.ModelForm):
+    class Meta:
+        model = InsuredPatient
+        fields = ['insurance_policy']
+
+
+class InsuranceClaimForm(forms.ModelForm):
+    class Meta:
+        model = InsuranceClaim
+        fields = ('claim_amount', 'diagnosis')
+
+
+class TransactionForm(forms.ModelForm):
+    class Meta:
+        model = Transaction
+        fields = ('diagnosis', 'amount', 'approved', 'completed')

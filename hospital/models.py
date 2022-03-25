@@ -3,6 +3,8 @@ from django.utils import timezone
 from django.core.validators import MinValueValidator, MaxValueValidator
 from django.db import models
 
+from administrators.models import AdministratorProfile
+from hospital_staffs.models import HospitalStaffProfile
 from patients.models import PatientProfile
 from doctors.models import DoctorProfile
 
@@ -51,7 +53,12 @@ class Diagnosis(models.Model):
     prescription = models.TextField(null=True, blank=True)
     lab_tests_recommended = models.TextField(null=True, blank=True)
     lab_test_status = models.BooleanField(null=True, blank=True)
+    amount = models.PositiveSmallIntegerField(default=100,
+                                              validators=[MinValueValidator(1), MaxValueValidator(1000)])
     created = models.DateTimeField(auto_now_add=True, blank=True)
+
+    def __str__(self):
+        return f"Date: {self.appointment.scheduled_date.strftime(format='%Y-%m-%d %H:%M:%S')}, Amount: {self.amount}"
 
 
 class LabTest(models.Model):
@@ -80,5 +87,16 @@ class InsuredPatient(models.Model):
 
 class InsuranceClaim(models.Model):
     insured_patient = models.ForeignKey(InsuredPatient, on_delete=models.CASCADE)
+    claim_amount = models.SmallIntegerField(null=True, blank=True,
+                                            validators=[MinValueValidator(1), MaxValueValidator(1000)])
+    diagnosis = models.OneToOneField(Diagnosis, on_delete=models.CASCADE)
     status = models.BooleanField(null=True, blank=True)
     created = models.DateTimeField(auto_now_add=True, blank=True)
+
+
+class Transaction(models.Model):
+    patient = models.ForeignKey(PatientProfile, on_delete=models.CASCADE)
+    diagnosis = models.OneToOneField(Diagnosis, on_delete=models.CASCADE)
+    amount = models.PositiveSmallIntegerField(default=50, validators=[MinValueValidator(1), MaxValueValidator(50000)])
+    approved = models.BooleanField(null=True, blank=True)
+    completed = models.BooleanField(null=True, blank=True)

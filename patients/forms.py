@@ -8,7 +8,7 @@ from patients.models import PatientProfile
 class PatientProfileUpdateForm(forms.ModelForm):
     class Meta:
         model = PatientProfile
-        fields = ['image', 'address']
+        fields = ['image']
 
 
 class InsurancePolicyUpdateForm(forms.ModelForm):
@@ -18,7 +18,8 @@ class InsurancePolicyUpdateForm(forms.ModelForm):
 
 
 class AppointmentForm(forms.ModelForm):
-    doctor = forms.ModelChoiceField(label="Select Doctor", required=False, queryset=DoctorProfile.objects.all())
+    doctor = forms.ModelChoiceField(label="Select Doctor (Optional)",
+                                    required=False, queryset=DoctorProfile.objects.all())
     scheduled_date = forms.DateTimeField(label='Please choose a date',
                                          widget=forms.DateTimeInput(attrs={'type': 'datetime-local'}))
 

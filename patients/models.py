@@ -9,7 +9,6 @@ class PatientProfile(models.Model):
     user = models.OneToOneField(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, primary_key=True)
     # insurance = models.OneToOneField(InsurancePolicy, null=True, blank=True, on_delete=models.SET_NULL)
     image = models.ImageField(default='default.jpg', upload_to='profile_pics', blank=True)
-    address = models.TextField(null=True, blank=True)
 
     def __str__(self):
         return f'{self.user.user_type}: {self.user.username}'

@@ -30,7 +30,7 @@ class Appointment(models.Model):
     Appointment approved: status=True
     """
     patient = models.ForeignKey(PatientProfile, on_delete=models.CASCADE)
-    doctor = models.ForeignKey(DoctorProfile, on_delete=models.CASCADE)
+    doctor = models.ForeignKey(DoctorProfile, null=True, blank=True, on_delete=models.CASCADE)
     status = models.BooleanField(null=True, blank=True)
     scheduled_date = models.DateTimeField(validators=[MinValueValidator(limit_value=timezone.now)])
     appointment_details = models.CharField(max_length=250)
@@ -57,7 +57,7 @@ class Diagnosis(models.Model):
 class LabTest(models.Model):
     doctor = models.ForeignKey(DoctorProfile, on_delete=models.CASCADE)
     patient = models.ForeignKey(PatientProfile, on_delete=models.CASCADE)
-    lab_tests_recommended = models.OneToOneField(Diagnosis, on_delete=models.CASCADE)
+    diagnosis = models.OneToOneField(Diagnosis, on_delete=models.CASCADE)
     lab_test_report = models.TextField(null=True, blank=True)
     created = models.DateTimeField(auto_now_add=True, blank=True)
 

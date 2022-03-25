@@ -142,17 +142,18 @@ reports_list = [
 @patient_required
 def home(request):
     logger.info(f"Inside home of {request.user}")
-    patient = request.user.patientprofile
-    logger.info(f"User object: {patient}")
-
-    appointment_form = AppointmentCreationForm()
-    context = {
-        'appointments': Appointment.objects.filter(patient=patient),
-        'profile': profile,
-        'appointment_form': appointment_form,
-        'uform': ''
-    }
-    return render(request, 'patients/home.html', context=context)
+    # patient = request.user.patientprofile
+    # logger.info(f"User object: {patient}")
+    #
+    # appointment_form = AppointmentCreationForm()
+    # context = {
+    #     'appointments': Appointment.objects.filter(patient=patient),
+    #     'profile': profile,
+    #     'appointment_form': appointment_form,
+    #     'uform': ''
+    # }
+    # return render(request, 'patients/home.html', context=context)
+    return redirect('patients:appointments')
 
 
 @login_required

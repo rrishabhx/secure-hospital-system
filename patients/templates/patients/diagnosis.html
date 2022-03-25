@@ -12,7 +12,6 @@
 
     <div class="row my-3">
         <div class="col">
-            <!-- <h3>My Insurance Claims</h3> -->
             {% if diagnosis_list %}
                 <table class="table">
                     <thead>
@@ -26,7 +25,11 @@
                     {% for d in diagnosis_list %}
                         <tr>
                             <td>${{ "50" }}</td>
-                            <td>{{ d.doctor.user.first_name }} {{ d.doctor.user.last_name }}</td>
+                            {% if d.doctor %}
+                                <td>Dr. {{ d.doctor.user.username }}</td>
+                            {% else %}
+                                <td><em>-Not Assigned Yet-</em></td>
+                            {% endif %}
                             <td>{{ d.details }}</td>
                             <td>{{ d.prescription }}</td>
                             <td>{{ d.created }}</td>

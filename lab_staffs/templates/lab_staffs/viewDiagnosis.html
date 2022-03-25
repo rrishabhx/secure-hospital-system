@@ -9,13 +9,26 @@
 {% block body-content %}
 <body>
 
-    <form id="labstaff-options" method="POST" action="">
-        <fieldset class="">
-            <legend>Patient diagnosis</legend>
-            {{Error}}
-            <legend>{{patientID}}</legend>
-        </fieldset>
-    </form>
+    {% if patientDiagnosis_list %}
+                <table class="table">
+                    <thead>
+                    <th scope="col">Patient</th>
+                    <th scope="col">Doctor</th>
+                    <th scope="col">lab_tests_recommended</th>
+                    </thead>
+                    <tbody>
+                    {% for d in patientDiagnosis_list %}
+                        <tr>
+                            <td>{{ d.patient.user.first_name }} {{ d.patient.user.last_name }}</td>
+                            <td>{{ d.doctor.user.first_name }} {{ d.doctor.user.last_name }}</td>
+                            <td>{{ d.lab_tests_recommended }}</td>
+                        </tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
+            {% else %}
+                <h4>No Diagnosis found</h4>
+            {% endif %}
 
 </body>
 {% endblock body-content %}

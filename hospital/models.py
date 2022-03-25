@@ -58,7 +58,7 @@ class Diagnosis(models.Model):
     created = models.DateTimeField(auto_now_add=True, blank=True)
 
     def __str__(self):
-        return f"Date: {self.appointment.scheduled_date.strftime(format='%Y-%m-%d %H:%M:%S')}, Amount: {self.amount}"
+        return f"Date: {self.appointment.scheduled_date.strftime(format='%Y-%m-%d %H:%M:%S')}"
 
 
 class LabTest(models.Model):
@@ -67,6 +67,9 @@ class LabTest(models.Model):
     diagnosis = models.OneToOneField(Diagnosis, on_delete=models.CASCADE)
     lab_test_report = models.TextField(null=True, blank=True)
     created = models.DateTimeField(auto_now_add=True, blank=True)
+
+    def __str__(self):
+        return f"LabTest for Diagnosis:{self.diagnosis}"
 
 
 class InsurancePolicy(models.Model):
@@ -84,6 +87,9 @@ class InsuredPatient(models.Model):
     amount_available = models.SmallIntegerField(null=True, blank=True,
                                                 validators=[MinValueValidator(1), MaxValueValidator(1000)])
 
+    def __str__(self):
+        return f"Insurance: {self.insurance_policy}, {self.patient}"
+
 
 class InsuranceClaim(models.Model):
     insured_patient = models.ForeignKey(InsuredPatient, on_delete=models.CASCADE)
@@ -93,6 +99,9 @@ class InsuranceClaim(models.Model):
     status = models.BooleanField(null=True, blank=True)
     created = models.DateTimeField(auto_now_add=True, blank=True)
 
+    def __str__(self):
+        return f"{self.insured_patient.patient}, {self.claim_amount}"
+
 
 class Transaction(models.Model):
     patient = models.ForeignKey(PatientProfile, on_delete=models.CASCADE)
@@ -100,3 +109,6 @@ class Transaction(models.Model):
     amount = models.PositiveSmallIntegerField(default=50, validators=[MinValueValidator(1), MaxValueValidator(50000)])
     approved = models.BooleanField(null=True, blank=True)
     completed = models.BooleanField(null=True, blank=True)
+
+    def __str__(self):
+        return f"{self.patient}, {self.amount}"

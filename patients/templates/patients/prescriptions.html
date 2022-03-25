@@ -17,14 +17,14 @@
                 <table class="table">
                     <thead>
                     <th scope="col">Prescription</th>
-                    <th scope="col">Prescribed by (Doctor)</th>
+                    <th scope="col">Prescribed By</th>
                     <th scope="col">Date</th>
                     </thead>
                     <tbody>
                     {% for d in diagnosis_list %}
                         <tr>
                             <td>{{ d.prescription }}</td>
-                            <td>{{ d.doctor.user.first_name }} {{ d.doctor.user.last_name }}</td>
+                            <td>Dr. {{ d.doctor.user.username }}</td>
                             <td>{{ d.created }}</td>
                         </tr>
                     {% endfor %}

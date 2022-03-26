@@ -1,9 +1,44 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>create report page</title>
-</head>
+{% extends 'lab_staffs/main.html' %}
+{% load static %}
+{% load crispy_forms_tags %}
+
+{% block labstaffcontent %}
+<div class="row mb-3">
+    <div class="col">
+        <h2>New Lab Test Report</h2>
+    </div>
+    <div class="col text-end">
+        <button class="btn btn-info" onclick="newReport()">Create New Test Report</button>
+    </div>
+</div>
+
+<div class="row my-3 d-none" id="new-testreport-block">
+    <div class="col">
+
+        <form action="" method="post">
+            {% csrf_token %}
+            <div class="row">
+                <div class="col">
+                    <h3>Create Test Report</h3>
+                </div>
+                <div class="col text-end">
+                    <button class="btn btn-primary">Submit</button>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col">
+                    {{ createReportForm | crispy }}
+                </div>
+            </div>
+        </form>
+
+    </div>
+</div>
+
+
+{% endblock labstaffcontent %}
+
 <body>
     {% if diagnosis %}
     <table class="table">
@@ -22,10 +57,6 @@
     {% else %}
         <h4>No Diagnosis found</h4>
     {% endif %}
-
-<script>
-
-</script>
 
 </body>
 </html>

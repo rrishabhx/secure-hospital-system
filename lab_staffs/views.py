@@ -2,10 +2,11 @@ from django.http import HttpResponse
 from users.models import User
 
 import logging
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required
 from users.decorators import lab_staff_required
 from hospital.models import Diagnosis, LabTest
+from .forms import labTestForm
 
 logger = logging.getLogger(__name__)
 
@@ -38,16 +39,16 @@ def viewDiagnosis(request):
     return render(request, "lab_staffs/viewDiagnosis.html", context)
 
 def createReport(request):
-    # if request.method == "POST":
-    #     if 'patient_name' in request.POST and request.POST['patient_name']:
-    #         username = request.POST['patient_name']
-    #         user = User.objects.get(username=username)
-    #         patientProfile = PatientProfile.objects.get(user=user)
-    #         patientDiagnosis_list = get_list_or_404(Diagnosis, patient=patientProfile)
-    #         context = {"patientDiagnosis": patientDiagnosis_list}
-    #     else:
-    #         context = {'Error': 'Error, empty patient name'}
-    context = {}
+    if request.method == "POST":
+        createReportForm = labTestForm(request.POST, instance=LabTest)
+        if createReportForm.is_valid():
+            report_data = createReportForm.cleaned_data
+            report_obj = LabTest(**report_data)
+            report_obj.save()
+            return redirect('lab_staffs:labstaff-home')
+    else:
+        createReportForm = labTestForm()
+    context = {'createReportForm': createReportForm}
     return render(request, "lab_staffs/createReport.html", context)
 
 def deleteReport(request):

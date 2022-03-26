@@ -20,12 +20,13 @@
             </thead>
             <tbody>
             {% for dia in diagnosis %}
-                <tr>
-                    <td>{{ dia.patient.user.first_name }} {{ dia.patient.user.last_name }}</td>
-                    <td>{{ dia.doctor.user.first_name }} {{ dia.doctor.user.last_name }}</td>
-                    <td>{{ dia.lab_tests_recommended }} <button onclick="approve(this)" data-patient={{dia}} class="btn approve-button">Approve</button>
-                    <input type="button" onclick="" value="Deny"></td>
-                </tr>
+                {% if dia.lab_test_status == True %}
+                    <tr>
+                        <td>{{ dia.patient.user.first_name }} {{ dia.patient.user.last_name }}</td>
+                        <td>{{ dia.doctor.user.first_name }} {{ dia.doctor.user.last_name }}</td>
+                        <td>{{ dia.lab_tests_recommended }}</td>
+                    </tr>
+                {% endif %}
             {% endfor %}
             </tbody>
         </table>
@@ -39,7 +40,6 @@
         var patientDiagnosis = patientDia.getAttribute("data-patient")
         patientDiagnosis.lab_test_status = True
         patientDiagnosis.save()
-
     }
 </script>
 

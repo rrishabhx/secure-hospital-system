@@ -18,9 +18,8 @@ class ViewPatientRecords(ModelForm):
         
 class CreateTransaction(ModelForm):
 	class Meta:
-		model = apps.get_model('patients', 'Transactions')
-		fields = ('patientID','staffId','status','transactionAmount',) 
-		readonly_fields = ('staffId','status')
+		model = apps.get_model('hospital', 'Transaction')
+		fields = ('patient','diagnosis', 'amount', 'approved', 'completed')
 
 
 class ViewLabRecords(ModelForm):

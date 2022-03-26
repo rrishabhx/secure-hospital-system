@@ -105,19 +105,19 @@ def createTransaction(request):
     return render(request,'hospital_staffs/createTransaction.html',context)
     
 def approveTransaction(request):
-    model = apps.get_model('patients', 'Transactions')
+    model = apps.get_model('hospital', 'Transaction')
     context = {'transactions': []}
     if request.method == 'POST':
         try:
             flag = request.POST['id']
             y = model.objects.get(id = flag)
-            y.status = True
+            y.completed = True
             y.save()
             print(flag)
         except KeyError:
             print('KeyError')
     try:
-        x = model.objects.filter(status = 'f')
+        x = model.objects.filter(completed = 'f',approved = 't')
         for i in x.iterator():
             context['transactions'].append(i)
     except:
@@ -138,8 +138,7 @@ def approveAppointment(request):
         except KeyError:
             print('KeyError')
     try:
-        x = model.objects.filter(status = 'f')
-        print(x)
+        x = model.objects.filter(status = None)
         for i in x.iterator():
             context['transactions'].append(i)
     except:

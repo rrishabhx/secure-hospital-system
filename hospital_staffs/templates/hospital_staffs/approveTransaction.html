@@ -14,10 +14,9 @@
 							<input type="hidden" name="id" value={{i.id}} />
 							<a href="{% url 'hospitalstaff-approveTransaction'}" onclick="document.forms[{{ forloop.counter0 }}].submit();return false;">Approve</a>
 					  </form>
-                      <li class="list-group-item list-group-item-light">Amount : {{ i.transactionAmount }}</li>
-					  <li class="list-group-item list-group-item-light">Patient Id: {{ i.patientID }}</li>
-					  <li class="list-group-item list-group-item-light">Staff Id: {{ i.staffId }}</li>
-					  <li class="list-group-item list-group-item-light">check: {{ i.id }}</li>
+                      <li class="list-group-item list-group-item-light">Amount : {{ i.amount }}</li>
+					  <li class="list-group-item list-group-item-light">Patient Id: {{ i.patient }}</li>
+					  <li class="list-group-item list-group-item-light">Staff Id: {{ i.diagnosis }}</li>
 					  <br>
 </ul>
 {% endfor %}

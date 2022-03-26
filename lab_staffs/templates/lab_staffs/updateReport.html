@@ -2,9 +2,28 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Title</title>
+    <title>update report page</title>
 </head>
+{% block labstaffcontent %}
 <body>
+    <h3>View Diagnosis</h3>
+        <table class="table">
+        <thead>
+        <th scope="col">Patient</th>
+        </thead>
+        <tbody>
+        {% for dia in list %}
+            <tr>
+                <td id="Patient"> {{dia}} <a href="{% url 'deletereport' %}"></a></td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+<script>
+    $(".select-button").click(function())
+</script>
 
 </body>
+{% endblock labstaffcontent %}
 </html>

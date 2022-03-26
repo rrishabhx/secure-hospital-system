@@ -2,9 +2,30 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>createReportTesting</title>
+    <title>create report page</title>
 </head>
 <body>
+    {% if diagnosis %}
+    <table class="table">
+        <thead>
+        <th scope="col">Patient</th>
+        </thead>
+        <tbody>
+        {% for dia in diagnosis %}
+            <tr>
+                <td id="Patient">{{ dia.patient.user.first_name }} {{ dia.patient.user.last_name }}
+                <input type="button" value="create report" id="createReport" data-patient={{dia}}></td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+    {% else %}
+        <h4>No Diagnosis found</h4>
+    {% endif %}
+
+<script>
+
+</script>
 
 </body>
 </html>

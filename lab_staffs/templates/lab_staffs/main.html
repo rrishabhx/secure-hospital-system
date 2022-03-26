@@ -31,23 +31,23 @@
                             <a class="nav-link" href="{% url 'lab_staffs:home' %}">Home</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" href="{% url 'lab_staffs:viewdiagnosis' %}">View diagonosis</a>
+                            <a class="nav-link" href="{% url 'lab_staffs:viewDiagnosis' %}">View diagonosis</a>
                         </li>
                         <li class="nav-item">
                             <a class="nav-link" href="{% url 'lab_staffs:createReport' %}">Create Report</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" href="{% url 'lab_staffs:deletereport' %}">Delete Report</a>
+                            <a class="nav-link" href="{% url 'lab_staffs:deleteReport' %}">Delete Report</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" href="{% url 'lab_staffs:updatereport' %}">Update Report</a>
+                            <a class="nav-link" href="{% url 'lab_staffs:updateReport' %}">Update Report</a>
                         </li>
                     </ul>
                 </div>
             </div>
 
             <div class="col-md-9">
-                {% block doctorcontent %}{% endblock doctorcontent %}
+                {% block labstaffcontent %}{% endblock labstaffcontent %}
             </div>
 
         </div>

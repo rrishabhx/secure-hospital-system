@@ -42,7 +42,6 @@
         {% if appointments %}
         <table class="table">
             <thead>
-                <!-- <th scope="col">S.No.</th> -->
                 <th scope="col">Status</th>
                 <th scope="col">Description</th>
                 <th scope="col">Doctor</th>
@@ -53,7 +52,11 @@
                 <tr>
                     <td>{{ app.status }}</td>
                     <td>{{ app.appointment_details }}</td>
-                    <td>{{ app.doctor.user.first_name }} {{ app.doctor.user.last_name }}</td>
+                    {% if app.doctor %}
+                        <td>Dr. {{ app.doctor.user.username }}</td>
+                    {% else %}
+                        <td><em>-Not Assigned Yet-</em></td>
+                    {% endif %}
                     <td>{{ app.scheduled_date }}</td>
                 </tr>
                 {% endfor %}

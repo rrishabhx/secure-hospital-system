@@ -4,47 +4,44 @@
 
 {% block patientcontent %}
 
-<div class="row mb-3">
-    <div class="col">
-        <h2>Transactions</h2>
+    <div class="row mb-3">
+        <div class="col">
+            <h2>Transactions</h2>
+        </div>
     </div>
-</div>
 
-<div class="row my-3">
-    <div class="col">
-        <!-- <h3>My Insurance Claims</h3> -->
-        {% if transactions %}
-        <table class="table">
-            <thead>
-                <th scope="col">Transaction Amount</th>
-                <th scope="col">Status</th>
-            </thead>
-            <tbody>
-                {% for t in transactions %}
-                {% if t.status == 'Rejected' %}
-                <tr class="table-danger">
-                    <td>${{ t.transactionAmount }}</td>
-                    <td>{{ t.status }}</td>
-                </tr>
-                {% elif t.status == 'Accepted' %}
-                <tr class="table-success">
-                    <td>${{ t.transactionAmount }}</td>
-                    <td>{{ t.status }}</td>
-                </tr>
-                {% elif t.status == 'Pending' %}
-                <tr class="table-warning">
-                    <td>${{ t.transactionAmount }}</td>
-                    <td>{{ t.status }}</td>
-                </tr>
-                {% endif %}
-                {% endfor %}
-            </tbody>
-        </table>
-        {% else %}
-        <h4>No Transaction Records found</h4>
-        {% endif %}
+    <div class="row my-3">
+        <div class="col">
+            {% if transactions %}
+                <table class="table">
+                    <thead>
+                    <th scope="col">Diagnosis Date</th>
+                    <th scope="col">Amount</th>
+                    <th scope="col">Payment complete</th>
+                    <th scope="col">Final Status</th>
+                    </thead>
+                    <tbody>
+                    {% for t in transactions %}
+                        {% if t.completed == None %}
+                            <tr class="table-warning">
+                        {% elif t.approved %}
+                            <tr class="table-success">
+                        {% elif not t.completed %}
+                            <tr class="table-danger">
+                        {% endif %}
+                            <td>{{ t.diagnosis.appointment.scheduled_date }}</td>
+                            <td>{{ t.diagnosis.amount }}</td>
+                            <td>{{ t.approved|yesno:"Yes,No,Due" }}</td>
+                            <td>{{ t.completed|yesno:"Completed,Incomplete,---" }}</td>
+                        </tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
+            {% else %}
+                <h4>No Transaction Records found</h4>
+            {% endif %}
 
+        </div>
     </div>
-</div>
 
 {% endblock patientcontent %}

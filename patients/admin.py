@@ -1,6 +1,5 @@
 from django.contrib import admin
 
-from patients.models import PatientProfile, MedicalInsurance
+from patients.models import PatientProfile
 
 admin.site.register(PatientProfile)
-admin.site.register(MedicalInsurance)

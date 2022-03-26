@@ -3,7 +3,7 @@ from django.contrib import messages
 from django.http import HttpResponse
 from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required
-from .forms import UserRegisterForm, UserUpdateForm, PatientProfileUpdateForm
+from .forms import UserRegisterForm, UserUpdateForm
 import logging
 
 from django.contrib.auth import get_user_model

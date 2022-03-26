@@ -15,16 +15,16 @@
             {% if lab_tests %}
                 <table class="table">
                     <thead>
-                    <th scope="col">Recommended by (Doctor)</th>
-                    <th scope="col">Test Type</th>
-                    <th scope="col">Test Report</th>
+                    <th scope="col">Recommended By</th>
+                    <th scope="col">Tests</th>
+                    <th scope="col">Reports</th>
                     <th scope="col">Date</th>
                     </thead>
                     <tbody>
                     {% for lt in lab_tests %}
                         <tr>
-                            <td>{{ lt.doctor.user.first_name }} {{ lt.doctor.user.last_name }}</td>
-                            <td>{{ lt.test_type }}</td>
+                            <td>Dr. {{ lt.doctor.user.username }}</td>
+                            <td>{{ lt.diagnosis.lab_tests_recommended }}</td>
                             <td>{{ lt.lab_test_report }}</td>
                             <td>{{ lt.created }}</td>
                         </tr>

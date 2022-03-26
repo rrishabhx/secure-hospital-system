@@ -4,79 +4,69 @@
 
 {% block patientcontent %}
 
-<div class="row mb-3">
-    <div class="col">
-        <h2>Insurance</h2>
+    <div class="row mb-3">
+        <div class="col">
+            <h2>Insurance Claims</h2>
+        </div>
+        <div class="col text-end">
+            <button class="btn btn-info" onclick="newInsuranceBlock()">Raise Insurance Claim</button>
+        </div>
     </div>
-    <div class="col text-end">
-        <button class="btn btn-info" onclick="newInsuranceBlock()">Raise Insurance Claim</button>
-    </div>
-</div>
 
-<div class="row my-3 d-none" id="new-insurance-block">
-    <div class="col">
+    <div class="row my-3 d-none" id="new-insurance-block">
+        <div class="col">
 
-        <form action="" method="post">
-            {% csrf_token %}
-            <div class="row">
-                <div class="col">
-                    <h3>Raise New Insurance Claim</h3>
+            <form action="" method="post">
+                {% csrf_token %}
+                <div class="row">
+                    <div class="col">
+                        <h3>Raise New Insurance Claim</h3>
+                    </div>
+                    <div class="col text-end">
+                        <button class="btn btn-primary">Submit</button>
+                    </div>
                 </div>
-                <div class="col text-end">
-                    <button class="btn btn-primary">Submit</button>
+
+                <div class="row">
+                    <div class="col">
+                        {{ form | crispy }}
+                    </div>
                 </div>
-            </div>
+            </form>
 
-            <div class="row">
-                <div class="col">
-                    {{ form | crispy }}
-                </div>
-            </div>
-        </form>
-
+        </div>
     </div>
-</div>
 
-<div class="row my-3">
-    <div class="col">
-        <h3>My Insurance Claims</h3>
-        {% if insurance_claims %}
-        <table class="table">
-            <thead>
-                <!-- <th scope="col">S.No.</th> -->
-                <th scope="col">Claim Amount</th>
-                <th scope="col">Test Result</th>
-                <th scope="col">Status</th>
-            </thead>
-            <tbody>
-                {% for ins in insurance_claims %}
-                {% if ins.status == 'Rejected' %}
-                <tr class="table-danger">
-                    <td>${{ ins.claimAmount }}</td>
-                    <td>{{ ins.testResult }}</td>
-                    <td>{{ ins.status }}</td>
-                </tr>
-                {% elif ins.status == 'Accepted' %}
-                <tr class="table-success">
-                    <td>${{ ins.claimAmount }}</td>
-                    <td>{{ ins.testResult }}</td>
-                    <td>{{ ins.status }}</td>
-                </tr>
-                {% elif ins.status == 'Pending' %}
-                <tr class="table-warning">
-                    <td>${{ ins.claimAmount }}</td>
-                    <td>{{ ins.testResult }}</td>
-                    <td>{{ ins.status }}</td>
-                </tr>
-                {% endif %}
-                {% endfor %}
-            </tbody>
-        </table>
-        {% else %}
-        <h4>No Insurance Claim Records found</h4>
-        {% endif %}
+    <div class="row my-3">
+        <div class="col">
+            {% if insurance_claims %}
+                <table class="table">
+                    <thead>
+                    <th scope="col">Diagnosis Date</th>
+                    <th scope="col">Claim Amount</th>
+                    <th scope="col">Status</th>
+                    </thead>
+                    <tbody>
+                    {% for ins in insurance_claims %}
+                        {% if ins.status == None %}
+                            <tr class="table-warning">
+                        {% elif ins.status %}
+                            <tr class="table-success">
+                        {% elif not ins.status %}
+                            <tr class="table-danger">
+                        {% endif %}
+                            <td>{{ ins.diagnosis.appointment.scheduled_date }}</td>
+                            <td>{{ ins.claim_amount }}</td>
+                            <td>{{ ins.status|yesno:"Accepted,Rejected,Pending" }}</td>
+                        </tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
+            {% else %}
+                <h4>No Insurance Claim Records found</h4>
+            {% endif %}
 
+        </div>
     </div>
-</div>
 
 {% endblock patientcontent %}

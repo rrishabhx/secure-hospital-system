@@ -15,8 +15,8 @@
 							<a href="{% url 'hospitalstaff-approveTransaction'}" onclick="document.forms[{{ forloop.counter0 }}].submit();return false;">Approve</a>
 					  </form>
                       <li class="list-group-item list-group-item-light">Appointment Details : {{ i.appointment_details }}</li>
-					  <li class="list-group-item list-group-item-light">Patient Id: {{ i.patientID }}</li>
-					  <li class="list-group-item list-group-item-light">Doctor Id: {{ i.staffId }}</li>
+					  <li class="list-group-item list-group-item-light">Patient Id: {{ i.patient }}</li>
+					  <li class="list-group-item list-group-item-light">Doctor Id: {{ i.doctor }}</li>
 					  <li class="list-group-item list-group-item-light">Scheduled Date: {{ i.scheduled_date }}</li>
 					  <br>
 </ul>

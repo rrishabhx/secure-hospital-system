@@ -116,6 +116,8 @@ def user_redirect(request, redirect_page='home'):
         return redirect(f'lab_staffs:{redirect_page}')
     elif user_type == 'insurance_staff':
         return redirect(f'insurance_staffs:{redirect_page}')
+    elif user_type == 'administrator':
+        return redirect(f'administrators:home')
     else:
         context = {
             'reason': f'Invalid user type: {user_type}'

@@ -1,0 +1,241 @@
+{% extends 'main.html' %}
+{% load static %}
+{% load crispy_forms_tags %}
+
+{% block body-content %}
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{% static 'patients/styles.css' %}">
+    <title>Document</title>
+</head>
+
+<body>
+
+    <div class="container">
+        <h1>Welcome to Dr. Yau's Clinic</h1>
+
+        <div class="row my-5">
+
+            <div class="col-md-3">
+                <div class="content-section">
+                    <h3>Menu</h3>
+                    <!-- <ul class="list-group patient-sidebar">
+                        <li id="home" onclick="switchPage('home')">Home</li>
+                        <li id="appointments" onclick="switchPage('appointments')">Appointments</li>
+                        <li id="diagnosis" onclick="switchPage('diagnosis')">
+                            Diagnosis</li>
+                        <li id="prescriptions" onclick="switchPage('prescriptions')">Prescriptions</li>
+                        <li id="reports" onclick="switchPage('reports')">
+                            Reports</li>
+                        <li id="insurance" onclick="switchPage('insurance')">
+                            Insurance</li>
+                        <li id="transactions" onclick="switchPage('transactions')">Transactions</li>
+                        <li id="profile" onclick="switchPage('profile')">My Profile</li>
+                    </ul> -->
+                    <ul class="nav flex-column">
+                        <li class="nav-item"> <a class="nav-link"  href="{% url 'hospital_staffs:createPatient' %}">Create Patient Records</a></li>
+                      <li class="nav-item"><a class="nav-link"  href="{% url 'hospital_staffs:viewPatient' %}">View Patient Diagnosis and Prescription</a></li>
+                      <li class="nav-item"><a  class="nav-link"  href="{% url 'hospital_staffs:viewRecords' %}">View Patient Records</a></li>
+					  <li class="nav-item"><a class="nav-link"  href="{% url 'hospital_staffs:viewLabRecords' %}">View Lab Records</a></li>
+                      <li class="nav-item"> <a  class="nav-link" href="{% url 'hospital_staffs:createTransaction' %}">Create Transactions</a></li>
+					  <li class="nav-item"> <a  class="nav-link" href="{% url 'hospital_staffs:approveTransaction' %}">Approve Transactions</a></li>					  
+                   	  <li class="nav-item"> <a  class="nav-link" href="{% url 'hospital_staffs:approveAppointment' %}">Approve Appointments</a></li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="col-md-9">
+                {% block patientcontent %}{% endblock patientcontent %}
+
+                <!-- <div id="home-view" style="display:none;">
+                    <h2>Home</h2>
+                    {% for appointment in appointments %}
+                    <article class="media content-section">
+                        <div class="media-body">
+                            <div class="article-metadata">
+                                <a class="mr-2" href="#">{{ appointment.doctor }}</a>
+                                <small class="text-muted">{{ appointment.date_posted }}</small>
+                            </div>
+                            <h2><a class="article-title" href="#">{{ appointment.title }}</a></h2>
+                            <p class="article-content">{{ appointment.description }}</p>
+                        </div>
+                    </article>
+                    {% endfor %}
+                </div>
+
+                <div id="appointments-view" style="display:none;">
+                    <h2>Appointments</h2>
+                    {% for appointment in appointments %}
+                    <article class="media content-section">
+                        <div class="media-body">
+                            <div class="article-metadata">
+                                <a class="mr-2" href="#">{{ appointment.doctor }}</a>
+                                <small class="text-muted">{{ appointment.date_posted }}</small>
+                            </div>
+                            <h2><a class="article-title" href="#">{{ appointment.title }}</a></h2>
+                            <p class="article-content">{{ appointment.description }}</p>
+                        </div>
+                    </article>
+                    {% endfor %}
+                </div>
+
+                <div id="diagnosis-view" style="display:none;">
+                    <h2>Diagnosis</h2>
+                    {% for appointment in appointments %}
+                    <article class="media content-section">
+                        <div class="media-body">
+                            <div class="article-metadata">
+                                <a class="mr-2" href="#">{{ appointment.doctor }}</a>
+                                <small class="text-muted">{{ appointment.date_posted }}</small>
+                            </div>
+                            <h2><a class="article-title" href="#">{{ appointment.title }}</a></h2>
+                            <p class="article-content">{{ appointment.description }}</p>
+                        </div>
+                    </article>
+                    {% endfor %}
+                </div>
+
+                <div id="prescriptions-view" style="display:none;">
+                    <h2>Prescriptions</h2>
+                    {% for appointment in appointments %}
+                    <article class="media content-section">
+                        <div class="media-body">
+                            <div class="article-metadata">
+                                <a class="mr-2" href="#">{{ appointment.doctor }}</a>
+                                <small class="text-muted">{{ appointment.date_posted }}</small>
+                            </div>
+                            <h2><a class="article-title" href="#">{{ appointment.title }}</a></h2>
+                            <p class="article-content">{{ appointment.description }}</p>
+                        </div>
+                    </article>
+                    {% endfor %}
+                </div>
+
+                <div id="reports-view" style="display:none;">
+                    <h2>Reports</h2>
+                    {% for appointment in appointments %}
+                    <article class="media content-section">
+                        <div class="media-body">
+                            <div class="article-metadata">
+                                <a class="mr-2" href="#">{{ appointment.doctor }}</a>
+                                <small class="text-muted">{{ appointment.date_posted }}</small>
+                            </div>
+                            <h2><a class="article-title" href="#">{{ appointment.title }}</a></h2>
+                            <p class="article-content">{{ appointment.description }}</p>
+                        </div>
+                    </article>
+                    {% endfor %}
+                </div>
+
+                <div id="insurance-view" style="display:none;">
+                    <h2>Insurance</h2>
+                    {% for appointment in appointments %}
+                    <article class="media content-section">
+                        <div class="media-body">
+                            <div class="article-metadata">
+                                <a class="mr-2" href="#">{{ appointment.doctor }}</a>
+                                <small class="text-muted">{{ appointment.date_posted }}</small>
+                            </div>
+                            <h2><a class="article-title" href="#">{{ appointment.title }}</a></h2>
+                            <p class="article-content">{{ appointment.description }}</p>
+                        </div>
+                    </article>
+                    {% endfor %}
+                </div>
+
+                <div id="transactions-view" style="display:none;">
+                    <h2>Transactions</h2>
+                    {% for appointment in appointments %}
+                    <article class="media content-section">
+                        <div class="media-body">
+                            <div class="article-metadata">
+                                <a class="mr-2" href="#">{{ appointment.doctor }}</a>
+                                <small class="text-muted">{{ appointment.date_posted }}</small>
+                            </div>
+                            <h2><a class="article-title" href="#">{{ appointment.title }}</a></h2>
+                            <p class="article-content">{{ appointment.description }}</p>
+                        </div>
+                    </article>
+                    {% endfor %}
+                </div>
+
+                <div id="profile-view" style="display:none;">
+                    <h2>Profile</h2>
+                    <div class="content-section">
+                        <div class="media">
+                            <img class="rounded-circle account-img" src="{{ user.patientprofile.image.url }}" alt="">
+                            <div class="media-body">
+                                <h2 class="account-heading">{{ user.username }}</h2>
+                                <p class="text-secondary">{{ user.email }}</p>
+                            </div>
+                        </div>
+                        FORM HERE
+                        <form name="profile-form" method="POST" action="" enctype="multipart/form-data">
+                            {% csrf_token %}
+                            {{ pform | crispy }}
+                            <div class="row">
+                                <div class="col">
+                                    <img src="{{ profile.user.patientprofile.image.url }}" alt="Profile Image Not Found!"
+                                        style="width: 100px; aspect-ratio: 1;">
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col">
+                                    <label for="username" class="form-label">Username</label>
+                                    <input id="username" class="form-control" name="username" type="text" value="{{ profile.user.username }}" disabled>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col">
+                                    <label for="email" class="form-label">Email</label>
+                                    <input id="email" class="form-control" name="email" type="text" value="{{ profile.user.email }}" disabled>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col">
+                                    <label for="address" class="form-label">Address</label>
+                                    <input id="address" name="address" type="text" class="form-control" value="{{ profile.address }}">
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col">
+                                    <label for="insurance" class="form-label">Insurance</label>
+                                    <input id="insurance" name="insurance" type="text" class="form-control" value="{{ profile.insurance }}">
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col"></div>
+                            </div>
+                            <fieldset class="form-group">
+                                <legend class="border-bottom mb-4">Profile Info</legend>
+                                {{ u_form|crispy }}
+                                {{ p_form|crispy }}
+                            </fieldset>
+                            <div class="form-group">
+                                <button class="btn btn-outline-info" type="submit">Update Profile</button>
+                            </div>
+                        </form>
+                    </div>
+                </div> -->
+
+
+
+            </div>
+
+        </div>
+    </div>
+
+
+    <script type="text/javascript" src="{% static 'patients/script.js' %}"></script>
+</body>
+
+</html>
+
+
+{% endblock body-content %}

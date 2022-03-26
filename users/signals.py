@@ -8,6 +8,10 @@ from hospital_staffs.models import HospitalStaffProfile
 from doctors.models import DoctorProfile
 from insurance_staffs.models import InsuranceStaffProfile
 from lab_staffs.models import LabStaffProfile
+from users.models import Log
+from django.contrib.auth.signals import user_logged_in, user_logged_out, user_login_failed
+from datetime import datetime
+from django.utils import timezone
 
 User = get_user_model()
 logger = logging.getLogger(__name__)
@@ -42,3 +46,34 @@ def save_usertype_profile(sender, instance, **kwargs):
         instance.insurancestaffprofile.save()
     elif instance.user_type == 'lab_staff':
         instance.labstaffprofile.save()
+        
+@receiver(user_logged_in)
+def log_user_login(sender, request, user, **kwargs):
+    try:
+        print('user {} logged in through page {}'.format(user.username, request.META.get('HTTP_REFERER')))
+        if user.user_type == 'patient':
+            log = Log(user = user, date = datetime.now(tz=timezone.utc))
+            log.save()
+    except:
+        print('something went wrong')
+
+
+@receiver(user_login_failed)
+def log_user_login_failed(sender, credentials, request, **kwargs):
+    try:
+        print('user {} logged in failed through page {}'.format(credentials.get('username'), request.META.get('HTTP_REFERER')))
+    except:
+        print('something went wrong')
+    
+    #al = Log.objects.all()
+    #for i in al:
+    #    print(i.user, i.date)
+    
+
+
+@receiver(user_logged_out)
+def log_user_logout(sender, request, user, **kwargs):
+    try:
+        print('user {} logged out through page {}'.format(user.username, request.META.get('HTTP_REFERER')))
+    except:
+        print('something went wrong')

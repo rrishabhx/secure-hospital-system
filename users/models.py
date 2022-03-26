@@ -3,6 +3,8 @@ from datetime import date
 from django.contrib.auth.models import AbstractUser
 from django.core.validators import MaxValueValidator
 from django.db import models
+from django.conf import settings
+from datetime import datetime
 
 
 class User(AbstractUser):
@@ -20,3 +22,11 @@ class User(AbstractUser):
 
     def __str__(self):
         return f'{self.username}'
+        
+        
+        
+class Log(models.Model):
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
+    date = models.DateTimeField(default = datetime.now, blank = True)
+    class Meta:
+        db_table = 'logs'

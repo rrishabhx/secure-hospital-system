@@ -6,7 +6,7 @@
 
 
 
-        <form action="" method="post">
+        <form action="" method="get">
             {% csrf_token %}
             <div class="row">
                 <div class="col">
@@ -25,16 +25,28 @@
         </form>
 		
 		<br>
-<h4> Records: </h4>
-{% for i in records %}
-<ul class="list-group">
-					  <li class="list-group-item list-group-item-dark">Record : {{ forloop.counter }}</li>
-                      <li class="list-group-item list-group-item-light">Test Type : {{ i.0 }}</li>
-					  <li class="list-group-item list-group-item-light">Test Result: {{ i.1 }}</li>
-					  <li class="list-group-item list-group-item-light">Staff Id: {{ i.2 }}</li>
-					  <br>
-</ul>
-{% endfor %}
+{% if checklist %}
+        <table class="table">
+            <thead>
+                <th scope="col">Record</th>
+                <th scope="col">Test Type </th>
+                <th scope="col">Test Result</th>
+                <th scope="col">Staff Id</th>
+            </thead>
+            <tbody>
+                {% for i in records %}
+                <tr>
+                    <td>{{ forloop.counter}}</td>
+                    <td>{{ i.0 }}</td>
+                    <td>{{ i.1 }}</td>
+                    <td>{{ i.2 }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        {% else %}
+        <h4>No Lab Tests found</h4>
+        {% endif %}
 
 
 

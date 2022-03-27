@@ -119,29 +119,27 @@ LOGGING = {
     'version': 1,
     'disable_existing_loggers': False,
     'loggers': {
-        'django': {
-            'handlers': ['console'],
-            'level': 'INFO',
-            'propagate': True,
-        },
-        # 'root': {
-        #     'handlers': ['file'],
+        # 'django': {
+        #     'handlers': ['console'],
         #     'level': 'INFO',
         #     'propagate': True,
-        # }
+        # },
+        'root': {
+            'handlers': ['file'],
+            'level': 'INFO',
+            'propagate': True,
+        }
     },
     'handlers': {
         'console': {
-            'level': 'INFO',
             'class': 'logging.StreamHandler',
-            'formatter': 'simpleRe'
         },
-        # 'file': {
-        #     'level': 'INFO',
-        #     'class': 'logging.FileHandler',
-        #     'filename': './shs.log',
-        #     'formatter': 'simpleRe',
-        # }
+        'file': {
+            'level': 'INFO',
+            'class': 'logging.FileHandler',
+            'filename': './shs.log',
+            'formatter': 'simpleRe',
+        }
     },
     'formatters': {
         'simpleRe': {

@@ -3,6 +3,8 @@ from django.shortcuts import render
 from .forms import CreatePatientForm, ViewPatientForm, ViewPatientRecords, CreateTransaction, ViewLabRecords
 from django.contrib import messages
 from django.apps import apps
+from django.db import IntegrityError
+
 
 
 # Create your views here.
@@ -12,34 +14,47 @@ def home(request):
 
 def createPatient(request):
     form = CreatePatientForm()
+    model1 = apps.get_model('hospital', 'Appointment')
+    model2 = apps.get_model('hospital', 'Diagnosis')
+    print(form.fields)
     if request.method == 'POST':
-        form = CreatePatientForm(request.POST)
-        if form.is_valid():
-            form.save()
+        try:
+            flag = request.POST['appointment']
+            y = model1.objects.get(id=flag)
+            x = model2.objects.create(appointment = y, doctor = y.doctor, patient = y.patient)
+            x.save()
             messages.success(request, 'New Record Created')
+        except KeyError:
+            print('KeyError')
+        except Exception as e:
+            print('some issue')
     context = {'form': form}
     return render(request, 'hospital_staffs/createPatient.html', context)
 
 
 def viewPatient(request):
     form = ViewPatientForm()
-    context = {'form': form, 'prescription': ["Enter Patient and Doctor for prescription"],
-               'diagnosis': ["Enter Patient and Doctor for prescription"]}
-    if request.method == 'GET' and 'patient' in request.GET and 'doctor' in request.GET:
+    context = {'form': form, 'prescription': [],
+               'diagnosis': [], 'checklistP':False, 'checklistD':False}
+    if request.method == 'GET' and 'patient' in request.GET:
         form = ViewPatientForm(request.GET)
         if form.is_valid():
             model = apps.get_model('hospital', 'Diagnosis')
-            print(request.GET)
             try:
-                x = model.objects.filter(patient=request.GET['patient'], doctor=request.GET['doctor'])
-                print(x)
-                print('hel')
+                x = model.objects.filter(patient=request.GET['patient'])
                 context['prescription'] = []
                 context['diagnosis'] = []
-                print('hello')
                 for i in x.iterator():
-                    context['prescription'].append(i.prescription)
-                    context['diagnosis'].append(i.details)
+                    if(i.prescription):
+                        context['prescription'].append(i.prescription)
+                    if(i.details):
+                        context['diagnosis'].append(i.details)
+                if(context['prescription']):
+                    context['checklistP'] = True
+                if(context['diagnosis']):
+                    context['checklistD'] = True
+                
+                    
             except Exception as e:
                 context['prescription'] = ["No information available as of now"]
                 context['diagnosis'] = ["No information available as of now"]
@@ -52,7 +67,7 @@ def viewPatient(request):
 def viewRecords(request):
     form = ViewPatientRecords()
     defText = 'Enter Patient Details fo records'
-    context = {'form': form, 'records': [[defText] * 4]}
+    context = {'form': form, 'records': [], 'checklist':False}
     if request.method == 'GET' and 'patient' in request.GET:
         form = ViewPatientRecords(request.GET)
         if form.is_valid():
@@ -64,6 +79,7 @@ def viewRecords(request):
                     l = ['', '', '', '']
                     l[0], l[1], l[2], l[3] = i.prescription, i.details, i.doctor, i.lab_tests_recommended
                     context['records'].append(l)
+                    context['checklist'] = True
             except Exception as e:
                 context['records'] = ["No information available as of now"]
             finally:
@@ -73,7 +89,7 @@ def viewRecords(request):
 
 def viewLabTests(request):
     form = ViewLabRecords()
-    context = {'form': form, 'records': [['Enter Patient Details fo records'] * 3]}
+    context = {'form': form, 'records': [],'checklist': False}
     if request.method == 'GET' and 'patient' in request.GET:
         form = ViewLabRecords(request.GET)
         if form.is_valid():
@@ -85,6 +101,7 @@ def viewLabTests(request):
                     l = ['', '', '']
                     l[0], l[1], l[2] = i.doctor, i.lab_test_report, i.created
                     context['records'].append(l)
+                    context['checklist'] = True
             except Exception as e:
                 context['records'] = ["No information available as of now"]
             finally:

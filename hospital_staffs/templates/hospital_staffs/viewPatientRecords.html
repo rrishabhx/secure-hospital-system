@@ -25,17 +25,32 @@
         </form>
 		
 		<br>
-<h4> Records: </h4>
-{% for i in records %}
-<ul class="list-group">
-					  <li class="list-group-item list-group-item-dark">Record : {{ forloop.counter }}</li>
-                      <li class="list-group-item list-group-item-light">Prescription : {{ i.0 }}</li>
-					  <li class="list-group-item list-group-item-light">Diagnosis: {{ i.1 }}</li>
-					  <li class="list-group-item list-group-item-light">DoctorId: {{ i.2 }}</li>
-					  <li class="list-group-item list-group-item-light">LabTestId: {{ i.3 }}</li>
-					  <br>
-</ul>
-	{% endfor %}
+
+
+{% if checklist %}
+        <table class="table">
+            <thead>
+                <th scope="col">Record</th>
+                <th scope="col">Prescription </th>
+                <th scope="col">Diagnosis</th>
+                <th scope="col">DoctorId</th>
+				<th scope="col">LabTestId</th>
+            </thead>
+            <tbody>
+                {% for i in records %}
+                <tr>
+                    <td>{{ forloop.counter}}</td>
+                    <td>{{ i.0 }}</td>
+                    <td>{{ i.1 }}</td>
+                    <td>{{ i.2 }}</td>
+					<td>{{ i.3 }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        {% else %}
+        <h4>No Records found</h4>
+        {% endif %}
 
 
 

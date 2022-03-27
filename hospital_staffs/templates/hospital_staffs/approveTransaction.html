@@ -6,20 +6,32 @@
 
 
 <h4> Records: </h4>
-{% for i in transactions %}
-<ul class="list-group">
-					  <li class="list-group-item list-group-item-dark">Record : {{ forloop.counter }}</li>
-					  <form id="myform{{ forloop.counter }}" method="post">
+
+<table class="table">
+            <thead>
+                <th scope="col">Record</th>
+                <th scope="col">Amount</th>
+                <th scope="col">Patient Id</th>
+                <th scope="col">Diagnosis</th>
+				<th scope="col">Approve</th>
+            </thead>
+            <tbody>
+                {% for i in transactions %}
+                <tr>
+				
+					<form id="myform{{ forloop.counter }}" method="POST">
 							{% csrf_token %}
 							<input type="hidden" name="id" value={{i.id}} />
-							<a href="{% url 'hospitalstaff-approveTransaction'}" onclick="document.forms[{{ forloop.counter0 }}].submit();return false;">Approve</a>
+							<td>{{ forloop.counter}}</td>
+							<td>{{ i.amount }}</td>
+							<td>{{ i.patient }}</td>
+							<td>{{ i.diagnosis}}</td>
+							<td><a href="{% url 'hospitalstaff-approveTransaction'}" onclick="document.forms[{{ forloop.counter0 }}].submit();return false;">Approve</a></td>
 					  </form>
-                      <li class="list-group-item list-group-item-light">Amount : {{ i.amount }}</li>
-					  <li class="list-group-item list-group-item-light">Patient Id: {{ i.patient }}</li>
-					  <li class="list-group-item list-group-item-light">Staff Id: {{ i.diagnosis }}</li>
-					  <br>
-</ul>
-{% endfor %}
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
 
 
 

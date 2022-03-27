@@ -27,21 +27,45 @@
 		
 		<br>
 		
-		<h4> Prescriptions: </h4>
-	{% for i in prescription %}
+		
+		{% if checklistP %}
+        <table class="table">
+            <thead>
+				<th scope="col">Record </th>
+                <th scope="col">Prescription </th>
+            </thead>
+            <tbody>
+                {% for i in prescription %}
+                <tr>
+                    <td>{{ forloop.counter}}</td>
+					<td>{{ i}}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        {% else %}
+        <h4>No Prescriptions found</h4>
+        {% endif %}
+		<br>
+				{% if checklistD %}
+        <table class="table">
+            <thead>
+				<th scope="col">Record </th>
+                <th scope="col">Diagnosis </th>
+            </thead>
+            <tbody>
+                {% for i in diagnosis %}
+                <tr>
+                    <td>{{ forloop.counter}}</td>
+					<td>{{ i}}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        {% else %}
+        <h4>No Diagnosis found</h4>
+        {% endif %}
 
-	<ul class="list-group">
-					  <li class="list-group-item list-group-item-light">{{ i }}</li>
-	</ul>
-	{% endfor %}
-
-	<br>
-	<h4> Diagnosis: </h4>
-	{% for j in diagnosis %}
-	<ul class="list-group">
-					  <li class="list-group-item list-group-item-light">{{ j }}</li>
-	</ul>
-	{% endfor %}
 
 
 

@@ -1,0 +1,82 @@
+{% extends 'insurance_staffs/main.html' %}
+{% load static %}
+{% load crispy_forms_tags %}
+
+{% block insurance_staff_content %}
+
+    <div class="row mb-3">
+        <div class="col">
+            <h2>Insurance Claim Requests</h2>
+        </div>
+    </div>
+
+
+    <div class="row my-3">
+        <div class="col">
+            {% if claims %}
+                <h4>Pending Insurance Claims</h4>
+                <table class="table table table-hover">
+                    <thead>
+                    <th scope="col">Patient</th>
+                    <th scope="col">Claim Amount</th>
+                    <th scope="col">Diagnosis</th>
+                    <th scope="col">Insurance Amount Available</th>
+                    <th scope="col">Approved</th>
+                    </thead>
+                    <tbody>
+                    {% for claim in claims %}
+                        <tr>
+                            <td>{{ claim.insured_patient.patient.user.username }}</td>
+                            <td>{{ claim.claim_amount }}</td>
+                            <td>{{ claim.diagnosis }}</td>
+                            <td>{{ claim.insured_patient.amount_available }}</td>
+                            <td>
+                                {% if claim.status != None %}
+                                    {{ claim.status|yesno:"Yes,No" }}<
+                                {% else %}
+                                    <form action="" method="post">
+                                        {% csrf_token %}
+                                        <button type="submit" class="btn btn-success" name="approve_claim"
+                                                value="{{ claim.id }}">Approve
+                                        </button>
+                                        <button type="submit" class="btn btn-danger" name="deny_claim"
+                                                value="{{ claim.id }}">Deny
+                                        </button>
+                                    </form>
+                                {% endif %}
+                            </td>
+                        </tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
+            {% endif %}
+            <br>
+            {% if old_claims %}
+                <h4>Previous Insurance Claims</h4>
+                <table class="table table table-hover">
+                    <thead>
+                    <th scope="col">Patient</th>
+                    <th scope="col">Claim Amount</th>
+                    <th scope="col">Diagnosis</th>
+                    <th scope="col">Approved</th>
+                    </thead>
+                    <tbody>
+                    {% for claim in old_claims %}
+                        <tr>
+                            <td>{{ claim.insured_patient.patient.user.username }}</td>
+                            <td>{{ claim.claim_amount }}</td>
+                            <td>{{ claim.diagnosis }}</td>
+                            <td>{{ claim.status|yesno:"Yes,No" }}</td>
+                        </tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
+            {% endif %}
+
+            {% if claims == None and old_claims == None %}
+                <h4>No Insurance Claims Found!</h4>
+            {% endif %}
+
+        </div>
+    </div>
+{% endblock insurance_staff_content %}

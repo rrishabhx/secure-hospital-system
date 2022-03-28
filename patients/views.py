@@ -20,14 +20,14 @@ logger = logging.getLogger(__name__)
 @login_required
 @patient_required
 def home(request):
-    logger.info(f"Inside home of {request.user}")
+    print(f"Inside home of {request.user}")
     return redirect('patients:appointments')
 
 
 @login_required
 @patient_required
 def appointments(request):
-    logger.info(f"{request.user}: Appointments page")
+    print(f"{request.user}: Appointments page")
     if request.method == 'POST':
         form = AppointmentForm(request.POST)
 
@@ -35,14 +35,14 @@ def appointments(request):
             appointment_data = form.cleaned_data
             appointment_data['patient'] = request.user.patientprofile
 
-            logger.info(f"{request.user}: New appointment details- {appointment_data}")
+            print(f"{request.user}: New appointment details- {appointment_data}")
             appointment_obj = Appointment(**appointment_data)
             appointment_obj.save()
 
             messages.success(request, 'New Appointment Requested')
             return redirect('patients:appointments')
         else:
-            logger.error(f"{request.user}: Invalid form data- {form.data}")
+            print(f"{request.user}: Invalid form data- {form.data}")
     else:
         form = AppointmentForm()
 
@@ -56,10 +56,10 @@ def appointments(request):
 @login_required
 @patient_required
 def diagnosis(request):
-    logger.info(f"{request.user}: Diagnosis page")
+    print(f"{request.user}: Diagnosis page")
 
     diagnosis_list = Diagnosis.objects.filter(patient=request.user.patientprofile)
-    logger.info(f"{request.user}: Previous diagnosis: {diagnosis_list}")
+    print(f"{request.user}: Previous diagnosis: {diagnosis_list}")
 
     context = {
         'diagnosis_list': diagnosis_list,
@@ -70,10 +70,10 @@ def diagnosis(request):
 @login_required
 @patient_required
 def prescriptions(request):
-    logger.info(f"{request.user}: Prescriptions page")
+    print(f"{request.user}: Prescriptions page")
 
     diagnosis_list = Diagnosis.objects.filter(patient=request.user.patientprofile)
-    logger.info(f"{request.user}: Previous diagnosis: {diagnosis_list}")
+    print(f"{request.user}: Previous diagnosis: {diagnosis_list}")
 
     context = {
         'diagnosis_list': diagnosis_list,
@@ -84,10 +84,10 @@ def prescriptions(request):
 @login_required
 @patient_required
 def lab_test_reports(request):
-    logger.info(f"{request.user}: Lab Test Reports page")
+    print(f"{request.user}: Lab Test Reports page")
 
     lab_tests = LabTest.objects.filter(patient=request.user.patientprofile)
-    logger.info(f"{request.user}: Previous Lab Reports: {lab_tests}")
+    print(f"{request.user}: Previous Lab Reports: {lab_tests}")
 
     context = {
         'lab_tests': lab_tests,
@@ -98,7 +98,7 @@ def lab_test_reports(request):
 @login_required
 @patient_required
 def insurance(request):
-    logger.info(f"{request.user}: Insurance page")
+    print(f"{request.user}: Insurance page")
 
     patient_profile = request.user.patientprofile
     insured_patient = None
@@ -117,12 +117,12 @@ def insurance(request):
 
                 messages.success(request, 'New Insurance Claim Filed')
             else:
-                logger.error(f"{request.user}: Patient not insured. Only God can save you!!")
+                print(f"{request.user}: Patient not insured. Only God can save you!!")
                 messages.error(request, 'Patient not insured. Only God can save you!!')
 
             return redirect('patients:insurance')
         else:
-            logger.error(f"{request.user}: Invalid insurance form data- {form.data}")
+            print(f"{request.user}: Invalid insurance form data- {form.data}")
     else:
         form = InsuranceClaimForm()
 
@@ -139,7 +139,7 @@ def insurance(request):
 @login_required
 @patient_required
 def transactions(request):
-    logger.info(f"{request.user}: Transactions page")
+    print(f"{request.user}: Transactions page")
 
     if request.method == 'POST':
         form = TransactionForm(request.POST)
@@ -161,12 +161,12 @@ def transactions(request):
 @login_required
 @patient_required
 def profile(request):
-    logger.info("Inside patient profile")
+    print("Inside patient profile")
     user = request.user
     patient_profile = request.user.patientprofile
 
     if request.method == 'POST':
-        logger.info("Request type: POST")
+        print("Request type: POST")
         u_form = UserUpdateForm(request.POST, instance=user)
         p_form = PatientProfileUpdateForm(
             request.POST, request.FILES, instance=patient_profile)
@@ -181,13 +181,13 @@ def profile(request):
             messages.success(request, f'Your account has been updated!')
             return redirect('profile')
     else:
-        logger.info(f"Request type: GET")
+        print(f"Request type: GET")
         u_form = UserUpdateForm(instance=user)
         p_form = PatientProfileUpdateForm(instance=patient_profile)
         i_form = InsuredPatientForm()
 
         if hasattr(patient_profile, 'insuredpatient'):
-            logger.info(f"{patient_profile} has the 'insuredpatient' attribute")
+            print(f"{patient_profile} has the 'insuredpatient' attribute")
             i_form = InsuredPatientForm(instance=patient_profile.insuredpatient)
 
     context = {

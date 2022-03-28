@@ -11,24 +11,9 @@ from django.contrib.auth import get_user_model
 User = get_user_model()
 logger = logging.getLogger(__name__)
 
-appointments = [
-    {
-        'doctor': 'Dr. Mantis Tobbagan',
-        'title': 'Covid-19',
-        'description': 'No taste in food',
-        'date_posted': 'Feb 27, 2022'
-    },
-    {
-        'doctor': 'Dr. Jane Doe',
-        'title': 'Cancer',
-        'description': 'Too much blood loss',
-        'date_posted': 'Feb 18, 2022'
-    }
-]
-
 
 def home(request):
-    logger.info("In landing page. Redirecting user to login page")
+    print("In landing page. Redirecting user to login page")
     return redirect('login-user', usertype='patient')
 
 
@@ -37,20 +22,27 @@ def about(request):
 
 
 def login_user(request, usertype):
-    logger.info("User trying to login")
+    print("User trying to login")
 
     if request.user.is_authenticated:
-        logger.info("User authenticated")
+        print("User authenticated")
 
         return user_redirect(request)
 
     if request.method == 'POST':
-        logger.info("User login POST request")
+        print(f"User login POST request: {request.POST}")
         username = request.POST.get('username')
         password = request.POST.get('password')
 
         try:
             user = User.objects.get(username=username)
+
+            if (usertype == 'patient' and user.user_type != 'patient') or (
+                    usertype != 'patient' and user.user_type != request.POST.get('staff')):
+                print(f"User-type incorrect! Please login as {user.user_type}")
+                messages.error(request, f"User-type incorrect! Please login as {user.user_type}")
+
+                return redirect('login-user', usertype=usertype)
         except:
             messages.error(request, 'User does not exist')
 
@@ -59,8 +51,8 @@ def login_user(request, usertype):
         if user is not None:
             login(request, user)
 
-            logger.info("User type: " + user.user_type)
-
+            print("User type: " + user.user_type)
+            messages.success(request, f'{user.username} successfully logged in')
             return user_redirect(request)
         else:
             messages.error(request, 'Username or Password does not exist')
@@ -96,7 +88,7 @@ def register_user(request):
 
 @login_required
 def profile_user(request):
-    logger.info("Opening user profile. Redirecting to user-type")
+    print("Opening user profile. Redirecting to user-type")
 
     return user_redirect(request, 'profile')
 
@@ -104,7 +96,7 @@ def profile_user(request):
 def user_redirect(request, redirect_page='home'):
     user_type = request.user.user_type
 
-    logger.info(f"Redirecting [{user_type}] to home page: ")
+    print(f"Redirecting [{user_type}] to home page: ")
 
     if user_type == 'patient':
         return redirect(f'patients:{redirect_page}')

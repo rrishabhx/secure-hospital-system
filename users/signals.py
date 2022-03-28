@@ -19,7 +19,7 @@ logger = logging.getLogger(__name__)
 
 @receiver(post_save, sender=User)
 def create_usertype_profile(sender, instance, created, **kwargs):
-    logger.info("Inside user-profile creation signal")
+    print("Inside user-profile creation signal")
     if created:
         if instance.user_type == 'patient':
             PatientProfile.objects.create(user=instance)
@@ -35,7 +35,7 @@ def create_usertype_profile(sender, instance, created, **kwargs):
 
 @receiver(post_save, sender=User)
 def save_usertype_profile(sender, instance, **kwargs):
-    logger.info("Inside user-profile save signal")
+    print("Inside user-profile save signal")
     if instance.user_type == 'patient':
         instance.patientprofile.save()
     elif instance.user_type == 'hospital_staff':

@@ -14,6 +14,7 @@ shs/
 __pycache__
 db.sqlite3
 #media
+#static/
 
 # Ignore Django Migrations in Development if you are working on team
 # Only for Development only
@@ -150,3 +151,8 @@ GitHub.sublime-settings
 !.vscode/launch.json
 !.vscode/extensions.json
 .history
+
+# Elastic Beanstalk Files
+.elasticbeanstalk/*
+!.elasticbeanstalk/*.cfg.yml
+!.elasticbeanstalk/*.global.yml

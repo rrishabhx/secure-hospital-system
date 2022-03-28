@@ -28,7 +28,7 @@ appointments = [
 
 
 def home(request):
-    logger.info("In landing page. Redirecting user to login page")
+    print("In landing page. Redirecting user to login page")
     return redirect('login-user', usertype='patient')
 
 
@@ -37,15 +37,15 @@ def about(request):
 
 
 def login_user(request, usertype):
-    logger.info("User trying to login")
+    print("User trying to login")
 
     if request.user.is_authenticated:
-        logger.info("User authenticated")
+        print("User authenticated")
 
         return user_redirect(request)
 
     if request.method == 'POST':
-        logger.info("User login POST request")
+        print("User login POST request")
         username = request.POST.get('username')
         password = request.POST.get('password')
 
@@ -59,7 +59,7 @@ def login_user(request, usertype):
         if user is not None:
             login(request, user)
 
-            logger.info("User type: " + user.user_type)
+            print("User type: " + user.user_type)
 
             return user_redirect(request)
         else:
@@ -96,7 +96,7 @@ def register_user(request):
 
 @login_required
 def profile_user(request):
-    logger.info("Opening user profile. Redirecting to user-type")
+    print("Opening user profile. Redirecting to user-type")
 
     return user_redirect(request, 'profile')
 
@@ -104,7 +104,7 @@ def profile_user(request):
 def user_redirect(request, redirect_page='home'):
     user_type = request.user.user_type
 
-    logger.info(f"Redirecting [{user_type}] to home page: ")
+    print(f"Redirecting [{user_type}] to home page: ")
 
     if user_type == 'patient':
         return redirect(f'patients:{redirect_page}')
@@ -116,6 +116,8 @@ def user_redirect(request, redirect_page='home'):
         return redirect(f'lab_staffs:{redirect_page}')
     elif user_type == 'insurance_staff':
         return redirect(f'insurance_staffs:{redirect_page}')
+    elif user_type == 'administrator':
+        return redirect(f'administrators:home')
     else:
         context = {
             'reason': f'Invalid user type: {user_type}'

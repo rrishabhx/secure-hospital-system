@@ -21,7 +21,7 @@
                 <tr>
                     <td>{{ app.status }}</td>
                     <td>{{ app.appointment_details }}</td>
-                    <td>{{ app.patient.user.first_name }} {{ app.patient.user.last_name }}</td>
+                    <td>{{ app.patient.user.username }}</td>
                     <td>{{ app.scheduled_date }}</td>
                 </tr>
                 {% endfor %}

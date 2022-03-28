@@ -4,12 +4,12 @@ from django.apps import apps
 class CreatePatientForm(ModelForm):
 	class Meta:
 		model = apps.get_model('hospital', 'Diagnosis')
-		fields = ('appointment','doctor', 'patient')
+		fields = ('appointment',)
 
 class ViewPatientForm(ModelForm):
 	class Meta:
 		model = apps.get_model('hospital', 'Diagnosis')
-		fields = ('patient','doctor')
+		fields = ('patient',)
         
 class ViewPatientRecords(ModelForm):
 	class Meta:
@@ -18,9 +18,8 @@ class ViewPatientRecords(ModelForm):
         
 class CreateTransaction(ModelForm):
 	class Meta:
-		model = apps.get_model('patients', 'Transactions')
-		fields = ('patientID','staffId','status','transactionAmount',) 
-		readonly_fields = ('staffId','status')
+		model = apps.get_model('hospital', 'Transaction')
+		fields = ('patient','diagnosis', 'amount')
 
 
 class ViewLabRecords(ModelForm):

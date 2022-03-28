@@ -3,6 +3,7 @@
 from django.http import HttpResponse
 from django.shortcuts import render
 import logging
+from django.apps import apps
 
 from django.contrib.auth.decorators import login_required
 
@@ -11,7 +12,7 @@ from hospital.models import Appointment, Diagnosis, LabTest
 from doctors.models import DoctorProfile
 from users.decorators import doctor_required
 from django.shortcuts import render, get_object_or_404
-from .forms import ProfileForm
+from .forms import ProfileForm, UpdatePatientForm,ViewLabRecords
 from django.contrib import messages
 
 from django.contrib.auth import get_user_model
@@ -59,9 +60,9 @@ reports_list = [
 @doctor_required
 # Create your views here.
 # def home(request):
-#     logger.info(f"Inside home of {request.user}")
+#     print(f"Inside home of {request.user}")
 #     user = get_object_or_404(DoctorProfile, user=request.user)
-#     logger.info(f"User object: {user}")
+#     print(f"User object: {user}")
 #
 #     recommendation_form = LabTestRecommendationForm()
 #
@@ -73,9 +74,9 @@ reports_list = [
 #     }
 #     return render(request, 'doctors/home.html', context)
 def home(request):
-    logger.info(f"Inside home of {request.user}")
+    print(f"Inside home of {request.user}")
     user = request.user.doctorprofile
-    logger.info(f"User object: {user}")
+    print(f"User object: {user}")
 
     recommendation_form = LabTestRecommendationForm()
 
@@ -89,37 +90,56 @@ def home(request):
 
 
 def prescriptions(request):
-    logger.info(f"{request.user}: Prescriptions page")
-    if request.method == 'POST':
-        form = LabTestRecommendationForm(request.POST)
-
+    form = UpdatePatientForm()
+    context = {'form': form, 'records': [], 'checklist':False}
+    if request.method == 'POST' and 'patient' not in request.POST:
+        model = apps.get_model('hospital', 'Diagnosis')
+        try:
+            flag = request.POST['id']
+            y = model.objects.get(id=flag)
+            if('prescription'in request.POST):
+                if not request.POST['prescription']:
+                    y.prescription = None
+                    print(y.prescription)
+                    print('a')
+                y.prescription = request.POST['prescription']
+                print(request.POST['prescription'])
+            if('details' in request.POST):
+                if not request.POST['details']:
+                    y.details = None
+                y.details = request.POST['details']  
+            if('lab' in request.POST):
+                if not request.POST['lab']:
+                    y.lab_tests_recommended = None
+                y.lab_tests_recommended = request.POST['lab']               
+            y.save()
+        except KeyError:
+            print('KeyError')
+        finally:
+                render(request, 'doctors/prescriptions.html', context)
+    if request.method == 'POST' and 'patient' in request.POST:
+        user = request.user.doctorprofile
+        form = UpdatePatientForm(request.POST)
         if form.is_valid():
-            data = form.cleaned_data
-            data['doctor'] = request.user.doctorprofile
-
-            logger.info(f"{request.user}: New prescription details- {data}")
-            obj = Diagnosis(**data)
-            obj.save()
-
-            messages.success(request, 'New Prescripotion Created')
-            # return redirect('doctors:prescriptions')
-        else:
-            logger.error(f"{request.user}: Invalid form data- {form.data}")
-    else:
-        form = LabTestRecommendationForm()
-
-    context = {
-        'prescriptions': Diagnosis.objects.filter(doctor=request.user.doctorprofile),
-        'form': form
-    }
-    return render(request, 'doctors/prescriptions.html', context=context)
+            model = apps.get_model('hospital', 'Diagnosis')
+            try:
+                x = model.objects.filter(patient=request.POST['patient'], doctor = user)
+                context['records'] = []
+                for i in x.iterator():
+                    context['records'].append(i)
+                    context['checklist'] = True
+            except Exception as e:
+                print('Some issue')
+            finally:
+                render(request, 'doctors/prescriptions.html', context)
+    return render(request, 'doctors/prescriptions.html', context)
 
 
 def diagnosis(request):
-    logger.info(f"{request.user}: Diagnosis page")
+    print(f"{request.user}: Diagnosis page")
 
     diagnosis_list = Diagnosis.objects.filter(doctor=request.user.doctorprofile)
-    logger.info(f"{request.user}: Previous diagnosis: {diagnosis_list}")
+    print(f"{request.user}: Previous diagnosis: {diagnosis_list}")
 
     context = {
         'diagnosis_list': diagnosis_list,
@@ -137,9 +157,24 @@ def appointments(request):
 
 
 def reports(request):
-    context = {
-        'reports': reports_list
-    }
+    form = ViewLabRecords()
+    context = {'form': form, 'records': [],'checklist': False}
+    if request.method == 'GET' and 'patient' in request.GET:
+        form = ViewLabRecords(request.GET)
+        if form.is_valid():
+            model = apps.get_model('hospital', 'LabTest')
+            try:
+                x = model.objects.filter(patient=request.GET['patient'])
+                context['records'] = []
+                for i in x.iterator():
+                    l = ['', '', '']
+                    l[0], l[1], l[2] = i.doctor, i.lab_test_report, i.created
+                    context['records'].append(l)
+                    context['checklist'] = True
+            except Exception as e:
+                context['records'] = ["No information available as of now"]
+            finally:
+                render(request, 'doctors/reports.html', context)
     return render(request, 'doctors/reports.html', context=context)
 
 def profile(request):
@@ -166,3 +201,6 @@ def profile(request):
         'profile': profile
     }
     return render(request, 'doctors/profile.html', context=context)
+    
+
+

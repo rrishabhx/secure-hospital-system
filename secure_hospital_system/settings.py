@@ -119,41 +119,41 @@ AUTH_PASSWORD_VALIDATORS = [
 ]
 
 # Logger settings
-LOGGING = {
-    'version': 1,
-    'disable_existing_loggers': False,
-    'loggers': {
-        # 'django': {
-        #     'handlers': ['console'],
-        #     'level': 'INFO',
-        #     'propagate': True,
-        # },
-        'root': {
-            'handlers': ['file'],
-            'level': 'INFO',
-            'propagate': True,
-        }
-    },
-    'handlers': {
-        'console': {
-            'class': 'logging.StreamHandler',
-        },
-        'file': {
-            'level': 'INFO',
-            'class': 'logging.FileHandler',
-            'filename': './shs.log',
-            'formatter': 'simpleRe',
-        }
-    },
-    'formatters': {
-        'simpleRe': {
-            'format': '[{asctime} {levelname} {module}/{funcName}():{lineno} {processName}:{threadName}] {message}',
-            # 'format': '[{asctime} {levelname} {module}/{funcName}():{lineno} {processName}:{threadName}] {message} '
-            #           '|||| File Path: {pathname}',
-            'style': '{',
-        }
-    }
-}
+# LOGGING = {
+#     'version': 1,
+#     'disable_existing_loggers': False,
+#     'loggers': {
+#         # 'django': {
+#         #     'handlers': ['console'],
+#         #     'level': 'INFO',
+#         #     'propagate': True,
+#         # },
+#         'root': {
+#             'handlers': ['file'],
+#             'level': 'INFO',
+#             'propagate': True,
+#         }
+#     },
+#     'handlers': {
+#         'console': {
+#             'class': 'logging.StreamHandler',
+#         },
+#         'file': {
+#             'level': 'INFO',
+#             'class': 'logging.FileHandler',
+#             'filename': './shs.log',
+#             'formatter': 'simpleRe',
+#         }
+#     },
+#     'formatters': {
+#         'simpleRe': {
+#             'format': '[{asctime} {levelname} {module}/{funcName}():{lineno} {processName}:{threadName}] {message}',
+#             # 'format': '[{asctime} {levelname} {module}/{funcName}():{lineno} {processName}:{threadName}] {message} '
+#             #           '|||| File Path: {pathname}',
+#             'style': '{',
+#         }
+#     }
+# }
 
 # Internationalization
 # https://docs.djangoproject.com/en/4.0/topics/i18n/

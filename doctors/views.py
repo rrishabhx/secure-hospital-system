@@ -60,9 +60,9 @@ reports_list = [
 @doctor_required
 # Create your views here.
 # def home(request):
-#     logger.info(f"Inside home of {request.user}")
+#     print(f"Inside home of {request.user}")
 #     user = get_object_or_404(DoctorProfile, user=request.user)
-#     logger.info(f"User object: {user}")
+#     print(f"User object: {user}")
 #
 #     recommendation_form = LabTestRecommendationForm()
 #
@@ -74,9 +74,9 @@ reports_list = [
 #     }
 #     return render(request, 'doctors/home.html', context)
 def home(request):
-    logger.info(f"Inside home of {request.user}")
+    print(f"Inside home of {request.user}")
     user = request.user.doctorprofile
-    logger.info(f"User object: {user}")
+    print(f"User object: {user}")
 
     recommendation_form = LabTestRecommendationForm()
 
@@ -136,10 +136,10 @@ def prescriptions(request):
 
 
 def diagnosis(request):
-    logger.info(f"{request.user}: Diagnosis page")
+    print(f"{request.user}: Diagnosis page")
 
     diagnosis_list = Diagnosis.objects.filter(doctor=request.user.doctorprofile)
-    logger.info(f"{request.user}: Previous diagnosis: {diagnosis_list}")
+    print(f"{request.user}: Previous diagnosis: {diagnosis_list}")
 
     context = {
         'diagnosis_list': diagnosis_list,

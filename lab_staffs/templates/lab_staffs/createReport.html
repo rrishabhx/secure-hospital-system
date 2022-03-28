@@ -3,60 +3,20 @@
 {% load crispy_forms_tags %}
 
 {% block labstaffcontent %}
-<div class="row mb-3">
-    <div class="col">
-        <h2>New Lab Test Report</h2>
-    </div>
-    <div class="col text-end">
-        <button class="btn btn-info" onclick="newReport()">Create New Test Report</button>
-    </div>
-</div>
-
-<div class="row my-3 d-none" id="new-testreport-block">
-    <div class="col">
-
-        <form action="" method="post">
-            {% csrf_token %}
-            <div class="row">
-                <div class="col">
-                    <h3>Create Test Report</h3>
-                </div>
-                <div class="col text-end">
-                    <button class="btn btn-primary">Submit</button>
-                </div>
+<div class="container">
+    <h1>New Lab Test Report</h1>
+    <form method="POST" novalidate>
+        {% csrf_token %}
+        {% for i in createReportForm %}
+            <div class="create Reprot form">
+                <label class="form label">{{ i.label }}</label>
+                <div class="detail label" style="position: relative;">{{ i }}</div>
             </div>
-
-            <div class="row">
-                <div class="col">
-                    {{ createReportForm | crispy }}
-                </div>
-            </div>
-        </form>
-
-    </div>
-</div>
-
-
-{% endblock labstaffcontent %}
-
-<body>
-    {% if diagnosis %}
-    <table class="table">
-        <thead>
-        <th scope="col">Patient</th>
-        </thead>
-        <tbody>
-        {% for dia in diagnosis %}
-            <tr>
-                <td id="Patient">{{ dia.patient.user.first_name }} {{ dia.patient.user.last_name }}
-                <input type="button" value="create report" id="createReport" data-patient={{dia}}></td>
-            </tr>
         {% endfor %}
-        </tbody>
-    </table>
-    {% else %}
-        <h4>No Diagnosis found</h4>
-    {% endif %}
-
-</body>
-</html>
+        {{ createReportForm.errors }}
+        <div class="col-md-2 col-md-offset-10">
+        <input type="submit" value="submit" class="btn-primary">
+        </div>
+    </form>
+</div>
+{% endblock labstaffcontent %}

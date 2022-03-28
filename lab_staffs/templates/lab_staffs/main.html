@@ -4,55 +4,38 @@
 
 {% block body-content %}
 
-<!DOCTYPE html>
-<html lang="en">
+<div class="container">
+    <h1>Welcome to Dr. Yau's Clinic</h1>
 
-<head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="{% static 'patients/styles.css' %}">
-    <title>Document</title>
-</head>
+    <div class="row my-5">
 
-<body>
+        <div class="col-md-3">
+            <div class="content-section">
+                <h3>Menu</h3>
 
-    <div class="container">
-        <h1>Welcome to Dr. Yau's Clinic</h1>
-
-        <div class="row my-5">
-
-            <div class="col-md-3">
-                <div class="content-section">
-                    <h3>Menu</h3>
-
-                    <ul class="nav flex-column">
-                        <li class="nav-item">
-                            <a class="nav-link" href="{% url 'lab_staffs:home' %}">Home</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="{% url 'lab_staffs:viewDiagnosis' %}">View diagonosis</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="{% url 'lab_staffs:createReport' %}">Create Report</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="{% url 'lab_staffs:deleteReport' %}">Delete Report</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="{% url 'lab_staffs:updateReport' %}">Update Report</a>
-                        </li>
-                    </ul>
-                </div>
+                <ul class="nav flex-column">
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'lab_staffs:home' %}">Home</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'lab_staffs:viewDiagnosis' %}">View diagonosis</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'lab_staffs:createReport' %}">Create Report</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'lab_staffs:viewReport' %}">View Test Report</a>
+                    </li>
+                </ul>
             </div>
-
-            <div class="col-md-9">
-                {% block labstaffcontent %}{% endblock labstaffcontent %}
-            </div>
-
         </div>
-    </div>
 
+        <div class="col-md-9">
+            {% block labstaffcontent %}{% endblock labstaffcontent %}
+        </div>
+
+    </div>
+</div>
 
     <script type="text/javascript" src="{% static 'doctors/script.js' %}"></script>
 </body>

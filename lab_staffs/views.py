@@ -2,11 +2,13 @@ from django.http import HttpResponse
 from users.models import User
 
 import logging
+from django.contrib import messages
 from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required
 from users.decorators import lab_staff_required
 from hospital.models import Diagnosis, LabTest
-from .forms import labTestForm
+from patients.models import PatientProfile
+from .forms import labTestForm, labTestUpdateForm
 
 logger = logging.getLogger(__name__)
 
@@ -25,50 +27,72 @@ def home(request):
     return render(request, "lab_staffs/labstaff-home.html", context)
 
 def viewDiagnosis(request):
-    if request.method == "POST":
-        # if 'username' in request.POST and request.POST['username']:
-        #     username = request.POST['username']
-        #     user = User.objects.get(username=username)
-        #     patientProfile = Diagnosis.objects.get(user=user)
-        #     patientDiagnosis_list = get_list_or_404(Diagnosis, patient=patientProfile)
-        #     context = {"patientDiagnosis": patientDiagnosis_list}
-        # else:
-        #     context = {'Error': 'Error, empty patient name'}
-        diagnosis = Diagnosis.objects.all()
-    context = {}
+    logger.info('lab staff viewing diagnosis')
+    diagnosis = Diagnosis.objects.filter(lab_test_status=True)
+    context = {'diagnosis': diagnosis}
     return render(request, "lab_staffs/viewDiagnosis.html", context)
 
+def approve_or_deny(request):
+    if request.POST:
+        if 'Approve' in request.POST:
+            logger.info('lab staff approve lab test')
+            messages.success(request, 'Lab test report approve!')
+            return redirect('lab_staffs:createReport')
+        elif 'Deny' in request.POST:
+            logger.info('lab staff deny labtest')
+            appid = request.POST.get('app_id')
+            username = request.POST.get('dia')
+            user = User.objects.get(username=username)
+            patientProfile = PatientProfile.objects.get(user=user)
+            userDia = Diagnosis.objects.get(patient=patientProfile, appointment_id=appid)
+            userDia.lab_test_status = False
+            userDia.save()
+            messages.success(request, 'Lab test report deny!')
+    return redirect('lab_staffs:viewDiagnosis')
+
+def viewReport(request):
+    logger.info('lab staff viewing report')
+    report = LabTest.objects.all()
+    context = {'report': report}
+    return render(request, "lab_staffs/viewReport.html", context)
+
 def createReport(request):
-    if request.method == "POST":
-        createReportForm = labTestForm(request.POST, instance=LabTest)
+    if request.POST:
+        createReportForm = labTestForm(request.POST)
         if createReportForm.is_valid():
-            report_data = createReportForm.cleaned_data
-            report_obj = LabTest(**report_data)
-            report_obj.save()
+            createReportForm.save()
+            logger.info('lab staff create report')
             return redirect('lab_staffs:labstaff-home')
     else:
         createReportForm = labTestForm()
     context = {'createReportForm': createReportForm}
     return render(request, "lab_staffs/createReport.html", context)
 
-def deleteReport(request):
-    test = request.POST.get('search')
+def deleteAndUpdateReport(request):
+    if request.POST:
+        if 'Delete' in request.POST:
+            dia_id = request.POST.get('dia_id')
+            lab_test_deleted = LabTest.objects.get(diagnosis_id = dia_id)
+            lab_test_deleted.delete()
+            logger.info('lab staff delete report')
+            return redirect('lab_staffs:viewReport')
+        elif 'Update' in request.POST:
+            dia_id = request.POST.get('dia_id')
+            lab_test_update = LabTest.objects.get(diagnosis_id= dia_id)
+            lab_test_update_form = labTestUpdateForm(instance=lab_test_update)
+            context = {'updateReportForm':lab_test_update_form,
+                       'dia_id':dia_id}
+            return render(request, 'lab_staffs/updateReport.html', context)
+    return redirect('lab_staffs:viewReport')
 
-def updateReport(request):
-    list = [1, 2, 3, 4]
-    context = {"list":list}
-    return render(request, "lab_staffs/updateReport.html", context)
-
-def approveTest(request):
-    # if request.method == "POST":
-    #     if 'username' in request.POST and request.POST['username']:
-    #         username = request.POST['username']
-    #         user = User.objects.get(username=username)
-    #         patientProfile = PatientProfile.objects.get(user=user)
-    #         patientDiagnosis_list = get_list_or_404(Diagnosis, patient=patientProfile)
-    #         context = {"patientDiagnosis": patientDiagnosis_list}
-    #     else:
-    #         context = {'Error': 'Error, empty patient name'}
-    context = {}
-
-    return render(request, "lab_staffs/approveTest.html", context)
+def updateReport(request, id):
+    lab_test_update = LabTest.objects.get(diagnosis_id=id)
+    if request.POST:
+        print(lab_test_update)
+        update_form = labTestUpdateForm(request.POST, instance=lab_test_update)
+        if update_form.is_valid():
+            update_form.save()
+            logger.info('lab staff update report')
+            return redirect('lab_staffs:viewReport')
+        return HttpResponse('form unvalid')
+    return redirect('lab_staffs:viewReport')

@@ -11,21 +11,6 @@ from django.contrib.auth import get_user_model
 User = get_user_model()
 logger = logging.getLogger(__name__)
 
-appointments = [
-    {
-        'doctor': 'Dr. Mantis Tobbagan',
-        'title': 'Covid-19',
-        'description': 'No taste in food',
-        'date_posted': 'Feb 27, 2022'
-    },
-    {
-        'doctor': 'Dr. Jane Doe',
-        'title': 'Cancer',
-        'description': 'Too much blood loss',
-        'date_posted': 'Feb 18, 2022'
-    }
-]
-
 
 def home(request):
     print("In landing page. Redirecting user to login page")
@@ -45,12 +30,19 @@ def login_user(request, usertype):
         return user_redirect(request)
 
     if request.method == 'POST':
-        print("User login POST request")
+        print(f"User login POST request: {request.POST}")
         username = request.POST.get('username')
         password = request.POST.get('password')
 
         try:
             user = User.objects.get(username=username)
+
+            if (usertype == 'patient' and user.user_type != 'patient') or (
+                    usertype != 'patient' and user.user_type != request.POST.get('staff')):
+                print(f"User-type incorrect! Please login as {user.user_type}")
+                messages.error(request, f"User-type incorrect! Please login as {user.user_type}")
+
+                return redirect('login-user', usertype=usertype)
         except:
             messages.error(request, 'User does not exist')
 
@@ -60,7 +52,7 @@ def login_user(request, usertype):
             login(request, user)
 
             print("User type: " + user.user_type)
-
+            messages.success(request, f'{user.username} successfully logged in')
             return user_redirect(request)
         else:
             messages.error(request, 'Username or Password does not exist')

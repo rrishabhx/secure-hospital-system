@@ -4,8 +4,13 @@ from administrators.models import Employee, Deleted_Employees
 from .forms import CreateEmployeeForm
 from django.contrib import messages
 from django.shortcuts import redirect, render
+from django.contrib.auth.decorators import login_required
+from users.decorators import administrator_required
+from django.apps import apps
 
-def home(request):
+@login_required
+@administrator_required
+def create(request):
     form = CreateEmployeeForm()
 
     if request.method == "POST":
@@ -25,15 +30,16 @@ def home(request):
         'form': form,
         'fnEmpData': fnEmpData
     }
-    return render(request, 'administrators/HomePage.html', context)
+    return render(request, 'administrators/create.html', context)
 
 
 # def viewEmployees(request):
 #     empData = Employee.objects.all()
 #     return render(request, 'administrators/HomePage.html', {'empData': empData})
 
-
-def deleteEmployees(request):
+@login_required
+@administrator_required
+def confirmDelete(request):
 
     email_toDelete = request.GET['emailDelete']
     first_name = request.GET['firstName']
@@ -59,37 +65,50 @@ def deleteEmployees(request):
         record = Employee.objects.get(email=str(email_toDelete))
         record.delete()
         messages.success(request, f'Record for {first_name} is deleted!')
-        return redirect('administrators:home')
+        return redirect('administrators:create')
     else:
         messages.warning(request, f'Record for {first_name} is not deleted! Please check the email address given')
-        return redirect('administrators:home')
+        return redirect('administrators:create')
 
-def getEmployee(request):
-    # firstName = request.GET['firstName']
+@login_required
+@administrator_required
+def saveModify(request):
+    firstName = request.GET['firstName']
     email_toModify = request.GET['emailModify']
 
+    data1 = "select * from administrators_employee where first_name = '"+str(firstName)+"';"
+    obj1 = Employee.objects.raw(data1)
     data = "select * from administrators_employee where email = '"+str(email_toModify)+"';"
     obj = Employee.objects.raw(data)
 
-    for i in obj:
-        fn = i.first_name
-        ln = i.last_name
-        db = i.date_of_birth
-        et = i.employee_type
-        pn = i.phone_number
-        em = i.email
+    for i in obj1:
+            email_orig = i.email
 
-    context = {
-        'fin': fn,
-        'lan': ln,
-        'dob': db,
-        'emt': et,
-        'phn': pn,
-        'ema': em
-    }
+    if str(email_orig) == email_toModify:    
+        for i in obj:
+            fn = i.first_name
+            ln = i.last_name
+            db = i.date_of_birth
+            et = i.employee_type
+            pn = i.phone_number
+            em = i.email
+
+        context = {
+            'fin': fn,
+            'lan': ln,
+            'dob': db,
+            'emt': et,
+            'phn': pn,
+            'ema': em
+        }
+    else:
+        messages.warning(request, f'Record for {firstName} is not updated! Please check the email address given')
+        return redirect('administrators:modify')
 
     return render(request, 'administrators/modifyEmployee.html', context)
 
+@login_required
+@administrator_required
 def save_modify(request):
     modify_fn = request.POST.get('first_name_modify')
     modify_ln = request.POST.get('last_name_modify')
@@ -107,4 +126,83 @@ def save_modify(request):
     record.save()
 
     messages.success(request, f'Record for {modify_fn} was updated!')
-    return redirect('administrators:home')
+    return redirect('administrators:create')
+
+@login_required
+@administrator_required
+def base(request):
+    return render(request, 'administrators/base.html')
+
+@login_required
+@administrator_required
+def transactions(request):
+    model = apps.get_model('hospital', 'Transaction')
+    context = {'transactions': []}
+    if request.method == 'POST':
+        try:
+            flag = request.POST['id']
+            y = model.objects.get(id=flag)
+            y.approved = True
+            y.save()
+            print(flag)
+        except KeyError:
+            print('KeyError')
+    try:
+        x = model.objects.filter(approved=None, completed=None)
+        for i in x.iterator():
+            context['transactions'].append(i)
+    except:
+        context['transactions'] = [['Record not found'] * 3]
+    return render(request, 'administrators/transactions.html', context)
+
+@login_required
+@administrator_required
+def fetch(request):
+    obj = Employee.objects.all()
+
+    if obj.exists():
+        context = {
+            'empData' : obj
+        }
+    else:
+        context = {
+            'empData' : None
+        }
+        
+    return render(request, 'administrators/viewEmployees.html', context)
+
+@login_required
+@administrator_required
+def modify(request):
+    obj = Employee.objects.all()
+    fnEmpData = Employee.objects.values('first_name', 'last_name')
+
+    if obj.exists():
+        context = {
+            'empData' : obj,
+            'fnEmpData': fnEmpData
+        }
+    else:
+        context = {
+            'empData' : None,
+            'fnEmpData': fnEmpData
+        }
+    return render(request, 'administrators/modify.html', context)
+
+@login_required
+@administrator_required
+def delete(request):
+    obj = Employee.objects.all()
+    fnEmpData = Employee.objects.values('first_name', 'last_name')
+
+    if obj.exists():
+        context = {
+            'empData' : obj,
+            'fnEmpData': fnEmpData
+        }
+    else:
+        context = {
+            'empData' : None,
+            'fnEmpData': fnEmpData
+        }
+    return render(request, 'administrators/delete.html', context)

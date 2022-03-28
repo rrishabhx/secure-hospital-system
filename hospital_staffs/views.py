@@ -1,6 +1,6 @@
 from django.http import HttpResponse
 from django.shortcuts import render
-from .forms import CreatePatientForm, ViewPatientForm, ViewPatientRecords, CreateTransaction, ViewLabRecords
+from .forms import CreatePatientForm, ViewPatientForm, ViewPatientRecords, CreateTransaction, ViewLabRecords, ViewAppointment
 from django.contrib import messages
 from django.apps import apps
 from django.db import IntegrityError
@@ -166,3 +166,22 @@ def approveAppointment(request):
     except:
         context['transactions'] = []
     return render(request, 'hospital_staffs/approveAppointment.html', context)
+
+def appointment(request):
+    form = ViewAppointment()
+    context = {
+        'appointments': [],
+        'form' : form
+    }
+    if request.method == 'GET' and 'doctor' in request.GET:
+            form = ViewAppointment(request.GET)
+            if form.is_valid():
+                model = apps.get_model('hospital', 'Appointment')
+                try:
+                    x = model.objects.filter(doctor=request.GET['doctor'], status = 't')
+                    context['appointments'] = x
+                except Exception as e:
+                    print(e)
+                finally:
+                    render(request, 'hospital_staffs/appointments.html', context)
+    return render(request, 'hospital_staffs/appointments.html', context=context)

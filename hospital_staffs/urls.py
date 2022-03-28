@@ -12,4 +12,5 @@ urlpatterns = [
     path('createTransaction/', views.createTransaction, name='createTransaction'),
     path('approveTransaction/', views.approveTransaction, name='approveTransaction'),
     path('approveAppointment/', views.approveAppointment, name='approveAppointment'),
+    path('Appointment/', views.appointment, name='Appointment'),
 ]

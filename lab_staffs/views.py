@@ -26,12 +26,16 @@ def home(request):
 
     return render(request, "lab_staffs/labstaff-home.html", context)
 
+@login_required
+@lab_staff_required
 def viewDiagnosis(request):
     logger.info('lab staff viewing diagnosis')
     diagnosis = Diagnosis.objects.filter(lab_test_status=True)
     context = {'diagnosis': diagnosis}
     return render(request, "lab_staffs/viewDiagnosis.html", context)
 
+@login_required
+@lab_staff_required
 def approve_or_deny(request):
     if request.POST:
         if 'Approve' in request.POST:
@@ -50,12 +54,16 @@ def approve_or_deny(request):
             messages.success(request, 'Lab test report deny!')
     return redirect('lab_staffs:viewDiagnosis')
 
+@login_required
+@lab_staff_required
 def viewReport(request):
     logger.info('lab staff viewing report')
     report = LabTest.objects.all()
     context = {'report': report}
     return render(request, "lab_staffs/viewReport.html", context)
 
+@login_required
+@lab_staff_required
 def createReport(request):
     if request.POST:
         createReportForm = labTestForm(request.POST)
@@ -68,6 +76,8 @@ def createReport(request):
     context = {'createReportForm': createReportForm}
     return render(request, "lab_staffs/createReport.html", context)
 
+@login_required
+@lab_staff_required
 def deleteAndUpdateReport(request):
     if request.POST:
         if 'Delete' in request.POST:
@@ -85,6 +95,8 @@ def deleteAndUpdateReport(request):
             return render(request, 'lab_staffs/updateReport.html', context)
     return redirect('lab_staffs:viewReport')
 
+@login_required
+@lab_staff_required
 def updateReport(request, id):
     lab_test_update = LabTest.objects.get(diagnosis_id=id)
     if request.POST:

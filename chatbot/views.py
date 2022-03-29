@@ -71,19 +71,6 @@ def chatbot_response(msg):
     return res
 
 
-#
-# from chatterbot import ChatBot
-#
-# chatbot = ChatBot(
-#     'Ron Obvious',
-#     trainer='chatterbot.trainers.ChatterBotCorpusTrainer'
-# )
-
-# Train based on the english corpus
-
-#Already trained and it's supposed to be persistent
-#chatbot.train("chatterbot.corpus.english")
-
 @csrf_exempt
 def get_response(request):
 	response = {'status': None}
@@ -108,7 +95,3 @@ def get_response(request):
 def home(request):
 	context = {'title': 'Chatbot Version 1.0'}
 	return render(request,'chatbot/home.html', context)
-
-def get_bot_response(request):
-    userText = request.args.get('msg')
-    return chatbot_response(userText)

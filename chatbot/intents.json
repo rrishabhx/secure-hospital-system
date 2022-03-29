@@ -1,7 +1,7 @@
 {"intents": [
         {"tag": "greeting",
          "patterns": ["Hi there", "How are you", "Is anyone there?","Hey","Hola", "Hello", "Good day"],
-         "responses": ["Hello, thanks for asking me", "Good to see you again me ", "Hi there, how can I help? me"],
+         "responses": ["Hello, thanks for asking", "Good to see you again", "Hi there, how can I help?"],
          "context": [""]
         },
         {"tag": "goodbye",
@@ -61,12 +61,12 @@
         },
         {"tag": "search_hospital_by_params",
          "patterns": [],
-         "responses": ["Please provide hospital type me"],
+         "responses": ["Please provide hospital type"],
          "context": ["search_hospital_by_type"]
         },
         {"tag": "search_hospital_by_type",
          "patterns": [],
-         "responses": ["Loading hospital details me"],
+         "responses": ["Loading hospital details"],
          "context": [""]
         }
    ]

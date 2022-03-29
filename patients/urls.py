@@ -1,4 +1,4 @@
-from django.urls import path
+from django.urls import path, include
 from . import views
 
 app_name = 'patients'
@@ -11,5 +11,6 @@ urlpatterns = [
     path('lab_test_reports/', views.lab_test_reports, name='lab-test-reports'),
     path('insurance/', views.insurance, name='insurance'),
     path('transactions/', views.transactions, name='transactions'),
-    path('profile/', views.profile, name='profile')
+    path('profile/', views.profile, name='profile'),
+    path('chatbot/', include('chatbot.urls')),
 ]

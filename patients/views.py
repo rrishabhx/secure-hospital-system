@@ -10,7 +10,7 @@ from django.contrib import messages
 from django.contrib.auth import get_user_model
 
 from users.forms import UserUpdateForm
-from .forms import PatientProfileUpdateForm, InsuredPatientForm, AppointmentForm, InsuranceClaimForm, TransactionForm
+from .forms import InsuredPatientForm, AppointmentForm, InsuranceClaimForm, TransactionForm
 
 User = get_user_model()
 
@@ -168,14 +168,10 @@ def profile(request):
     if request.method == 'POST':
         print("Request type: POST")
         u_form = UserUpdateForm(request.POST, instance=user)
-        p_form = PatientProfileUpdateForm(
-            request.POST, request.FILES, instance=patient_profile)
-
         i_form = InsuredPatientForm(request.POST, instance=patient_profile.insuredpatient)
 
-        if u_form.is_valid() and p_form.is_valid() and i_form.is_valid():
+        if u_form.is_valid() and i_form.is_valid():
             u_form.save()
-            p_form.save()
             i_form.save()
 
             messages.success(request, f'Your account has been updated!')
@@ -183,7 +179,6 @@ def profile(request):
     else:
         print(f"Request type: GET")
         u_form = UserUpdateForm(instance=user)
-        p_form = PatientProfileUpdateForm(instance=patient_profile)
         i_form = InsuredPatientForm()
 
         if hasattr(patient_profile, 'insuredpatient'):
@@ -192,7 +187,6 @@ def profile(request):
 
     context = {
         'u_form': u_form,
-        'p_form': p_form,
         'i_form': i_form,
     }
 

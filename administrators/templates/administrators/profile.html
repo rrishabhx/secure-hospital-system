@@ -1,7 +1,7 @@
-{% extends 'patients/main.html' %}
+{% extends 'administrators/main.html' %}
 {% load crispy_forms_tags %}
 
-{% block patientcontent %}
+{% block admincontent %}
 
     <div class="content-section">
         <!-- FORM HERE -->
@@ -10,7 +10,6 @@
             <fieldset class="form-group">
                 <legend class="border-bottom mb-4">Profile Info</legend>
                 {{ u_form|crispy }}
-                {{ i_form|crispy }}
             </fieldset>
             <br>
             <div class="form-group">
@@ -19,4 +18,4 @@
         </form>
     </div>
 
-{% endblock patientcontent %}
+{% endblock admincontent %}

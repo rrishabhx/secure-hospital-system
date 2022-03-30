@@ -1,0 +1,55 @@
+{% extends 'main.html' %}
+{% load static %}
+{% load crispy_forms_tags %}
+
+{% block body-content %}
+
+    <!DOCTYPE html>
+    <html lang="en">
+
+    <head>
+        <meta charset="UTF-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link rel="stylesheet" href="{% static 'patients/styles.css' %}">
+        <title>Document</title>
+    </head>
+
+    <body>
+
+    <div class="container">
+        <div class="row" justify-content-center>
+            <div class="col-sm-4 offset-sm-4" style="background-color: lightgray; padding: 20px; border-radius: 5px;">
+                <h4>Enter OTP Below</h4>
+                <br>
+                <form action="{% url 'otp' %}" method="post">
+                    {% csrf_token %}
+                    <label for="otp">Enter 4-digit OTP</label>
+                    <input type="text" name="otp" id="" class="form-control">
+                    <br>
+                    <button class="btn btn-primary" type="submit">Submit OTP</button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+
+    <script type="text/javascript" src="{% static 'patients/script.js' %}"></script>
+    <script>
+        function hiddenFunc(){
+            var l1 = document.getElementById("li1");
+            var l2 = document.getElementById("li2");
+            var l3 = document.getElementById("li3");
+            var l4 = document.getElementById("li4");
+            l1.classList.toggle("d-none");
+            l2.classList.toggle("d-none");
+            l3.classList.toggle("d-none");
+            l4.classList.toggle("d-none");
+        }
+    </script>
+    </body>
+
+    </html>
+
+
+{% endblock body-content %}

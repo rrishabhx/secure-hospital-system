@@ -19,5 +19,5 @@ urlpatterns = [
     # path('employees/<int:pk>/update/', views.employees_update, name='employees-update'),
     # path('employees/<int:pk>/delete', views.employees_delete, name='employees-delete'),
     path('profile/', views.profile, name='profile'),
-
+    path('log/', views.log, name='log')
 ]

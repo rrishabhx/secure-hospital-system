@@ -25,7 +25,7 @@
                     <h3>Menu</h3>
                     <ul class="nav flex-column">
                         <li class="nav-item">
-                            <a class="nav-link" href="{% url 'administrators:home' %}">Home</a>
+                            <a class="nav-link" href="{% url 'administrators:base' %}">Home</a>
                         </li>
                         <li class="nav-item">
                             <a class="nav-link" style="cursor: pointer;" onclick="hiddenFunc()">Employees <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-caret-down-fill" viewBox="0 0 16 16">
@@ -67,49 +67,37 @@
 
             <div class="col-md-9">
                 {% block content %}
-                <h2>Delete Employee Record</h2>
-                <hr>
-                <br>
-                <div class="row" id="empDeleteDIV">
-                    <!-- <h4 style="color: #7952B3;">Delete Employee</h4> -->
-                    <br>
-                    <div class="row">
-                        {% if empData %}
-                        <div class="col-sm-12">
-                            <form action="{% url 'administrators:confirmDelete' %}" autocomplete="off">
-                                <label for="firstName">Select Firstname of Employee below</label>
-                                <br><br>
-                                <div class="row">
-                                    <div class="col-sm-6">
-                                        <select name="firstName" id="firstName" class="form-control">
-                                            <option value="0">SELECT OPTION</option>
-                                            {% for i in fnEmpData %}
-                                            <option value="{{ i.first_name }}">{{ i.first_name }},{{ i.last_name }}</option>
-                                            {% endfor %}
-                                        </select>
-                                    </div>
-                                </div>
-                                <br>
-                                <div class="row">
-                                    <div class="col-sm-6">
-                                        <label for="emailDelete">Enter Employee Email Address</label>
-                                        <input type="email" name="emailDelete" class="form-control"  id="emailDelete">
-                                    </div>
-                                </div>
-                                <br>
-                                <div class="row">
-                                    <div class="col-sm-12">
-                                        <button type="submit" class="btn btn-default" style="background-color: #7952B3; color: white">Delete Employee</button>
-                                    </div>
-                                </div>
-                            </form>
-                        </div>
-                        {% else %}
-                        <p><i>No records found</i></p>
-                        <p><i>Add employees <a href="{% url 'administrators:create' %}">here</a> to update records.</i></p>
-                        {% endif %}
+                {% if not logData %}
+                <div class="row">
+                    <div class="col-sm-12">
+                        <p><i>No Logs found</i></p>
                     </div>
                 </div>
+                {% else %}
+                <div class="row">
+                    <div class="col-sm-12">
+                        <h2>Logs</h2>
+                        <hr>
+                        <br>
+                        <table class="table table-bordered table-striped table-hover" style="text-align: center;">
+                            <thead>
+                                <th>S No</th>
+                                <th>User</th>
+                                <th>Timestamp</th>
+                            </thead>
+                            {% for i in logData %}
+                            <tbody>
+                                <tr>
+                                    <td>{{ forloop.counter }}</td>
+                                    <td>{{ i.user }}</td>
+                                    <td>{{ i.date }}</td>
+                                </tr>
+                            </tbody>
+                            {% endfor %}
+                        </table>
+                    </div>
+                </div>
+                {% endif %}
                 {% endblock content %}
             </div>
 

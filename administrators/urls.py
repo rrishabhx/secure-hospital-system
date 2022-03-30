@@ -14,4 +14,5 @@ urlpatterns = [
     path('confirmDelete/', views.confirmDelete, name='confirmDelete'),
     path('save_modify/', views.save_modify, name='save_modify'),
     path('transactions/', views.transactions, name='transactions'),
+    path('log/', views.log, name='log')
 ]

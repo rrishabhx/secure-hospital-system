@@ -206,3 +206,8 @@ def delete(request):
             'fnEmpData': fnEmpData
         }
     return render(request, 'administrators/delete.html', context)
+
+def log(request):
+    model = apps.get_model('users', 'Log')
+    x = model.objects.all()
+    return render(request, 'administrators/log.html', {'logData':x})

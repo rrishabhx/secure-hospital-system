@@ -51,9 +51,9 @@ def save_usertype_profile(sender, instance, **kwargs):
 def log_user_login(sender, request, user, **kwargs):
     try:
         print('user {} logged in through page {}'.format(user.username, request.META.get('HTTP_REFERER')))
-        if user.user_type == 'patient':
-            log = Log(user = user, date = datetime.now(tz=timezone.utc))
-            log.save()
+        # if user.user_type == 'patient':
+        log = Log(user = user, date = datetime.now(tz=timezone.utc))
+        log.save()
     except:
         print('something went wrong')
 

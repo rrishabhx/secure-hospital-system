@@ -38,6 +38,7 @@ INSTALLED_APPS = [
     'hospital_staffs.apps.HospitalStaffsConfig',
     'insurance_staffs.apps.InsuranceStaffsConfig',
     'lab_staffs.apps.LabStaffsConfig',
+    'chatbot.apps.ChatbotConfig',
     'crispy_forms',
     'bootstrap5',
     'django_bootstrap_icons',
@@ -127,6 +128,13 @@ MESSAGE_TAGS = {message_constants.DEBUG: 'debug',
                 message_constants.WARNING: 'warning',
                 message_constants.ERROR: 'danger', }
 
+REST_FRAMEWORK = {
+    # Use Django's standard `django.contrib.auth` permissions,
+    # or allow read-only access for unauthenticated users.
+    'DEFAULT_PERMISSION_CLASSES': [
+        'rest_framework.permissions.DjangoModelPermissionsOrAnonReadOnly'
+    ]
+}
 # Logger settings
 # LOGGING = {
 #     'version': 1,

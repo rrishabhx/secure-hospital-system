@@ -53,3 +53,6 @@ texttable==1.6.4
 urllib3==1.26.8
 wcwidth==0.1.9
 websocket-client==0.59.0
+tensorflow==2.7.0
+nltk==3.6.1
+numpy==1.21.4

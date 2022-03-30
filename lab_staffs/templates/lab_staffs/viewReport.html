@@ -1,0 +1,38 @@
+{% extends 'lab_staffs/main.html' %}
+{% load static %}
+{% load crispy_forms_tags %}
+
+{% block labstaffcontent %}
+<h3>View Report</h3>
+{% if report %}
+    <table class="table">
+        <thead>
+        <th scope="col">Patient</th>
+        <th scope="col">Doctor</th>
+        <th scope="col">Lab test report</th>
+        </thead>
+        <tbody>
+        {% for report in report %}
+            <tr>
+            <form id="Delete-update-options" method="POST" action="{% url 'lab_staffs:deleteAndUpdateReport' %}">
+                {% csrf_token %}
+                <td>{{ report.diagnosis.patient.user.first_name }} {{ report.diagnosis.patient.user.last_name }}</td>
+                <td>{{ report.diagnosis.doctor.user.first_name }} {{ report.diagnosis.doctor.user.last_name }} </td>
+                <td>{{ report.lab_test_report }}
+                <input name="dia_id" type="hidden" value="{{ report.diagnosis_id }}">
+                <input name="Delete" type="submit" value="Delete">
+                <input name="Update" type="submit" value="Update">
+                </td>
+            </form>
+            </tr>
+
+        {% endfor %}
+        </tbody>
+    </table>
+
+
+{% else %}
+    <h4>No Report found</h4>
+{% endif %}
+
+{% endblock labstaffcontent %}

@@ -12,5 +12,5 @@ urlpatterns = [
     path('insurance/', views.insurance, name='insurance'),
     path('transactions/', views.transactions, name='transactions'),
     path('profile/', views.profile, name='profile'),
-    path('chatbot/', include('chatbot.urls'),name='chatbot')
+
 ]

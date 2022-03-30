@@ -25,7 +25,7 @@
                     <h3>Menu</h3>
                     <ul class="nav flex-column">
                         <li class="nav-item">
-                            <a class="nav-link" href="{% url 'administrators:base' %}">Home</a>
+                            <a class="nav-link" href="{% url 'administrators:home' %}">Home</a>
                         </li>
                         <li class="nav-item">
                             <a class="nav-link" style="cursor: pointer;" onclick="hiddenFunc()">Employees <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-caret-down-fill" viewBox="0 0 16 16">
@@ -94,7 +94,7 @@
                 {% else %}
                 <p><i>No transactions found for approval</i></p>
                 <!-- <p><i>Transactions comes from hospital staff <a href="{% url 'administrators:create' %}">here</a> to update records.</i></p> -->
-                <p><i>Click <a href="{% url 'administrators:base' %}">here</a> to goto homepage</i></p>
+                <p><i>Click <a href="{% url 'administrators:home' %}">here</a> to goto homepage</i></p>
                 {% endif %}
                 {% endblock %}
             </div>

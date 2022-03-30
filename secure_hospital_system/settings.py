@@ -83,11 +83,11 @@ if 'RDS_DB_NAME' in os.environ:
     DATABASES = {
         'default': {
             'ENGINE': 'django.db.backends.postgresql_psycopg2',
-            'NAME': os.environ['RDS_DB_NAME'],
-            'USER': os.environ['RDS_USERNAME'],
-            'PASSWORD': os.environ['RDS_PASSWORD'],
-            'HOST': os.environ['RDS_HOSTNAME'],
-            'PORT': os.environ['RDS_PORT'],
+            'NAME': os.environ.get('RDS_DB_NAME'),
+            'USER': os.environ.get('RDS_USERNAME'),
+            'PASSWORD': os.environ.get('RDS_PASSWORD'),
+            'HOST': os.environ.get('RDS_HOSTNAME'),
+            'PORT': os.environ.get('RDS_PORT'),
         }
     }
 else:
@@ -176,17 +176,17 @@ USE_I18N = True
 USE_TZ = True
 
 # Amazon S3 configuration
-# STATICFILES_STORAGE = 'storages.backends.s3boto3.S3Boto3Storage'
-# DEFAULT_FILE_STORAGE = 'storages.backends.s3boto3.S3Boto3Storage'
-# AWS_S3_FILE_OVERWRITE = False
-# AWS_DEFAULT_ACL = None
-#
-# if 'AWS_STORAGE_BUCKET_NAME' in os.environ:
-#     AWS_STORAGE_BUCKET_NAME = os.environ['AWS_STORAGE_BUCKET_NAME']
-#     AWS_S3_REGION_NAME = os.environ['AWS_S3_REGION_NAME']
-#
-#     AWS_S3_ACCESS_KEY_ID = os.environ['AWS_ACCESS_KEY_ID']
-#     AWS_S3_SECRET_ACCESS_KEY = os.environ['AWS_SECRET_ACCESS_KEY']
+STATICFILES_STORAGE = 'storages.backends.s3boto3.S3Boto3Storage'
+DEFAULT_FILE_STORAGE = 'storages.backends.s3boto3.S3Boto3Storage'
+AWS_S3_FILE_OVERWRITE = False
+AWS_DEFAULT_ACL = None
+
+if 'AWS_STORAGE_BUCKET_NAME' in os.environ:
+    AWS_STORAGE_BUCKET_NAME = os.environ.get('AWS_STORAGE_BUCKET_NAME')
+    AWS_S3_REGION_NAME = os.environ.get('AWS_S3_REGION_NAME')
+
+    AWS_S3_ACCESS_KEY_ID = os.environ.get('AWS_ACCESS_KEY_ID')
+    AWS_S3_SECRET_ACCESS_KEY = os.environ.get('AWS_SECRET_ACCESS_KEY')
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/4.0/howto/static-files/
@@ -209,5 +209,8 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 CRISPY_TEMPLATE_PACK = 'bootstrap4'
 
 LOGIN_REDIRECT_URL = 'users-home'
-# LOGIN_URL = 'login'
 LOGIN_URL = reverse_lazy('login-user', kwargs={'usertype': 'patient'})
+
+# Security settings
+CSRF_COOKIE_SECURE = True
+SESSION_COOKIE_SECURE = True

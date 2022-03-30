@@ -45,6 +45,7 @@ def login_user(request, usertype):
                 return redirect('login-user', usertype=usertype)
         except:
             messages.error(request, 'User does not exist')
+            return redirect('login-user', usertype=usertype)
 
         user = authenticate(request, username=username, password=password)
 
@@ -109,7 +110,7 @@ def user_redirect(request, redirect_page='home'):
     elif user_type == 'insurance_staff':
         return redirect(f'insurance_staffs:{redirect_page}')
     elif user_type == 'administrator':
-        return redirect(f'administrators:base')
+        return redirect(f'administrators:{redirect_page}')
     else:
         context = {
             'reason': f'Invalid user type: {user_type}'

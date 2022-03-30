@@ -12,6 +12,7 @@
           integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
     <link rel="stylesheet" type="text/css" href="{% static 'users/main.css' %}">
     <link rel="stylesheet" type="text/javascript" href="{% static 'js/app.js' %}">
+    {% block additional-styles %} {% endblock %}
     <title>Hospital Management System</title>
 </head>
 
@@ -90,6 +91,7 @@
         integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM"
         crossorigin="anonymous"></script>
 <script></script>
+{% block additional-scripts %} {% endblock %}
 </body>
 
 </html>

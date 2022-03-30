@@ -16,8 +16,9 @@ class UserRegisterForm(UserCreationForm):
 
 class UserUpdateForm(forms.ModelForm):
     username = forms.CharField(disabled=True)
+    user_type = forms.CharField(disabled=True)
     date_of_birth = forms.DateField(label='What is your birth date?', widget=forms.DateInput(attrs={'type': 'date'}))
 
     class Meta:
         model = User
-        fields = ['username', 'email', 'date_of_birth']
+        fields = ['user_type', 'username', 'first_name', 'last_name', 'email', 'date_of_birth']

@@ -4,18 +4,15 @@
 {% block patientcontent %}
 
     <div class="content-section">
-        <div class="media">
-            <img class="rounded-circle account-img" src="{{ user.patientprofile.image.url }}" alt="">
-        </div>
         <!-- FORM HERE -->
         <form method="POST" action="" enctype="multipart/form-data">
             {% csrf_token %}
             <fieldset class="form-group">
                 <legend class="border-bottom mb-4">Profile Info</legend>
                 {{ u_form|crispy }}
-                {{ p_form|crispy }}
                 {{ i_form|crispy }}
             </fieldset>
+            <br>
             <div class="form-group">
                 <button class="btn btn-outline-info" type="submit">Update Profile</button>
             </div>

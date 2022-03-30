@@ -45,6 +45,7 @@ def login_user(request, usertype):
                 return redirect('login-user', usertype=usertype)
         except:
             messages.error(request, 'User does not exist')
+            return redirect('login-user', usertype=usertype)
 
         user = authenticate(request, username=username, password=password)
 

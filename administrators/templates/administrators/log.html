@@ -1,0 +1,41 @@
+{% extends 'administrators/main.html' %}
+{% load static %}
+{% load crispy_forms_tags %}
+
+{% block admincontent %}
+
+    <div class="row mb-3">
+        <div class="col">
+            <h2>User Logs</h2>
+        </div>
+    </div>
+
+    <div class="row my-3">
+        <div class="col">
+            {% if logs %}
+                <table class="table">
+                    <thead>
+                    <th scope="col">S No</th>
+                    <th scope="col">Username</th>
+                    <th scope="col">Usertype</th>
+                    <th scope="col">Login Timestamp</th>
+                    </thead>
+                    <tbody>
+                    {% for log in logs %}
+                        <tr>
+                            <td>{{ forloop.counter }}</td>
+                            <td>{{ log.user }}</td>
+                            <td>{{ log.user.user_type }}</td>
+                            <td>{{ log.date }}</td>
+                        </tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
+            {% else %}
+                <h4>No Logs Found!</h4>
+            {% endif %}
+
+        </div>
+    </div>
+
+{% endblock admincontent %}

@@ -1,3 +1,4 @@
+import random
 from django.contrib.auth import authenticate, login, logout
 from django.contrib import messages
 from django.http import HttpResponse
@@ -5,6 +6,7 @@ from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required
 from .forms import UserRegisterForm, UserUpdateForm
 import logging
+from django.core.mail import send_mail
 
 from django.contrib.auth import get_user_model
 
@@ -23,7 +25,6 @@ def about(request):
 
 def login_user(request, usertype):
     print("User trying to login")
-
     if request.user.is_authenticated:
         print("User authenticated")
 
@@ -33,7 +34,6 @@ def login_user(request, usertype):
         print(f"User login POST request: {request.POST}")
         username = request.POST.get('username')
         password = request.POST.get('password')
-
         try:
             user = User.objects.get(username=username)
 
@@ -45,6 +45,7 @@ def login_user(request, usertype):
                 return redirect('login-user', usertype=usertype)
         except:
             messages.error(request, 'User does not exist')
+            return redirect('login-user', usertype=usertype)
 
         user = authenticate(request, username=username, password=password)
 
@@ -60,6 +61,22 @@ def login_user(request, usertype):
     page = 'patient' if usertype == 'patient' else 'staff'
     return render(request, 'users/login.html', context={'page': page})
 
+global no
+no = 0
+def otp(request):
+    global no
+    if request.method == 'POST':
+        otp = request.POST.get('otp','')
+        if(int(otp)==int(no)):
+            return user_redirect(request)
+        else:
+            u = User.objects.filter(username=u1)
+            u.delete()
+            return HttpResponse('Invalid OTP.')
+    else:
+        no=random.randrange(1000,9999)
+        send_mail('Your OTP for verification','Your OTP is {}'.format(no),'srivatsavkumar7777@gmail.com',['srivatsavkumar5555@gmail.com'],fail_silently=False)
+        return render(request, 'users/otp.html', {})
 
 def logout_user(request):
     logout(request)
@@ -109,7 +126,7 @@ def user_redirect(request, redirect_page='home'):
     elif user_type == 'insurance_staff':
         return redirect(f'insurance_staffs:{redirect_page}')
     elif user_type == 'administrator':
-        return redirect(f'administrators:base')
+        return redirect(f'administrators:{redirect_page}')
     else:
         context = {
             'reason': f'Invalid user type: {user_type}'

@@ -5,7 +5,7 @@ bin/
 *.pyo
 .DS_Store
 shs/
-
+temp/
 
 # Django #
 *.log

@@ -22,11 +22,11 @@ class User(AbstractUser):
 
     def __str__(self):
         return f'{self.username}'
-        
-        
-        
+
+
 class Log(models.Model):
     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
-    date = models.DateTimeField(default = datetime.now, blank = True)
+    date = models.DateTimeField(default=datetime.now, blank=True)
+
     class Meta:
         db_table = 'logs'

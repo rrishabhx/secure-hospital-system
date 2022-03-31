@@ -36,6 +36,8 @@ def login_user(request, usertype):
         password = request.POST.get('password')
         try:
             user = User.objects.get(username=username)
+            print(
+                f"usertype:{usertype}, user_type:{user.user_type}, request.POST.get_staff:{request.POST.get('staff')}")
 
             if (usertype == 'patient' and user.user_type != 'patient') or (
                     usertype != 'patient' and user.user_type != request.POST.get('staff')):
@@ -61,22 +63,27 @@ def login_user(request, usertype):
     page = 'patient' if usertype == 'patient' else 'staff'
     return render(request, 'users/login.html', context={'page': page})
 
+
 global no
 no = 0
+
+
 def otp(request):
     global no
     if request.method == 'POST':
-        otp = request.POST.get('otp','')
-        if(int(otp)==int(no)):
+        otp = request.POST.get('otp', '')
+        if (int(otp) == int(no)):
             return user_redirect(request)
         else:
             u = User.objects.filter(username=u1)
             u.delete()
             return HttpResponse('Invalid OTP.')
     else:
-        no=random.randrange(1000,9999)
-        send_mail('Your OTP for verification','Your OTP is {}'.format(no),'srivatsavkumar7777@gmail.com',['srivatsavkumar5555@gmail.com'],fail_silently=False)
+        no = random.randrange(1000, 9999)
+        send_mail('Your OTP for verification', 'Your OTP is {}'.format(no), 'srivatsavkumar7777@gmail.com',
+                  ['srivatsavkumar5555@gmail.com'], fail_silently=False)
         return render(request, 'users/otp.html', {})
+
 
 def logout_user(request):
     logout(request)

@@ -16,7 +16,7 @@
                                 <label>
                                     <select name="staff" class="form-select" onchange="testing(value)">
                                         <option value="">Select Staff Type</option>
-                                        <option value="hospital">Hospital Staff</option>
+                                        <option value="hospital_staff">Hospital Staff</option>
                                         <option value="doctor">Doctor</option>
                                         <option value="lab_staff">Lab Staff</option>
                                         <option value="insurance_staff">Insurance Staff</option>
@@ -49,6 +49,9 @@
                     </fieldset>
                     <div class="form-group">
                         <button id="submitbutton" class="btn btn-primary my-2" type="submit">Login</button>
+                        <small class="text-muted ml-2">
+                            <a href="{% url 'password_reset' %}">Forgot Password?</a>
+                        </small>
                     </div>
                 </form>
                 <div class="border-top pt-3">
@@ -87,13 +90,16 @@
                             <label>Password:</label>
                             <label>
                                 <input class="form-control" type="password" name="password"
-                                    placeholder="Enter Password" />
+                                       placeholder="Enter Password"/>
                             </label>
                         </div>
                     </div>
                 </fieldset>
                 <div class="form-group">
                     <button class="btn btn-primary" type="submit">Login</button>
+                    <small class="text-muted ml-2">
+                        <a href="{% url 'password_reset' %}">Forgot Password?</a>
+                    </small>
                 </div>
             </form>
             <div class="border-top pt-3">

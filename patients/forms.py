@@ -1,7 +1,7 @@
 from django import forms
 
 from doctors.models import DoctorProfile
-from hospital.models import Appointment, InsuredPatient, InsuranceClaim, Transaction
+from hospital.models import Appointment, InsuredPatient, InsuranceClaim, Transaction,InsurancePolicy
 
 
 class AppointmentForm(forms.ModelForm):

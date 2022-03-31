@@ -2,7 +2,7 @@ import logging
 
 from django.contrib.auth.decorators import login_required
 
-from hospital.models import Appointment, Diagnosis, LabTest, InsuredPatient, Transaction, InsuranceClaim
+from hospital.models import Appointment, Diagnosis, LabTest, InsuredPatient, Transaction, InsuranceClaim,InsurancePolicy
 from users.decorators import patient_required
 from django.shortcuts import render, redirect
 from django.urls import reverse
@@ -191,3 +191,44 @@ def profile(request):
     }
 
     return render(request, 'patients/profile.html', context)
+    
+@login_required
+@patient_required
+def requestPolicy(request):
+    form = InsuredPatientForm()
+    user = request.user.patientprofile
+    if request.method == 'POST':
+        try:
+            form = InsuredPatientForm(request.POST)
+            flag = request.POST['insurance_policy']
+            policy = InsurancePolicy.objects.get(id=flag)
+            amount = policy.max_amount
+            if form.is_valid():
+                if hasattr(user, 'insuredpatient'):
+                    insured_patient = request.user.patientprofile.insuredpatient
+                    insured_patient.insurance_policy = policy
+                    insured_patient.amount_available = amount
+                else:
+                    insured_patient = InsuredPatient(patient=user,
+                                             insurance_policy=policy, amount_available=amount)
+                insured_patient.save()
+                y = insured_patient
+                print(y.amount_available)
+                messages.success(request, 'Record Updated')
+        except Exception as e:
+            print(e)
+    context = {'form': form}
+    return render(request, 'patients/requestPolicy.html', context)
+
+@login_required
+@patient_required
+def receipt(request):
+    model = Transaction
+    context = {'transactions': []}
+    try:
+        x = model.objects.filter(approved='t', completed='t')
+        for i in x.iterator():
+            context['transactions'].append(i)
+    except:
+        print('some issue')
+    return render(request, 'patients/receipt.html', context)

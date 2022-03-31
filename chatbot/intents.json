@@ -24,49 +24,39 @@
          "responses": ["I can guide you through Adverse drug reaction list, Blood pressure tracking, Hospitals and Pharmacies", "Offering support for Adverse drug reaction, Blood pressure, Hospitals and Pharmacies"],
          "context": [""]
         },
-        {"tag": "adverse_drug",
-         "patterns": ["How to check Adverse drug reaction?", "Open adverse drugs module", "Give me a list of drugs causing adverse behavior", "List all drugs suitable for patient with adverse reaction", "Which drugs dont have adverse reaction?" ],
-         "responses": ["Navigating to Adverse drug reaction module"],
+        {"tag": "appointments",
+         "patterns": ["How to create an appointment?", "Open appointments", "Give me a list of appointments", "List all appointments", "appointment","appointments"],
+         "responses": ["../patients/appointments"],
          "context": [""]
         },
-        {"tag": "blood_pressure",
-         "patterns": ["Open blood pressure module", "Task related to blood pressure", "Blood pressure data entry", "I want to log blood pressure results", "Blood pressure data management" ],
-         "responses": ["Navigating to Blood Pressure module"],
+        {"tag": "profile",
+         "patterns": ["Open profile", "view profile","Update profile", "Modify profile", "Update username", "email","password","profile","username","birth date","image","picture", "Look up my details"],
+         "responses": ["../patients/profile"],
          "context": [""]
         },
-        {"tag": "blood_pressure_search",
-         "patterns": ["I want to search for blood pressure result history", "Blood pressure for patient", "Load patient blood pressure result", "Show blood pressure results for patient", "Find blood pressure results by ID" ],
-         "responses": ["Please provide Patient ID", "Patient ID?"],
-         "context": ["search_blood_pressure_by_patient_id"]
-        },
-        {"tag": "search_blood_pressure_by_patient_id",
-         "patterns": [],
-         "responses": ["Loading Blood pressure result for Patient"],
+        {"tag": "diagnosis",
+         "patterns": ["Find diagnosis", "diagnosis", "List of diagnosis", "how to go to diagnosis", "Search diagnosis" ],
+         "responses": ["../patients/diagnosis"],
          "context": [""]
         },
-        {"tag": "pharmacy_search",
-         "patterns": ["Find me a pharmacy", "Find pharmacy", "List of pharmacies nearby", "Locate pharmacy", "Search pharmacy" ],
-         "responses": ["Please provide pharmacy name"],
-         "context": ["search_pharmacy_by_name"]
-        },
-        {"tag": "search_pharmacy_by_name",
-         "patterns": [],
-         "responses": ["Loading pharmacy details"],
+        {"tag": "prescriptions",
+         "patterns": ["prescription","Lookup for prescriptions", "Searching for prescriptions", "I want to search prescriptions", "lookup prescriptions" ],
+         "responses": ["../patients/prescriptions"],
          "context": [""]
         },
-        {"tag": "hospital_search",
-         "patterns": ["Lookup for hospital", "Searching for hospital to transfer patient", "I want to search hospital data", "Hospital lookup for patient", "Looking up hospital details" ],
-         "responses": ["Please provide hospital name or location"],
-         "context": ["search_hospital_by_params"]
+        {"tag": "insurance",
+         "patterns": ["insurance","find insurance","check insurance","insurance claims","insurance amount"],
+         "responses": ["../patients/insurance"],
+         "context": [""]
         },
-        {"tag": "search_hospital_by_params",
-         "patterns": [],
-         "responses": ["Please provide hospital type"],
-         "context": ["search_hospital_by_type"]
+        {"tag": "transactions",
+         "patterns": ["transaction","find transactions","check transactions","transactions","transactions amount"],
+         "responses": ["../patients/transactions"],
+         "context": [""]
         },
-        {"tag": "search_hospital_by_type",
-         "patterns": [],
-         "responses": ["Loading hospital details"],
+        {"tag": "lab_test",
+         "patterns": ["lab","test","reports","Reports found","lab tests","lab test reports","test reports"],
+         "responses": ["../patients/lab_test_reports"],
          "context": [""]
         }
    ]

@@ -73,23 +73,19 @@ def chatbot_response(msg):
 
 @csrf_exempt
 def get_response(request):
-	response = {'status': None}
-
-	if request.method == 'POST':
-		data = json.loads(request.body.decode('utf-8'))
-		message = data['message']
-
-		chat_response = chatbot_response(message)
-		response['message'] = {'text':chat_response, 'user': False, 'chat_bot': True}
-		response['status'] = 'ok'
-
-	else:
-		response['error'] = 'no post data found'
-
-	return HttpResponse(
-		json.dumps(response),
-			content_type="application/json"
-		)
+    response = {'status': None}
+    if request.method == 'POST':
+        data = json.loads(request.body.decode('utf-8'))
+        message = data['message']
+        chat_response = chatbot_response(message)
+        if(chat_response.startswith('..')):
+            response['message'] = {'text':"Please go to the url:",'link':chat_response, 'user': False, 'chat_bot': True}
+        else:
+            response['message'] = {'text': chat_response, 'link': "", 'user': False,'chat_bot': True}
+        response['status'] = 'ok'
+    else:
+        response['error'] = 'no post data found'
+    return HttpResponse(json.dumps(response),content_type="application/json")
 
 
 def home(request):

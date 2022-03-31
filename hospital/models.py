@@ -112,3 +112,11 @@ class Transaction(models.Model):
 
     def __str__(self):
         return f"{self.patient}, {self.amount}"
+        
+class InsuranceRequest(models.Model):
+    patient = models.ForeignKey(PatientProfile, on_delete=models.CASCADE)
+    insurance_policy = models.ForeignKey(InsurancePolicy, on_delete=models.CASCADE)
+    approved = models.BooleanField(null=True, blank=True)
+    def __str__(self):
+        return f"{self.patient}, {self.insurance_policy}"
+    

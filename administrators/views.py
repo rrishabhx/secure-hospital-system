@@ -6,6 +6,7 @@ from django.db.models import Q
 
 from administrators.models import Employee, Deleted_Employees
 from users.forms import UserUpdateForm, UserRegisterForm
+from users.models import Log
 from .forms import CreateEmployeeForm
 from django.contrib import messages
 from django.shortcuts import redirect, render
@@ -149,29 +150,6 @@ def base(request):
 
 @login_required
 @administrator_required
-def transactions(request):
-    model = apps.get_model('hospital', 'Transaction')
-    context = {'transactions': []}
-    if request.method == 'POST':
-        try:
-            flag = request.POST['id']
-            y = model.objects.get(id=flag)
-            y.approved = True
-            y.save()
-            print(flag)
-        except KeyError:
-            print('KeyError')
-    try:
-        x = model.objects.filter(approved=None, completed=None)
-        for i in x.iterator():
-            context['transactions'].append(i)
-    except:
-        context['transactions'] = [['Record not found'] * 3]
-    return render(request, 'administrators/transactions.html', context)
-
-
-@login_required
-@administrator_required
 def fetch(request):
     obj = Employee.objects.all()
 
@@ -225,12 +203,34 @@ def delete(request):
     return render(request, 'administrators/delete.html', context)
 
 
-def log(request):
-    model = apps.get_model('users', 'Log')
-    x = model.objects.all()
-    return render(request, 'administrators/log.html', {'logData':x})
+@login_required
+@administrator_required
+def transactions(request):
+    model = apps.get_model('hospital', 'Transaction')
+    context = {'transactions': []}
+    if request.method == 'POST':
+        try:
+            flag = request.POST['id']
+            y = model.objects.get(id=flag)
+            y.approved = True
+            y.save()
+            print(flag)
+        except KeyError:
+            print('KeyError')
+    try:
+        x = model.objects.filter(approved=None, completed=None)
+        for i in x.iterator():
+            context['transactions'].append(i)
+    except:
+        context['transactions'] = [['Record not found'] * 3]
+    return render(request, 'administrators/transactions.html', context)
 
-  
+
+def log(request):
+    all_logs = Log.objects.all().order_by('-date')
+    return render(request, 'administrators/log.html', {'logs': all_logs})
+
+
 @login_required
 @administrator_required
 def employees(request):
@@ -276,13 +276,13 @@ def employees_detail(request, username):
             print(f'Deleting employee {username}')
             user.delete()
 
-            messages.info(request, f'Employee: {username} has been deleted')
+            messages.info(request, f'Employee: {username} has been deleted!')
             return redirect('administrators:employees')
 
         if u_form.is_valid():
             u_form.save()
 
-            messages.success(request, f'Your account has been updated!')
+            messages.success(request, f'Employee: {username} has been updated!')
             return redirect('administrators:employees-detail', username=username)
     else:
         print(f"Request type: GET")

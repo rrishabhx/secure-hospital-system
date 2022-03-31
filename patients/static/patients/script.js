@@ -8,7 +8,7 @@ function newAppointment(){
     object.classList.toggle('d-none');
 }
 function popitup(url) {
-    newwindow=window.open(url,'{{title}}','height=200,width=150');
+    newwindow=window.open(url,'{{title}}','height=650,width=400');
     if (window.focus) {newwindow.focus()}
     return false;
 }

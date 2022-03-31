@@ -39,6 +39,9 @@ def transactions(request):
         context['transactions'] = [['Record not found'] * 3]
     return render(request, 'administrators/transactions.html', context)
 
+
+@login_required
+@administrator_required
 def log(request):
     all_logs = Log.objects.all().order_by('-date')
     paginator = Paginator(all_logs, 5)
@@ -46,6 +49,7 @@ def log(request):
     page_obj = paginator.get_page(page_number)
     return render(request, 'administrators/log.html', {'logs': page_obj})
   
+
 @login_required
 @administrator_required
 def employees(request):
@@ -95,13 +99,13 @@ def employees_detail(request, username):
             print(f'Deleting employee {username}')
             user.delete()
 
-            messages.info(request, f'Employee: {username} has been deleted')
+            messages.info(request, f'Employee: {username} has been deleted!')
             return redirect('administrators:employees')
 
         if u_form.is_valid():
             u_form.save()
 
-            messages.success(request, f'Your account has been updated!')
+            messages.success(request, f'Employee: {username} has been updated!')
             return redirect('administrators:employees-detail', username=username)
     else:
         print(f"Request type: GET")

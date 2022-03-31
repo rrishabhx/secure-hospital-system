@@ -17,16 +17,17 @@ class User(AbstractUser):
         ('administrator', 'Administrator'),
     )
 
+    email = models.EmailField(unique=True)
     user_type = models.CharField(max_length=20, default='patient', choices=USER_TYPE_CHOICES)
     date_of_birth = models.DateField(default=date.today, validators=[MaxValueValidator(limit_value=date.today)])
 
     def __str__(self):
         return f'{self.username}'
-        
-        
-        
+
+
 class Log(models.Model):
     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
-    date = models.DateTimeField(default = datetime.now, blank = True)
+    date = models.DateTimeField(default=datetime.now, blank=True)
+
     class Meta:
         db_table = 'logs'

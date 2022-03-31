@@ -11,7 +11,7 @@ from hospital_staffs.models import HospitalStaffProfile
 from doctors.models import DoctorProfile
 from insurance_staffs.models import InsuranceStaffProfile
 from lab_staffs.models import LabStaffProfile
-from users.models import Log
+from users.models import Log, Code
 from django.contrib.auth.signals import user_logged_in, user_logged_out, user_login_failed
 from datetime import datetime
 from django.utils import timezone
@@ -71,7 +71,7 @@ def log_user_login(sender, request, user, **kwargs):
     try:
         print('user {} logged in through page {}'.format(user.username, request.META.get('HTTP_REFERER')))
         # if user.user_type == 'patient':
-        log = Log(user = user, date = datetime.now(tz=timezone.utc))
+        log = Log(user=user, date=datetime.now(tz=timezone.utc))
         log.save()
     except:
         print('something went wrong')
@@ -96,3 +96,9 @@ def log_user_logout(sender, request, user, **kwargs):
         print('user {} logged out through page {}'.format(user.username, request.META.get('HTTP_REFERER')))
     except:
         print('something went wrong')
+
+
+@receiver(post_save, sender=User)
+def post_save_generate_code(sender, instance, created, *args, **kwargs):
+    if created:
+        Code.objects.create(user=instance)

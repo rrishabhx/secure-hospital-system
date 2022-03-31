@@ -1,0 +1,35 @@
+{% extends 'insurance_staffs/main.html' %}
+{% load static %}
+{% load crispy_forms_tags %}
+
+{% block insurance_staff_content %}
+
+<h4> Requests: </h4>
+
+<table class="table">
+            <thead>
+				<th scope="col">Request No.</th>
+                <th scope="col">Patient</th>
+                <th scope="col">Policy</th>
+				<th scope="col">Approved</th>
+				<th scope="col">Approve</th>
+            </thead>
+            <tbody>
+                {% for i in requests %}
+                <tr>
+				
+					<form id="myform{{ forloop.counter }}" method="POST">
+							{% csrf_token %}
+							<input type="hidden" name="id" value={{i.id}} />
+							<td>{{ forloop.counter}}</td>
+							<td>{{ i.patient }}</td>
+							<td>{{ i.insurance_policy }}</td>
+							<td>{{ i.approved}}</td>
+							<td><a href="{% url 'insurance_staffs:policyRequest'}" onclick="document.forms[{{ forloop.counter0 }}].submit();return false;">Approve</a></td>
+					  </form>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+
+{% endblock insurance_staff_content %}

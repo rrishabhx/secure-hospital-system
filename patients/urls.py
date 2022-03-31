@@ -11,5 +11,7 @@ urlpatterns = [
     path('lab_test_reports/', views.lab_test_reports, name='lab-test-reports'),
     path('insurance/', views.insurance, name='insurance'),
     path('transactions/', views.transactions, name='transactions'),
-    path('profile/', views.profile, name='profile')
+    path('profile/', views.profile, name='profile'),
+    path('requestPolicy/', views.requestPolicy, name='requestPolicy'),
+    path('receipt/', views.receipt, name='receipt')
 ]

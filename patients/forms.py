@@ -1,7 +1,7 @@
 from django import forms
 
 from doctors.models import DoctorProfile
-from hospital.models import Appointment, InsuredPatient, InsuranceClaim, Transaction
+from hospital.models import Appointment, InsuredPatient, InsuranceClaim, Transaction,InsurancePolicy, InsuranceRequest
 
 
 class AppointmentForm(forms.ModelForm):
@@ -32,3 +32,8 @@ class TransactionForm(forms.ModelForm):
     class Meta:
         model = Transaction
         fields = ('diagnosis', 'amount', 'approved', 'completed')
+
+class InsuranceRequestForm(forms.ModelForm):
+    class Meta:
+        model = InsuranceRequest
+        fields = ('insurance_policy',)

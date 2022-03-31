@@ -26,3 +26,8 @@ class ViewLabRecords(ModelForm):
 	class Meta:
 		model = apps.get_model('hospital', 'LabTest')
 		fields = ('patient',)
+
+class ViewAppointment(ModelForm):
+	class Meta:
+		model = apps.get_model('hospital', 'Appointment')
+		fields = ('doctor',)

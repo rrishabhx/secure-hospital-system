@@ -14,7 +14,7 @@ User = get_user_model()
 @login_required
 @administrator_required
 def base(request):
-    return redirect('administrators:profile')
+    return redirect('administrators:employees')
 
 
 @login_required

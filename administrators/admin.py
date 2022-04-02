@@ -1,3 +1,5 @@
 from django.contrib import admin
 
-# Register your models here.
+from administrators.models import AdministratorProfile
+
+admin.site.register(AdministratorProfile)

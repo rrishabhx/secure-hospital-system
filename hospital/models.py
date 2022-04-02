@@ -58,7 +58,8 @@ class Diagnosis(models.Model):
     created = models.DateTimeField(auto_now_add=True, blank=True)
 
     def __str__(self):
-        return f"Date: {self.appointment.scheduled_date.strftime(format='%Y-%m-%d %H:%M:%S')}"
+        return f"Doctor:{self.doctor}, Patient:{self.patient}: " \
+               f"{self.appointment.scheduled_date.strftime(format='%Y-%m-%d %H:%M:%S')}"
 
 
 class LabTest(models.Model):
@@ -112,3 +113,12 @@ class Transaction(models.Model):
 
     def __str__(self):
         return f"{self.patient}, {self.amount}"
+
+
+class InsuranceRequest(models.Model):
+    patient = models.ForeignKey(PatientProfile, on_delete=models.CASCADE)
+    insurance_policy = models.ForeignKey(InsurancePolicy, on_delete=models.CASCADE)
+    approved = models.BooleanField(null=True, blank=True)
+
+    def __str__(self):
+        return f"{self.patient}, {self.insurance_policy}"

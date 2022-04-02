@@ -1,124 +1,46 @@
-{% extends 'main.html' %}
+{% extends 'administrators/main.html' %}
 {% load static %}
 {% load crispy_forms_tags %}
 
-{% block body-content %}
+{% block admincontent %}
 
-    <!DOCTYPE html>
-    <html lang="en">
-
-    <head>
-        <meta charset="UTF-8">
-        <meta http-equiv="X-UA-Compatible" content="IE=edge">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <link rel="stylesheet" href="{% static 'patients/styles.css' %}">
-        <title>Document</title>
-    </head>
-
-    <body>
-
-    <div class="container">
-        <div class="row my-5">
-
-            <div class="col-md-3">
-                <div class="content-section">
-                    <h3>Menu</h3>
-                    <ul class="nav flex-column">
-                        <li class="nav-item">
-                            <a class="nav-link" href="{% url 'administrators:base' %}">Home</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" style="cursor: pointer;" onclick="hiddenFunc()">Employees <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-caret-down-fill" viewBox="0 0 16 16">
-                                <path d="M7.247 11.14 2.451 5.658C1.885 5.013 2.345 4 3.204 4h9.592a1 1 0 0 1 .753 1.659l-4.796 5.48a1 1 0 0 1-1.506 0z"/>
-                              </svg></a>
-                        </li>
-                        <li class="nav-item d-none small" id="li1">
-                            <a class="nav-link" href="{% url 'administrators:create' %}">
-                                Create new Employee
-                            </a>
-                        </li>
-                        <li class="nav-item d-none small" id="li2">
-                            <a class="nav-link" href="{% url 'administrators:fetch' %}">
-                                View Employees
-                            </a>
-                        </li>
-                        <li class="nav-item d-none small" id="li3">
-                            <a class="nav-link" href="{% url 'administrators:modify' %}">
-                                Modify Employee
-                            </a>
-                        </li>
-                        <li class="nav-item d-none small" id="li4">
-                            <a class="nav-link" href="{% url 'administrators:delete' %}">
-                                Delete Employee
-                            </a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="{% url 'administrators:transactions' %}">Transactions</a>
-                        </li>
-                        <!-- <li class="nav-item">
-                            <a class="nav-link" href="{% url 'patients:prescriptions' %}">Prescriptions</a>
-                        </li> -->
-                    </ul>
-                </div>
-            </div>
-
-            <div class="col-md-9">
-                {% block content %}
-                <h2>Transactions</h2>
-                {% if transactions %}
-                <table class="table">
-                    <thead>
-                        <th scope="col">Record</th>
-                        <th scope="col">Amount</th>
-                        <th scope="col">Patient Id</th>
-                        <th scope="col">Diagnosis</th>
-                        <th scope="col">Approve</th>
-                    </thead>
-                    <tbody>
-                        {% for i in transactions %}
-                        <tr>
-                        
-                            <form id="myform{{ forloop.counter }}" method="POST">
-                                    {% csrf_token %}
-                                    <input type="hidden" name="id" value={{i.id}} />
-                                    <td>{{ forloop.counter}}</td>
-                                    <td>{{ i.amount }}</td>
-                                    <td>{{ i.patient }}</td>
-                                    <td>{{ i.diagnosis}}</td>
-                                    <td><a href="{% url 'administrators:transactions'}" onclick="document.forms[{{ forloop.counter0 }}].submit();return false;">Approve</a></td>
-                              </form>
-                        </tr>
-                        {% endfor %}
-                    </tbody>
-                </table>
-                {% else %}
-                <p><i>No transactions found for approval</i></p>
-                <!-- <p><i>Transactions comes from hospital staff <a href="{% url 'administrators:create' %}">here</a> to update records.</i></p> -->
-                <p><i>Click <a href="{% url 'administrators:base' %}">here</a> to goto homepage</i></p>
-                {% endif %}
-                {% endblock %}
-            </div>
-
-        </div>
+<div class="row mb-3">
+    <div class="col">
+        <h2>Transactions</h2>
     </div>
+</div>
 
+<div class="row my-3">
+    <div class="col">
+        {% if transactions %}
+            <table class="table">
+                <thead>
+                    <th scope="col">Record</th>
+                    <th scope="col">Amount</th>
+                    <th scope="col">Patient Id</th>
+                    <th scope="col">Diagnosis</th>
+                    <th scope="col">Approve</th>
+                </thead>
+                <tbody>
+                    {% for i in transactions %}
+                    <tr>
+                        <form id="myform{{ forloop.counter }}" method="POST">
+                                {% csrf_token %}
+                                <input type="hidden" name="id" value={{i.id}} />
+                                <td>{{ forloop.counter}}</td>
+                                <td>{{ i.amount }}</td>
+                                <td>{{ i.patient }}</td>
+                                <td>{{ i.diagnosis}}</td>
+                                <td><a href="{% url 'administrators:transactions' %}" onclick="document.forms[{{ forloop.counter0 }}].submit();return false;">Approve</a></td>
+                          </form>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        {% else %}
+            <h5><i>No Transactions Found!</i></h5>
+        {% endif %}
 
-    <script type="text/javascript" src="{% static 'patients/script.js' %}"></script>
-    <script>
-        function hiddenFunc(){
-            var l1 = document.getElementById("li1");
-            var l2 = document.getElementById("li2");
-            var l3 = document.getElementById("li3");
-            var l4 = document.getElementById("li4");
-            l1.classList.toggle("d-none");
-            l2.classList.toggle("d-none");
-            l3.classList.toggle("d-none");
-            l4.classList.toggle("d-none");
-        }
-    </script>
-    </body>
-
-    </html>
-
-
-{% endblock body-content %}
+    </div>
+</div>
+{% endblock admincontent %}

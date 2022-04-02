@@ -1,0 +1,114 @@
+{% extends 'administrators/main.html' %}
+{% load static %}
+{% load crispy_forms_tags %}
+
+{% block admincontent %}
+
+    <div class="row mb-3">
+        <div class="col">
+            <h2>Employees</h2>
+        </div>
+        <div class="col text-end">
+            <button class="btn btn-info" onclick="newEmployee()">Create New Employee</button>
+        </div>
+
+    </div>
+
+    <div class="row my-3 d-none" id="new-employee-block">
+        <div class="col">
+
+            <form action="" method="post">
+                {% csrf_token %}
+                <div class="row">
+                    <div class="col">
+                        <h3>Create New Employee</h3>
+                    </div>
+                    <div class="col text-end">
+                        <button class="btn btn-primary">Submit</button>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col">
+                        {{ form | crispy }}
+                    </div>
+                </div>
+            </form>
+
+        </div>
+    </div>
+
+    <div class="row my-3">
+        <div class="col">
+            {% if employees %}
+                <table class="table">
+                    <thead>
+                    <th scope="col">Department</th>
+                    <th scope="col">Username</th>
+                    <th scope="col">First Name</th>
+                    <th scope="col">Last Name</th>
+                    </thead>
+                    <tbody>
+                    {% for user in employees %}
+                        <tr>
+                            <td>{{ user.user_type }}</td>
+                            <td>
+                                <a href="{% url 'administrators:employees-detail' user.username %}">{{ user.username }}</a>
+                            </td>
+                            {% if user.first_name %}
+                                <td>{{ user.first_name }}</td>
+                            {% else %}
+                                <td><em>-</em></td>
+                            {% endif %}
+                            {% if user.first_name %}
+                                <td>{{ user.last_name }}</td>
+                            {% else %}
+                                <td><em>-</em></td>
+                            {% endif %}
+                        </tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
+            {% else %}
+                <h4>No Employees found!</h4>
+            {% endif %}
+
+        </div>
+    </div>
+
+    <nav aria-label="Page navigation example">
+        <ul class="pagination justify-content-center">
+          {% if employees.has_previous %}
+            <li class="page-item">
+              <a class="page-link" href="?page={{ employees.previous_page_number }}">Previous</a>
+            </li>
+          {% else %}
+            <li class="page-item disabled">
+              <a class="page-link" href="#" tabindex="-1" aria-disabled="True">Previous</a>
+            </li>
+          {% endif %}
+          {% for i in employees.paginator.page_range %}
+            {% if employees.number == i %}
+              <li class="page-item active" aria-current="page">
+                <span class="page-link">
+                  {{ i }}
+                  <span class="sr-only"></span>
+                </span>
+              </li>
+            {% else %}
+              <li class="page-item"><a class="page-link" href="?page={{ i }}">{{ i }}</a></li>
+            {% endif %}
+          {% endfor %}
+          {% if employees.has_next %}
+            <li class="page-item">
+              <a class="page-link" href="?page={{ employees.next_page_number }}">Next</a>
+            </li>
+          {% else %}
+            <li class="page-item disabled">
+              <a class="page-link" href="#" tabindex="-1" aria-disabled="True">Next</a>
+            </li>
+          {% endif %}
+        </ul>
+      </nav>
+
+{% endblock admincontent %}

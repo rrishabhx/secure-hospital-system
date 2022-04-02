@@ -1,0 +1,22 @@
+{% extends 'administrators/main.html' %}
+{% load crispy_forms_tags %}
+
+{% block admincontent %}
+
+    <div class="content-section">
+        <!-- FORM HERE -->
+        <form method="POST" action="" enctype="multipart/form-data">
+            {% csrf_token %}
+            <fieldset class="form-group">
+                <legend class="border-bottom mb-4">Profile Info</legend>
+                {{ u_form|crispy }}
+            </fieldset>
+            <br>
+            <div class="form-group">
+                <button class="btn btn-outline-info" type="submit" name="update_employee">Update Employee</button>
+                <button class="btn btn-outline-danger" type="submit" name="delete_employee">Delete Employee</button>
+            </div>
+        </form>
+    </div>
+
+{% endblock admincontent %}

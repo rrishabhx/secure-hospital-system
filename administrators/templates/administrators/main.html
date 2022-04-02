@@ -1,0 +1,42 @@
+{% extends 'main.html' %}
+{% load static %}
+{% load crispy_forms_tags %}
+
+{% block additional-styles %}
+    <link rel="stylesheet" href="{% static 'administrators/styles.css' %}">
+{% endblock additional-styles %}
+
+{% block body-content %}
+
+    <div class="container">
+        <div class="row my-5">
+
+            <div class="col-md-3">
+                <div class="content-section">
+                    <h3>Admin Menu</h3>
+                    <ul class="nav flex-column">
+                        <li class="nav-item">
+                            <a class="nav-link" href="{% url 'administrators:employees' %}">Employees Portal</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="{% url 'administrators:transactions' %}">Transactions</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="{% url 'administrators:log' %}">Logs</a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="col-md-9">
+                {% block admincontent %}{% endblock admincontent %}
+            </div>
+
+        </div>
+    </div>
+
+{% endblock body-content %}
+
+{% block additional-scripts %}
+    <script type="text/javascript" src="{% static 'administrators/script.js' %}"></script>
+{% endblock additional-scripts %}

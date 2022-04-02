@@ -1,0 +1,57 @@
+{% extends 'hospital_staffs/home.html' %}
+{% load static %}
+{% load crispy_forms_tags %}
+
+{% block patientcontent %}
+
+
+<form action="" method="get">
+            {% csrf_token %}
+            <div class="row">
+                <div class="col">
+                    <h3>View Appointments</h3>
+                </div>
+                <div class="col text-end">
+                    <button class="btn btn-primary">Submit</button>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col">
+                    {{ form | crispy }}
+                </div>
+            </div>
+        </form>
+		
+		<br>
+
+<div class="row my-3">
+    <div class="col">
+        {% if appointments %}
+        <table class="table">
+            <thead>
+                <!-- <th scope="col">S.No.</th> -->
+                <th scope="col">Status</th>
+                <th scope="col">Description</th>
+                <th scope="col">Patient</th>
+                <th scope="col">Scheduled Date</th>
+            </thead>
+            <tbody>
+                {% for app in appointments %}
+                <tr>
+                    <td>{{ app.status }}</td>
+                    <td>{{ app.appointment_details }}</td>
+                    <td>{{ app.patient.user.username }}</td>
+                    <td>{{ app.scheduled_date }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        {% else %}
+        <h4>No Appointments found!</h4>
+        {% endif %}
+
+    </div>
+</div>
+
+{% endblock patientcontent %}

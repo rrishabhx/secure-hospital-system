@@ -2,15 +2,14 @@ import logging
 
 from django.contrib.auth.decorators import login_required
 
-from hospital.models import Appointment, Diagnosis, LabTest, InsuredPatient, Transaction, InsuranceClaim
+from hospital.models import *
 from users.decorators import patient_required
 from django.shortcuts import render, redirect
-from django.urls import reverse
 from django.contrib import messages
 from django.contrib.auth import get_user_model
 
 from users.forms import UserUpdateForm
-from .forms import PatientProfileUpdateForm, InsuredPatientForm, AppointmentForm, InsuranceClaimForm, TransactionForm
+from .forms import InsuredPatientForm, AppointmentForm, InsuranceClaimForm, TransactionForm, InsuranceRequestForm
 
 User = get_user_model()
 
@@ -168,14 +167,10 @@ def profile(request):
     if request.method == 'POST':
         print("Request type: POST")
         u_form = UserUpdateForm(request.POST, instance=user)
-        p_form = PatientProfileUpdateForm(
-            request.POST, request.FILES, instance=patient_profile)
-
         i_form = InsuredPatientForm(request.POST, instance=patient_profile.insuredpatient)
 
-        if u_form.is_valid() and p_form.is_valid() and i_form.is_valid():
+        if u_form.is_valid() and i_form.is_valid():
             u_form.save()
-            p_form.save()
             i_form.save()
 
             messages.success(request, f'Your account has been updated!')
@@ -183,7 +178,6 @@ def profile(request):
     else:
         print(f"Request type: GET")
         u_form = UserUpdateForm(instance=user)
-        p_form = PatientProfileUpdateForm(instance=patient_profile)
         i_form = InsuredPatientForm()
 
         if hasattr(patient_profile, 'insuredpatient'):
@@ -192,8 +186,68 @@ def profile(request):
 
     context = {
         'u_form': u_form,
-        'p_form': p_form,
         'i_form': i_form,
     }
 
     return render(request, 'patients/profile.html', context)
+
+
+# @login_required
+# @patient_required
+# def requestPolicy(request):
+#    form = InsuredPatientForm()
+#    user = request.user.patientprofile
+#    if request.method == 'POST':
+#        try:
+#            form = InsuredPatientForm(request.POST)
+#            flag = request.POST['insurance_policy']
+#            policy = InsurancePolicy.objects.get(id=flag)
+#            amount = policy.max_amount
+#            if form.is_valid():
+#                if hasattr(user, 'insuredpatient'):
+#                    insured_patient = request.user.patientprofile.insuredpatient
+#                    insured_patient.insurance_policy = policy
+#                    insured_patient.amount_available = amount
+#                else:
+#                    insured_patient = InsuredPatient(patient=user,
+#                                             insurance_policy=policy, amount_available=amount)
+#                insured_patient.save()
+#                y = insured_patient
+#                print(y.amount_available)
+#                messages.success(request, 'Record Updated')
+#        except Exception as e:
+#            print(e)
+#    context = {'form': form}
+#    return render(request, 'patients/requestPolicy.html', context)
+
+@login_required
+@patient_required
+def requestPolicy(request):
+    form = InsuranceRequestForm()
+    user = request.user.patientprofile
+    if request.method == 'POST':
+        try:
+            form = InsuranceRequestForm(request.POST)
+            if form.is_valid():
+                policy = InsurancePolicy.objects.get(id=request.POST['insurance_policy'])
+                req = InsuranceRequest(patient=user, insurance_policy=policy, approved=False)
+                req.save()
+                messages.success(request, 'Record Created')
+        except Exception as e:
+            print(e)
+    context = {'form': form}
+    return render(request, 'patients/requestPolicy.html', context)
+
+
+@login_required
+@patient_required
+def receipt(request):
+    model = Transaction
+    context = {'transactions': []}
+    try:
+        x = model.objects.filter(approved='t', completed='t')
+        for i in x.iterator():
+            context['transactions'].append(i)
+    except:
+        print('some issue')
+    return render(request, 'patients/receipt.html', context)

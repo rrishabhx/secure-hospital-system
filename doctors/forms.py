@@ -12,14 +12,15 @@ class ProfileForm(forms.Form):
     address = forms.CharField(label='Address', max_length=100, required=False)
     insurance = forms.CharField(
         label='Insurance', max_length=100, required=False)
-        
+
+
 class UpdatePatientForm(ModelForm):
-	class Meta:
-		model = apps.get_model('hospital', 'Diagnosis')
-		fields = ('patient',)
+    class Meta:
+        model = apps.get_model('hospital', 'Diagnosis')
+        fields = ('patient',)
+
 
 class ViewLabRecords(ModelForm):
-	class Meta:
-		model = apps.get_model('hospital', 'LabTest')
-		fields = ('patient',)
-
+    class Meta:
+        model = apps.get_model('hospital', 'LabTest')
+        fields = ('patient',)

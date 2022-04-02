@@ -1,0 +1,22 @@
+{% extends 'lab_staffs/main.html' %}
+{% load static %}
+{% load crispy_forms_tags %}
+
+{% block labstaffcontent %}
+<div class="container">
+    <h1>New Lab Test Report</h1>
+    <form method="POST" novalidate>
+        {% csrf_token %}
+
+        <div class="row">
+            <div class="col">
+                {{ createReportForm | crispy }}
+            </div>
+        </div>
+
+        <div class="col-md-2 col-md-offset-10">
+            <input type="submit" value="submit" class="btn-primary">
+        </div>
+    </form>
+</div>
+{% endblock labstaffcontent %}

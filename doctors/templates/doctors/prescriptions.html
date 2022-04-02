@@ -47,7 +47,7 @@
 							<td><input type="text" name="details" value="{{ i.details }}" /></td>
 							<td>{{ i.doctor }}</td>
 							<td><input type="text" name="lab" value="{{ i.lab_tests_recommended }}" /></td>
-							<td><a href="{% url 'doctors:prescriptions'}" onclick="document.forms[{{ forloop.counter }}].submit();return false;">Approve</a></td>
+							<td><a href="{% url 'doctors:prescriptions' %}" onclick="document.forms[{{ forloop.counter }}].submit();return false;">Approve</a></td>
 					  </form>
                 </tr>
                 {% endfor %}

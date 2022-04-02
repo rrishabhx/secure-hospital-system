@@ -62,8 +62,8 @@ def save_usertype_profile(sender, instance, **kwargs):
         instance.insurancestaffprofile.save()
     elif instance.user_type == 'lab_staff':
         instance.labstaffprofile.save()
-    # elif instance.user_type == 'administrator':
-    #     instance.administratorprofile.save()
+    elif instance.user_type == 'administrator':
+        instance.administratorprofile.save()
 
 
 @receiver(user_logged_in)

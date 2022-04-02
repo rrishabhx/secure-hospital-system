@@ -26,7 +26,7 @@
 							<td>{{ i.amount }}</td>
 							<td>{{ i.patient }}</td>
 							<td>{{ i.diagnosis}}</td>
-							<td><a href="{% url 'hospitalstaff-approveTransaction'}" onclick="document.forms[{{ forloop.counter0 }}].submit();return false;">Approve</a></td>
+							<td><a href="{% url 'hospitalstaff-approveTransaction' %}" onclick="document.forms[{{ forloop.counter0 }}].submit();return false;">Approve</a></td>
 					  </form>
                 </tr>
                 {% endfor %}

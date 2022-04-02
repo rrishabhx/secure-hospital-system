@@ -25,7 +25,6 @@ class Car(models.Model):
 '''
 
 
-# TODO: Review doctor availability, Transactions, Insurance functionality
 class Appointment(models.Model):
     """
     Appointment requested: status=False

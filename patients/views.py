@@ -2,14 +2,16 @@ import logging
 
 from django.contrib.auth.decorators import login_required
 
-from hospital.models import *
+from hospital.models import Appointment, Diagnosis, LabTest, InsuranceClaim, Transaction, InsurancePolicy, \
+    InsuranceRequest
+from patients.forms import AppointmentForm, InsuranceClaimForm, TransactionForm, InsuredPatientForm, \
+    InsuranceRequestForm
 from users.decorators import patient_required
 from django.shortcuts import render, redirect
 from django.contrib import messages
 from django.contrib.auth import get_user_model
 
 from users.forms import UserUpdateForm
-from .forms import InsuredPatientForm, AppointmentForm, InsuranceClaimForm, TransactionForm, InsuranceRequestForm
 
 User = get_user_model()
 

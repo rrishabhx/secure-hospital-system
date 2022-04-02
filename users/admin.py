@@ -1,7 +1,7 @@
 from django import forms
 from django.contrib import admin
 from django.contrib.auth.admin import UserAdmin as BaseUserAdmin
-from .models import *
+from .models import User, Log, Code
 
 
 class UserCreationForm(forms.ModelForm):

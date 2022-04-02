@@ -1,6 +1,7 @@
 from django.contrib import admin
 
-from hospital.models import *
+from hospital.models import Appointment, Diagnosis, LabTest, InsurancePolicy, InsuredPatient, InsuranceClaim, \
+    Transaction
 
 admin.site.register(Appointment)
 admin.site.register(Diagnosis)

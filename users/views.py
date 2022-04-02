@@ -1,17 +1,14 @@
-import random
-from django.contrib.auth import authenticate, login, logout
-from django.contrib.auth.forms import AuthenticationForm
+import logging
+
 from django.contrib import messages
-from django.http import HttpResponse
-from django.shortcuts import render, redirect
+from django.contrib.auth import authenticate, login, logout
+from django.contrib.auth import get_user_model
 from django.contrib.auth.decorators import login_required
+from django.core.mail import send_mail
+from django.shortcuts import render, redirect
 
 from secure_hospital_system import settings
-from .forms import UserRegisterForm, UserUpdateForm, CodeForm
-import logging
-from django.core.mail import send_mail
-
-from django.contrib.auth import get_user_model
+from .forms import UserRegisterForm, CodeForm
 
 User = get_user_model()
 logger = logging.getLogger(__name__)

@@ -25,7 +25,7 @@
 							<td>{{ i.patient }}</td>
 							<td>{{ i.insurance_policy }}</td>
 							<td>{{ i.approved}}</td>
-							<td><a href="{% url 'insurance_staffs:policyRequest'}" onclick="document.forms[{{ forloop.counter0 }}].submit();return false;">Approve</a></td>
+							<td><a href="{% url 'insurance_staffs:policyRequest' %}" onclick="document.forms[{{ forloop.counter0 }}].submit();return false;">Approve</a></td>
 					  </form>
                 </tr>
                 {% endfor %}

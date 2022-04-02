@@ -1,5 +1,7 @@
 from django.contrib.auth import get_user_model
 from django.db.models import Q
+
+from hospital.models import Transaction
 from users.forms import UserUpdateForm, UserRegisterForm
 from users.models import Log
 from django.contrib import messages
@@ -21,19 +23,19 @@ def base(request):
 @login_required
 @administrator_required
 def transactions(request):
-    model = apps.get_model('hospital', 'Transaction')
+    # model = apps.get_model('hospital', 'Transaction')
     context = {'transactions': []}
     if request.method == 'POST':
         try:
             flag = request.POST['id']
-            y = model.objects.get(id=flag)
+            y = Transaction.objects.get(id=flag)
             y.approved = True
             y.save()
             print(flag)
         except KeyError:
             print('KeyError')
     try:
-        x = model.objects.filter(approved=None, completed=None)
+        x = Transaction.objects.filter(approved=None, completed=None)
         for i in x.iterator():
             context['transactions'].append(i)
     except:

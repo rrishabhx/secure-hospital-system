@@ -5,9 +5,8 @@ from django.contrib.auth.decorators import login_required
 
 from hospital.forms import LabTestRecommendationForm
 from hospital.models import Appointment, Diagnosis, LabTest
-from doctors.models import DoctorProfile
 from users.decorators import doctor_required
-from django.shortcuts import render, get_object_or_404
+from django.shortcuts import render
 from .forms import ProfileForm, UpdatePatientForm, ViewLabRecords
 from django.contrib import messages
 
@@ -60,18 +59,18 @@ def prescriptions(request):
         try:
             flag = request.POST['id']
             y = model.objects.get(id=flag)
-            if ('prescription' in request.POST):
+            if 'prescription' in request.POST:
                 if not request.POST['prescription']:
                     y.prescription = None
                     print(y.prescription)
                     print('a')
                 y.prescription = request.POST['prescription']
                 print(request.POST['prescription'])
-            if ('details' in request.POST):
+            if 'details' in request.POST:
                 if not request.POST['details']:
                     y.details = None
                 y.details = request.POST['details']
-            if ('lab' in request.POST):
+            if 'lab' in request.POST:
                 if not request.POST['lab']:
                     y.lab_tests_recommended = None
                 y.lab_tests_recommended = request.POST['lab']

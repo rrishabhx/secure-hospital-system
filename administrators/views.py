@@ -11,6 +11,7 @@ from django.core.paginator import Paginator
 
 User = get_user_model()
 
+
 @login_required
 @administrator_required
 def base(request):
@@ -48,7 +49,7 @@ def log(request):
     page_number = request.GET.get('page')
     page_obj = paginator.get_page(page_number)
     return render(request, 'administrators/log.html', {'logs': page_obj})
-  
+
 
 @login_required
 @administrator_required
@@ -72,7 +73,7 @@ def employees(request):
     employees = User.objects.filter(
         Q(user_type='doctor') | Q(user_type='insurance_staff') | Q(user_type='lab_staff') | Q(user_type='patient') | Q(
             user_type='hospital_staff') | Q(user_type='administrator')).order_by('user_type', 'username')
-    
+
     paginator = Paginator(employees, 5)
     page_number = request.GET.get('page')
     page_obj = paginator.get_page(page_number)

@@ -2,7 +2,7 @@ from django.contrib.auth.decorators import login_required
 from django.http import HttpResponse
 from django.shortcuts import render, redirect
 from django.contrib import messages
-from hospital.models import InsuranceClaim, InsurancePolicy,InsuranceRequest,InsuredPatient
+from hospital.models import InsuranceClaim, InsurancePolicy, InsuranceRequest, InsuredPatient
 from insurance_staffs.forms import InsurancePolicyForm
 from users.decorators import insurance_staff_required
 from users.forms import UserUpdateForm
@@ -97,6 +97,7 @@ def profile(request):
 
     return render(request, 'insurance_staffs/profile.html', context)
 
+
 @login_required
 @insurance_staff_required
 def policyRequest(request):
@@ -112,12 +113,12 @@ def policyRequest(request):
             y.approved = True
             y.save()
             if hasattr(patient, 'insuredpatient'):
-                    insured_patient = patient.insuredpatient
-                    insured_patient.insurance_policy = policy
-                    insured_patient.amount_available = amount
+                insured_patient = patient.insuredpatient
+                insured_patient.insurance_policy = policy
+                insured_patient.amount_available = amount
             else:
-                    insured_patient = InsuredPatient(patient=patient,
-                    insurance_policy=policy, amount_available=amount)
+                insured_patient = InsuredPatient(patient=patient,
+                                                 insurance_policy=policy, amount_available=amount)
             insured_patient.save()
             messages.success(request, f'Your account has been updated!')
         except KeyError:

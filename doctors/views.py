@@ -1,7 +1,3 @@
-
-
-from django.http import HttpResponse
-from django.shortcuts import render
 import logging
 from django.apps import apps
 
@@ -12,7 +8,7 @@ from hospital.models import Appointment, Diagnosis, LabTest
 from doctors.models import DoctorProfile
 from users.decorators import doctor_required
 from django.shortcuts import render, get_object_or_404
-from .forms import ProfileForm, UpdatePatientForm,ViewLabRecords
+from .forms import ProfileForm, UpdatePatientForm, ViewLabRecords
 from django.contrib import messages
 
 from django.contrib.auth import get_user_model
@@ -20,44 +16,7 @@ from django.contrib.auth import get_user_model
 User = get_user_model()
 logger = logging.getLogger(__name__)
 
-prescriptions_list = []
-reports_list = [
-    {
-        'Id': 1,
-        'testType': 'Type1',
-        'testResult': 'All Ok',
-        'patientID_Id': 1,
-        'staffID_Id': 3,
-        'userID_Id': 1
-    },
-    {
-        'Id': 2,
-        'testType': 'Type1',
-        'testResult': 'All Ok',
-        'patientID_Id': 1,
-        'staffID_Id': 3,
-        'userID_Id': 1
-    },
-    {
-        'Id': 3,
-        'testType': 'Type1',
-        'testResult': 'All Ok',
-        'patientID_Id': 1,
-        'staffID_Id': 3,
-        'userID_Id': 1
-    },
-    {
-        'Id': 4,
-        'testType': 'Type1',
-        'testResult': 'All Ok',
-        'patientID_Id': 1,
-        'staffID_Id': 3,
-        'userID_Id': 1
-    },
-]
 
-@login_required
-@doctor_required
 # Create your views here.
 # def home(request):
 #     print(f"Inside home of {request.user}")
@@ -73,6 +32,8 @@ reports_list = [
 #         'recommendation_form': recommendation_form
 #     }
 #     return render(request, 'doctors/home.html', context)
+@login_required
+@doctor_required
 def home(request):
     print(f"Inside home of {request.user}")
     user = request.user.doctorprofile
@@ -89,41 +50,43 @@ def home(request):
     return render(request, 'doctors/home.html', context)
 
 
+@login_required
+@doctor_required
 def prescriptions(request):
     form = UpdatePatientForm()
-    context = {'form': form, 'records': [], 'checklist':False}
+    context = {'form': form, 'records': [], 'checklist': False}
     if request.method == 'POST' and 'patient' not in request.POST:
         model = apps.get_model('hospital', 'Diagnosis')
         try:
             flag = request.POST['id']
             y = model.objects.get(id=flag)
-            if('prescription'in request.POST):
+            if ('prescription' in request.POST):
                 if not request.POST['prescription']:
                     y.prescription = None
                     print(y.prescription)
                     print('a')
                 y.prescription = request.POST['prescription']
                 print(request.POST['prescription'])
-            if('details' in request.POST):
+            if ('details' in request.POST):
                 if not request.POST['details']:
                     y.details = None
-                y.details = request.POST['details']  
-            if('lab' in request.POST):
+                y.details = request.POST['details']
+            if ('lab' in request.POST):
                 if not request.POST['lab']:
                     y.lab_tests_recommended = None
-                y.lab_tests_recommended = request.POST['lab']               
+                y.lab_tests_recommended = request.POST['lab']
             y.save()
         except KeyError:
             print('KeyError')
         finally:
-                render(request, 'doctors/prescriptions.html', context)
+            render(request, 'doctors/prescriptions.html', context)
     if request.method == 'POST' and 'patient' in request.POST:
         user = request.user.doctorprofile
         form = UpdatePatientForm(request.POST)
         if form.is_valid():
             model = apps.get_model('hospital', 'Diagnosis')
             try:
-                x = model.objects.filter(patient=request.POST['patient'], doctor = user)
+                x = model.objects.filter(patient=request.POST['patient'], doctor=user)
                 context['records'] = []
                 for i in x.iterator():
                     context['records'].append(i)
@@ -135,6 +98,8 @@ def prescriptions(request):
     return render(request, 'doctors/prescriptions.html', context)
 
 
+@login_required
+@doctor_required
 def diagnosis(request):
     print(f"{request.user}: Diagnosis page")
 
@@ -147,6 +112,8 @@ def diagnosis(request):
     return render(request, 'doctors/diagnosis.html', context=context)
 
 
+@login_required
+@doctor_required
 def appointments(request):
     user = request.user.doctorprofile
     context = {
@@ -156,9 +123,11 @@ def appointments(request):
     return render(request, 'doctors/appointments.html', context=context)
 
 
+@login_required
+@doctor_required
 def reports(request):
     form = ViewLabRecords()
-    context = {'form': form, 'records': [],'checklist': False}
+    context = {'form': form, 'records': [], 'checklist': False}
     if request.method == 'GET' and 'patient' in request.GET:
         form = ViewLabRecords(request.GET)
         if form.is_valid():
@@ -177,10 +146,13 @@ def reports(request):
                 render(request, 'doctors/reports.html', context)
     return render(request, 'doctors/reports.html', context=context)
 
+
+@login_required
+@doctor_required
 def profile(request):
     form = ProfileForm()
     # profile = PatientProfile.objects.all()[0]
-    #form = ProfileForm(initial={'username': profile.user.username, 'email': profile.user.email,
+    # form = ProfileForm(initial={'username': profile.user.username, 'email': profile.user.email,
     #                             'address': profile.address, 'insurance': profile.insurance})
 
     # if(request.method == 'POST'):
@@ -201,6 +173,3 @@ def profile(request):
         'profile': profile
     }
     return render(request, 'doctors/profile.html', context=context)
-    
-
-

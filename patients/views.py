@@ -2,15 +2,14 @@ import logging
 
 from django.contrib.auth.decorators import login_required
 
-from hospital.models import Appointment, Diagnosis, LabTest, InsuredPatient, Transaction, InsuranceClaim,InsurancePolicy,InsuranceRequest
+from hospital.models import *
 from users.decorators import patient_required
 from django.shortcuts import render, redirect
-from django.urls import reverse
 from django.contrib import messages
 from django.contrib.auth import get_user_model
 
 from users.forms import UserUpdateForm
-from .forms import InsuredPatientForm, AppointmentForm, InsuranceClaimForm, TransactionForm,InsuranceRequestForm
+from .forms import InsuredPatientForm, AppointmentForm, InsuranceClaimForm, TransactionForm, InsuranceRequestForm
 
 User = get_user_model()
 
@@ -191,10 +190,11 @@ def profile(request):
     }
 
     return render(request, 'patients/profile.html', context)
-    
-#@login_required
-#@patient_required
-#def requestPolicy(request):
+
+
+# @login_required
+# @patient_required
+# def requestPolicy(request):
 #    form = InsuredPatientForm()
 #    user = request.user.patientprofile
 #    if request.method == 'POST':
@@ -230,13 +230,14 @@ def requestPolicy(request):
             form = InsuranceRequestForm(request.POST)
             if form.is_valid():
                 policy = InsurancePolicy.objects.get(id=request.POST['insurance_policy'])
-                req = InsuranceRequest(patient=user,insurance_policy = policy, approved = False )
+                req = InsuranceRequest(patient=user, insurance_policy=policy, approved=False)
                 req.save()
                 messages.success(request, 'Record Created')
         except Exception as e:
             print(e)
     context = {'form': form}
     return render(request, 'patients/requestPolicy.html', context)
+
 
 @login_required
 @patient_required

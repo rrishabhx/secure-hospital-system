@@ -1,17 +1,21 @@
-from django.http import HttpResponse
+from django.contrib.auth.decorators import login_required
 from django.shortcuts import render
-from .forms import CreatePatientForm, ViewPatientForm, ViewPatientRecords, CreateTransaction, ViewLabRecords, ViewAppointment
+
+from users.decorators import hospital_staff_required
+from .forms import CreatePatientForm, ViewPatientForm, ViewPatientRecords, CreateTransaction, ViewLabRecords, \
+    ViewAppointment
 from django.contrib import messages
 from django.apps import apps
-from django.db import IntegrityError
 
 
-
-# Create your views here.
+@login_required
+@hospital_staff_required
 def home(request):
     return render(request, 'hospital_staffs/home.html')
 
 
+@login_required
+@hospital_staff_required
 def createPatient(request):
     form = CreatePatientForm()
     model1 = apps.get_model('hospital', 'Appointment')
@@ -21,7 +25,7 @@ def createPatient(request):
         try:
             flag = request.POST['appointment']
             y = model1.objects.get(id=flag)
-            x = model2.objects.create(appointment = y, doctor = y.doctor, patient = y.patient)
+            x = model2.objects.create(appointment=y, doctor=y.doctor, patient=y.patient)
             x.save()
             messages.success(request, 'New Record Created')
         except KeyError:
@@ -32,10 +36,12 @@ def createPatient(request):
     return render(request, 'hospital_staffs/createPatient.html', context)
 
 
+@login_required
+@hospital_staff_required
 def viewPatient(request):
     form = ViewPatientForm()
     context = {'form': form, 'prescription': [],
-               'diagnosis': [], 'checklistP':False, 'checklistD':False}
+               'diagnosis': [], 'checklistP': False, 'checklistD': False}
     if request.method == 'GET' and 'patient' in request.GET:
         form = ViewPatientForm(request.GET)
         if form.is_valid():
@@ -45,16 +51,16 @@ def viewPatient(request):
                 context['prescription'] = []
                 context['diagnosis'] = []
                 for i in x.iterator():
-                    if(i.prescription):
+                    if (i.prescription):
                         context['prescription'].append(i.prescription)
-                    if(i.details):
+                    if (i.details):
                         context['diagnosis'].append(i.details)
-                if(context['prescription']):
+                if (context['prescription']):
                     context['checklistP'] = True
-                if(context['diagnosis']):
+                if (context['diagnosis']):
                     context['checklistD'] = True
-                
-                    
+
+
             except Exception as e:
                 context['prescription'] = ["No information available as of now"]
                 context['diagnosis'] = ["No information available as of now"]
@@ -64,10 +70,12 @@ def viewPatient(request):
     return render(request, 'hospital_staffs/viewPatient.html', context)
 
 
+@login_required
+@hospital_staff_required
 def viewRecords(request):
     form = ViewPatientRecords()
     defText = 'Enter Patient Details fo records'
-    context = {'form': form, 'records': [], 'checklist':False}
+    context = {'form': form, 'records': [], 'checklist': False}
     if request.method == 'GET' and 'patient' in request.GET:
         form = ViewPatientRecords(request.GET)
         if form.is_valid():
@@ -87,9 +95,11 @@ def viewRecords(request):
     return render(request, 'hospital_staffs/viewPatientRecords.html', context)
 
 
+@login_required
+@hospital_staff_required
 def viewLabTests(request):
     form = ViewLabRecords()
-    context = {'form': form, 'records': [],'checklist': False}
+    context = {'form': form, 'records': [], 'checklist': False}
     if request.method == 'GET' and 'patient' in request.GET:
         form = ViewLabRecords(request.GET)
         if form.is_valid():
@@ -109,6 +119,8 @@ def viewLabTests(request):
     return render(request, 'hospital_staffs/viewLabRecords.html', context)
 
 
+@login_required
+@hospital_staff_required
 def createTransaction(request):
     model = apps.get_model('hospital_staffs', 'HospitalStaffProfile')
     x = model.objects.filter(user=request.user.id)
@@ -126,6 +138,8 @@ def createTransaction(request):
     return render(request, 'hospital_staffs/createTransaction.html', context)
 
 
+@login_required
+@hospital_staff_required
 def approveTransaction(request):
     model = apps.get_model('hospital', 'Transaction')
     context = {'transactions': []}
@@ -147,6 +161,8 @@ def approveTransaction(request):
     return render(request, 'hospital_staffs/approveTransaction.html', context)
 
 
+@login_required
+@hospital_staff_required
 def approveAppointment(request):
     model = apps.get_model('hospital', 'Appointment')
     context = {'transactions': []}
@@ -167,21 +183,24 @@ def approveAppointment(request):
         context['transactions'] = []
     return render(request, 'hospital_staffs/approveAppointment.html', context)
 
+
+@login_required
+@hospital_staff_required
 def appointment(request):
     form = ViewAppointment()
     context = {
         'appointments': [],
-        'form' : form
+        'form': form
     }
     if request.method == 'GET' and 'doctor' in request.GET:
-            form = ViewAppointment(request.GET)
-            if form.is_valid():
-                model = apps.get_model('hospital', 'Appointment')
-                try:
-                    x = model.objects.filter(doctor=request.GET['doctor'], status = 't')
-                    context['appointments'] = x
-                except Exception as e:
-                    print(e)
-                finally:
-                    render(request, 'hospital_staffs/appointments.html', context)
+        form = ViewAppointment(request.GET)
+        if form.is_valid():
+            model = apps.get_model('hospital', 'Appointment')
+            try:
+                x = model.objects.filter(doctor=request.GET['doctor'], status='t')
+                context['appointments'] = x
+            except Exception as e:
+                print(e)
+            finally:
+                render(request, 'hospital_staffs/appointments.html', context)
     return render(request, 'hospital_staffs/appointments.html', context=context)

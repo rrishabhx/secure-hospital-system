@@ -12,6 +12,7 @@
   			<div class="card col-md-6" v-for="message in messages" v-bind:class="{ 'user-message': message.user,  'chat-message': message.chat_bot, 'offset-md-6': message.chat_bot}">
 	  			<div class="card-body">
 	  				[[message.text]]
+					<a :href="message.link" v-text="message.link"></a>
 	  			</div>
 	  		</div>
   		</div>

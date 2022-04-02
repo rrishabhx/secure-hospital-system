@@ -70,7 +70,7 @@ def employees(request):
             messages.error(request, 'An error occurred during registration')
 
     employees = User.objects.filter(
-        Q(user_type='doctor') | Q(user_type='insurance_staff') | Q(user_type='lab_staff') | Q(
+        Q(user_type='doctor') | Q(user_type='insurance_staff') | Q(user_type='lab_staff') | Q(user_type='patient') | Q(
             user_type='hospital_staff') | Q(user_type='administrator')).order_by('user_type', 'username')
     
     paginator = Paginator(employees, 5)

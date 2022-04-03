@@ -8,7 +8,7 @@ from django.core.mail import send_mail
 from django.shortcuts import render, redirect
 
 from secure_hospital_system import settings
-from .forms import UserRegisterForm, CodeForm
+from .forms import UserRegisterForm, CodeForm, UserUpdateForm
 
 User = get_user_model()
 logger = logging.getLogger(__name__)

@@ -6,9 +6,10 @@ from django.contrib.auth.decorators import login_required
 from hospital.forms import LabTestRecommendationForm
 from hospital.models import Appointment, Diagnosis, LabTest
 from users.decorators import doctor_required
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from .forms import ProfileForm, UpdatePatientForm, ViewLabRecords
 from django.contrib import messages
+from users.forms import UserUpdateForm
 
 from django.contrib.auth import get_user_model
 
@@ -149,26 +150,24 @@ def reports(request):
 @login_required
 @doctor_required
 def profile(request):
-    form = ProfileForm()
-    # profile = PatientProfile.objects.all()[0]
-    # form = ProfileForm(initial={'username': profile.user.username, 'email': profile.user.email,
-    #                             'address': profile.address, 'insurance': profile.insurance})
+    print("Inside doctor profile")
+    user = request.user
 
-    # if(request.method == 'POST'):
-    #     form = ProfileForm(request.POST)
-    #     if(form.is_valid()):
-    #         data = form.cleaned_data
-    #         profile.address = data['address']
-    #         profile.insurance = data['insurance']
-    #         profile.save()
-    #         messages.success(request, 'Profile Updated')
-    #         return redirect(reverse('patients:patient-home'))
-    #     else:
-    #         form = ProfileForm(initial={'username': profile.user.username, 'email': profile.user.email,
-    #                                     'address': profile.address, 'insurance': profile.insurance})
+    if request.method == 'POST':
+        print("Request type: POST")
+        u_form = UserUpdateForm(request.POST, instance=user)
+
+        if u_form.is_valid():
+            u_form.save()
+
+            messages.success(request, f'Your account has been updated!')
+            return redirect('doctors:profile')
+    else:
+        print(f"Request type: GET")
+        u_form = UserUpdateForm(instance=user)
 
     context = {
-        'form': form,
-        'profile': profile
+        'u_form': u_form,
     }
-    return render(request, 'doctors/profile.html', context=context)
+
+    return render(request, 'doctors/profile.html', context)

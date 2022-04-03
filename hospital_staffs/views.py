@@ -1,11 +1,12 @@
 from django.contrib.auth.decorators import login_required
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 
 from users.decorators import hospital_staff_required
 from .forms import CreatePatientForm, ViewPatientForm, ViewPatientRecords, CreateTransaction, ViewLabRecords, \
     ViewAppointment
 from django.contrib import messages
 from django.apps import apps
+from users.forms import UserUpdateForm
 
 
 @login_required
@@ -204,3 +205,29 @@ def appointment(request):
             finally:
                 render(request, 'hospital_staffs/appointments.html', context)
     return render(request, 'hospital_staffs/appointments.html', context=context)
+
+
+@login_required
+@hospital_staff_required
+def profile(request):
+    print("Inside hospitalstaff profile")
+    user = request.user
+
+    if request.method == 'POST':
+        print("Request type: POST")
+        u_form = UserUpdateForm(request.POST, instance=user)
+
+        if u_form.is_valid():
+            u_form.save()
+
+            messages.success(request, f'Your account has been updated!')
+            return redirect('doctors:profile')
+    else:
+        print(f"Request type: GET")
+        u_form = UserUpdateForm(instance=user)
+
+    context = {
+        'u_form': u_form,
+    }
+
+    return render(request, 'hospital_staffs/profile.html', context)

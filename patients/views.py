@@ -43,6 +43,7 @@ def appointments(request):
             messages.success(request, 'New Appointment Requested')
             return redirect('patients:appointments')
         else:
+            messages.error(request, 'Error Processing Request. Please re-check your inputs')
             print(f"{request.user}: Invalid form data- {form.data}")
     else:
         form = AppointmentForm()

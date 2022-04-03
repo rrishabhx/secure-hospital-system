@@ -38,6 +38,7 @@ INSTALLED_APPS = [
     'hospital_staffs.apps.HospitalStaffsConfig',
     'insurance_staffs.apps.InsuranceStaffsConfig',
     'lab_staffs.apps.LabStaffsConfig',
+    'chatbot.apps.ChatbotConfig',
     'crispy_forms',
     'bootstrap5',
     'django_bootstrap_icons',

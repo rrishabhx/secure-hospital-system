@@ -19,10 +19,6 @@ def home(request):
     return redirect('login-user', usertype='patient')
 
 
-def about(request):
-    return render(request, 'users/about.html')
-
-
 def login_user(request, usertype):
     print("User trying to login")
     if request.user.is_authenticated:

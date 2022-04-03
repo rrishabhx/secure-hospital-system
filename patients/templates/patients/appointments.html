@@ -50,7 +50,7 @@
             <tbody>
                 {% for app in appointments %}
                 <tr>
-                    <td>{{ app.status }}</td>
+                    <td>{{ app.status|yesno:"Accepted,Declined,Pending" }}</td>
                     <td>{{ app.appointment_details }}</td>
                     {% if app.doctor %}
                         <td>Dr. {{ app.doctor.user.username }}</td>

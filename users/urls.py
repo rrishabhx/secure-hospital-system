@@ -4,7 +4,6 @@ from . import views
 
 urlpatterns = [
     path('', views.home, name='users-home'),
-    path('about/', views.about, name='users-about'),  # delete this route
     path('login/<str:usertype>', views.login_user, name='login-user'),
     path('verify/<str:usertype>', views.verify_user, name='verify-user'),
     path('logout/', auth_views.LogoutView.as_view(template_name='users/logout.html'), name='logout'),

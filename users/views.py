@@ -52,14 +52,14 @@ def login_user(request, usertype):
         user = authenticate(request, username=username, password=password)
 
         if user is not None:
-            request.session['pk'] = user.pk
-            return redirect('verify-user', usertype=usertype)
+            # request.session['pk'] = user.pk
+            # return redirect('verify-user', usertype=usertype)
 
-            # login(request, user)
-            #
-            # print("User type: " + user.user_type)
-            # messages.success(request, f'{user.username} successfully logged in')
-            # return user_redirect(request)
+            login(request, user)
+
+            print("User type: " + user.user_type)
+            messages.success(request, f'{user.username} successfully logged in')
+            return user_redirect(request)
         else:
             messages.error(request, 'Username or Password does not exist')
 

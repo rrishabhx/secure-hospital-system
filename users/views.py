@@ -48,7 +48,7 @@ def login_user(request, usertype):
         user = authenticate(request, username=username, password=password)
 
         if user is not None:
-            # request.session['pk'] = user.pk
+            request.session['pk'] = user.pk
             # return redirect('verify-user', usertype=usertype)
 
             login(request, user)
@@ -63,34 +63,34 @@ def login_user(request, usertype):
     return render(request, 'users/login.html', context={'page': page})
 
 
-def verify_user(request, usertype):
-    form = CodeForm(request.POST or None)
-    pk = request.session.get('pk')
-
-    if pk:
-        user = User.objects.get(pk=pk)
-        code = user.code
-        code_user = f"{user.username}: {user.code}"
-
-        if not request.POST:
-            # send email
-            send_otp_through_email(user, code)
-            print(code_user)
-
-        if form.is_valid():
-            num = form.cleaned_data.get('number')
-
-            if str(code) == num:
-                code.save()
-                login(request, user)
-
-                messages.success(request, f'{user.username} successfully logged in')
-                return user_redirect(request)
-            else:
-                messages.error(request, f'Incorrect OTP!! Please try again.')
-                return redirect('login-user', usertype=usertype)
-
-    return render(request, 'users/verify.html', {'form': form})
+# def verify_user(request, usertype):
+#     form = CodeForm(request.POST or None)
+#     pk = request.session.get('pk')
+#
+#     if pk:
+#         user = User.objects.get(pk=pk)
+#         code = user.code
+#         code_user = f"{user.username}: {user.code}"
+#
+#         if not request.POST:
+#             # send email
+#             send_otp_through_email(user, code)
+#             print(code_user)
+#
+#         if form.is_valid():
+#             num = form.cleaned_data.get('number')
+#
+#             if str(code) == num:
+#                 code.save()
+#                 login(request, user)
+#
+#                 messages.success(request, f'{user.username} successfully logged in')
+#                 return user_redirect(request)
+#             else:
+#                 messages.error(request, f'Incorrect OTP!! Please try again.')
+#                 return redirect('login-user', usertype=usertype)
+#
+#     return render(request, 'users/verify.html', {'form': form})
 
 
 def logout_user(request):

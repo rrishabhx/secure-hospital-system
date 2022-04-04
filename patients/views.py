@@ -1,17 +1,19 @@
 import logging
 
 from django.contrib.auth.decorators import login_required
+from django.core.mail import send_mail
 
 from hospital.models import Appointment, Diagnosis, LabTest, InsuranceClaim, Transaction, InsurancePolicy, \
     InsuranceRequest
 from patients.forms import AppointmentForm, InsuranceClaimForm, TransactionForm, InsuredPatientForm, \
     InsuranceRequestForm
+from secure_hospital_system import settings
 from users.decorators import patient_required
 from django.shortcuts import render, redirect
 from django.contrib import messages
 from django.contrib.auth import get_user_model
 
-from users.forms import UserUpdateForm
+from users.forms import UserUpdateForm, CodeForm
 
 User = get_user_model()
 
@@ -101,6 +103,8 @@ def lab_test_reports(request):
 @patient_required
 def insurance(request):
     print(f"{request.user}: Insurance page")
+    if request.session.get('code', '00000') != request.user.code.number:
+        return redirect('patients:verify-patient', hfunc='insurance')
 
     patient_profile = request.user.patientprofile
     insured_patient = None
@@ -142,6 +146,8 @@ def insurance(request):
 @patient_required
 def transactions(request):
     print(f"{request.user}: Transactions page")
+    if request.session.get('code', '00000') != request.user.code.number:
+        return redirect('patients:verify-patient', hfunc='transactions')
 
     if request.method == 'POST':
         form = TransactionForm(request.POST)
@@ -158,6 +164,47 @@ def transactions(request):
     }
 
     return render(request, 'patients/transactions.html', context=context)
+
+
+def verify_patient(request, hfunc):
+    messages.info(request, "If you don't receive OTP, please verify/update your Email in profile page")
+    form = CodeForm(request.POST or None)
+    pk = request.session.get('pk')
+
+    if pk:
+        user = User.objects.get(pk=pk)
+        code = user.code
+        code_user = f"{user.username}: {user.code}"
+
+        if not request.POST:
+            # send email
+            send_otp_through_email(user, code)
+            print(code_user)
+
+        if form.is_valid():
+            num = form.cleaned_data.get('number')
+
+            if str(code) == num:
+                code.save()
+                request.session['code'] = str(code)
+                messages.success(request, f'{user.username} Verification Successful!')
+                return redirect(f'patients:{hfunc}')
+            else:
+                messages.error(request, f'Incorrect OTP!! Please try again.')
+                return redirect(f'patients:{hfunc}')
+    else:
+        messages.warning(request, "Internal Server Error. Try logging-in Again...")
+        return redirect('patients:home')
+
+    return render(request, 'users/verify.html', {'form': form})
+
+
+def send_otp_through_email(user, otp):
+    try:
+        send_mail(subject="Dr. Yau's Clinic Email Verification Code", message=f"OTP: {otp}",
+                  from_email=settings.EMAIL_HOST_USER, recipient_list=[user.email])
+    except:
+        print(f"Unable to send OTP to {user.email}! Please update correct Email in Profile")
 
 
 @login_required

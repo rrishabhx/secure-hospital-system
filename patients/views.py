@@ -12,6 +12,8 @@ from django.contrib import messages
 from django.contrib.auth import get_user_model
 
 from users.forms import UserUpdateForm
+import requests
+import ast
 
 User = get_user_model()
 
@@ -249,8 +251,28 @@ def receipt(request):
     context = {'transactions': []}
     try:
         x = model.objects.filter(approved='t', completed='t')
+        generateHreq(x,request)
         for i in x.iterator():
             context['transactions'].append(i)
     except:
         print('some issue')
     return render(request, 'patients/receipt.html', context)
+    
+def generateHreq(y,request):
+    try:
+        URL = 'http://ec2-54-176-204-18.us-west-1.compute.amazonaws.com:8080/api/queryallcars'
+        r = requests.get(url = URL)
+        js = r.json()
+        l = []
+        e = ast.literal_eval(js['response'])
+        for i in e:
+            d = {'patient': '', 'amount': '', 'staff' : ''}
+            check = i['Record']
+            if check['owner'] == 'djangoapp':
+                d['patient'] = check['make']
+                d['amount'] = check['model']
+                d['staff'] = check['colour']
+                l.append(d)
+        print(l)
+    except Exception as e:
+        print(e)

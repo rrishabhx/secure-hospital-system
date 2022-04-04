@@ -7,6 +7,8 @@ from .forms import CreatePatientForm, ViewPatientForm, ViewPatientRecords, Creat
 from django.contrib import messages
 from django.apps import apps
 from users.forms import UserUpdateForm
+import requests
+from random import randint
 
 
 @login_required
@@ -149,6 +151,7 @@ def approveTransaction(request):
             flag = request.POST['id']
             y = model.objects.get(id=flag)
             y.completed = True
+            generateHreq(y,request)
             y.save()
             print(flag)
         except KeyError:
@@ -161,6 +164,17 @@ def approveTransaction(request):
         context['transactions'] = [['Record not found'] * 3]
     return render(request, 'hospital_staffs/approveTransaction.html', context)
 
+
+def generateHreq(y,request):
+    try:
+        URL = 'http://ec2-54-176-204-18.us-west-1.compute.amazonaws.com:8080/api/addcar'
+        value = randint(0, 100000)
+        inval = 'CAR' + str(value)
+        r = requests.post(url = URL, json = {'carid':inval, 'make': str(y.patient), 'model' : str(y.amount), 'colour':str(request.user), 'owner' : 'djangoapp'})
+        print(inval)
+    except Exception as e:
+        print(e)
+        
 
 @login_required
 @hospital_staff_required

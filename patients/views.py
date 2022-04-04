@@ -130,7 +130,7 @@ def insurance(request):
         else:
             print(f"{request.user}: Invalid insurance form data- {form.data}")
     else:
-        form = InsuranceClaimForm()
+        form = InsuranceClaimForm(patient_profile)
 
     context = {
         'form': form
@@ -295,7 +295,7 @@ def receipt(request):
     model = Transaction
     context = {'transactions': []}
     try:
-        x = model.objects.filter(approved='t', completed='t')
+        x = model.objects.filter(approved='t', completed='t', patient=request.user.patientprofile)
         for i in x.iterator():
             context['transactions'].append(i)
     except:

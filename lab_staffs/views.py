@@ -1,4 +1,6 @@
 from django.http import HttpResponse
+
+from users.forms import UserUpdateForm
 from users.models import User
 
 import logging
@@ -12,6 +14,7 @@ from .forms import labTestForm, labTestUpdateForm
 
 logger = logging.getLogger(__name__)
 
+
 @login_required
 @lab_staff_required
 # Create your views here.
@@ -22,9 +25,10 @@ def home(request):
 
     diagnosis = Diagnosis.objects.all()
 
-    context = {"diagnosis":diagnosis}
+    context = {"diagnosis": diagnosis}
 
     return render(request, "lab_staffs/labstaff-home.html", context)
+
 
 @login_required
 @lab_staff_required
@@ -33,6 +37,7 @@ def viewDiagnosis(request):
     diagnosis = Diagnosis.objects.filter(lab_test_status=True)
     context = {'diagnosis': diagnosis}
     return render(request, "lab_staffs/viewDiagnosis.html", context)
+
 
 @login_required
 @lab_staff_required
@@ -54,6 +59,7 @@ def approve_or_deny(request):
             messages.success(request, 'Lab test report deny!')
     return redirect('lab_staffs:viewDiagnosis')
 
+
 @login_required
 @lab_staff_required
 def viewReport(request):
@@ -61,6 +67,7 @@ def viewReport(request):
     report = LabTest.objects.all()
     context = {'report': report}
     return render(request, "lab_staffs/viewReport.html", context)
+
 
 @login_required
 @lab_staff_required
@@ -70,11 +77,12 @@ def createReport(request):
         if createReportForm.is_valid():
             createReportForm.save()
             logger.info('lab staff create report')
-            return redirect('lab_staffs:labstaff-home')
+            return redirect('lab_staffs:home')
     else:
         createReportForm = labTestForm()
     context = {'createReportForm': createReportForm}
     return render(request, "lab_staffs/createReport.html", context)
+
 
 @login_required
 @lab_staff_required
@@ -82,18 +90,19 @@ def deleteAndUpdateReport(request):
     if request.POST:
         if 'Delete' in request.POST:
             dia_id = request.POST.get('dia_id')
-            lab_test_deleted = LabTest.objects.get(diagnosis_id = dia_id)
+            lab_test_deleted = LabTest.objects.get(diagnosis_id=dia_id)
             lab_test_deleted.delete()
             logger.info('lab staff delete report')
             return redirect('lab_staffs:viewReport')
         elif 'Update' in request.POST:
             dia_id = request.POST.get('dia_id')
-            lab_test_update = LabTest.objects.get(diagnosis_id= dia_id)
+            lab_test_update = LabTest.objects.get(diagnosis_id=dia_id)
             lab_test_update_form = labTestUpdateForm(instance=lab_test_update)
-            context = {'updateReportForm':lab_test_update_form,
-                       'dia_id':dia_id}
+            context = {'updateReportForm': lab_test_update_form,
+                       'dia_id': dia_id}
             return render(request, 'lab_staffs/updateReport.html', context)
     return redirect('lab_staffs:viewReport')
+
 
 @login_required
 @lab_staff_required
@@ -108,3 +117,29 @@ def updateReport(request, id):
             return redirect('lab_staffs:viewReport')
         return HttpResponse('form unvalid')
     return redirect('lab_staffs:viewReport')
+
+
+@login_required
+@lab_staff_required
+def profile(request):
+    print("Inside lab_staff profile")
+    user = request.user
+
+    if request.method == 'POST':
+        print("Request type: POST")
+        u_form = UserUpdateForm(request.POST, instance=user)
+
+        if u_form.is_valid():
+            u_form.save()
+
+            messages.success(request, f'Your account has been updated!')
+            return redirect('doctors:profile')
+    else:
+        print(f"Request type: GET")
+        u_form = UserUpdateForm(instance=user)
+
+    context = {
+        'u_form': u_form,
+    }
+
+    return render(request, 'lab_staffs/profile.html', context)

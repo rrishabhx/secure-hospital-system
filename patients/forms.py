@@ -1,7 +1,7 @@
 from django import forms
 
 from doctors.models import DoctorProfile
-from hospital.models import Appointment, InsuredPatient, InsuranceClaim, Transaction, InsuranceRequest
+from hospital.models import Appointment, InsuredPatient, InsuranceClaim, Transaction, InsuranceRequest, Diagnosis
 
 
 class AppointmentForm(forms.ModelForm):
@@ -26,6 +26,10 @@ class InsuranceClaimForm(forms.ModelForm):
     class Meta:
         model = InsuranceClaim
         fields = ('claim_amount', 'diagnosis')
+
+    def __init__(self, patient, *args, **kwargs):
+        super(InsuranceClaimForm, self).__init__(*args, **kwargs)
+        self.fields['diagnosis'].queryset = Diagnosis.objects.filter(patient=patient)
 
 
 class TransactionForm(forms.ModelForm):

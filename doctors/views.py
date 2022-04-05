@@ -36,18 +36,7 @@ logger = logging.getLogger(__name__)
 @doctor_required
 def home(request):
     print(f"Inside home of {request.user}")
-    user = request.user.doctorprofile
-    print(f"User object: {user}")
-
-    recommendation_form = LabTestRecommendationForm()
-
-    context = {
-        'appointments': Appointment.objects.filter(doctor=user),
-        'diagnosis': Diagnosis.objects.filter(doctor=user),
-        'lab_tests': LabTest.objects.filter(doctor=user),
-        'recommendation_form': recommendation_form
-    }
-    return render(request, 'doctors/home.html', context)
+    return redirect('doctors:appointments')
 
 
 @login_required

@@ -1,7 +1,22 @@
 {% extends 'main.html' %}
 {% load crispy_forms_tags %}
+{% load static %}
+
 
 {% block body-content %}
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/simple-keyboard@latest/build/css/index.css">
+    <link rel="stylesheet" href="{% static 'users/main.css' %}">
+</head>
+
+<body>
 
     <div class="row">
         <div class="col-4">
@@ -12,6 +27,60 @@
             </form>
         </div>
     </div>
+
+    <div class="row mt-5">
+        <div class="col justify-content-center">
+            <div class="simple-keyboard"></div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/simple-keyboard@latest/build/index.js"></script>
+    <script>
+        let Keyboard = window.SimpleKeyboard.default;
+
+        let keyboard = new Keyboard({
+            onChange: input => onChange(input),
+            onKeyPress: button => onKeyPress(button)
+        });
+
+        /**
+         * Update simple-keyboard when input is changed directly
+         */
+        document.querySelector("#id_number").addEventListener("input", event => {
+            keyboard.setInput(event.target.value);
+        });
+
+        console.log(keyboard);
+
+        function onChange(input) {
+            document.querySelector("#id_number").value = input;
+            console.log("Input changed", input);
+        }
+
+        function onKeyPress(button) {
+            console.log("Button pressed", button);
+
+            /**
+             * If you want to handle the shift and caps lock buttons
+             */
+            if (button === "{shift}" || button === "{lock}") handleShift();
+        }
+
+        function handleShift() {
+            let currentLayout = keyboard.options.layoutName;
+            let shiftToggle = currentLayout === "default" ? "shift" : "default";
+
+            keyboard.setOptions({
+                layoutName: shiftToggle
+            });
+        }
+
+    </script>
+</body>
+
+</html>
+
+
 
 
 

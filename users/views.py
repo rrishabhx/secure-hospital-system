@@ -111,7 +111,9 @@ def register_user(request):
                 request, f'Account created for {username}! You are now able to log in')
             # login(request, user)
 
-            return redirect('login-user', usertype='patient')
+            user_type = 'patient' if form.cleaned_data.get('user_type', 'patient') == 'patient' else 'staff'
+
+            return redirect('login-user', usertype=user_type)
         else:
             messages.error(request, 'An error occurred during registration')
 

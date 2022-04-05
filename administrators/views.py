@@ -47,7 +47,7 @@ def transactions(request):
 @administrator_required
 def log(request):
     all_logs = Log.objects.all().order_by('-date')
-    paginator = Paginator(all_logs, 5)
+    paginator = Paginator(all_logs, 10)
     page_number = request.GET.get('page')
     page_obj = paginator.get_page(page_number)
     return render(request, 'administrators/log.html', {'logs': page_obj})
@@ -73,10 +73,10 @@ def employees(request):
             messages.error(request, 'An error occurred during registration')
 
     employees = User.objects.filter(
-        Q(user_type='doctor') | Q(user_type='insurance_staff') | Q(user_type='lab_staff') | Q(user_type='patient') | Q(
+        Q(user_type='doctor') | Q(user_type='insurance_staff') | Q(user_type='lab_staff') | Q(
             user_type='hospital_staff') | Q(user_type='administrator')).order_by('user_type', 'username')
 
-    paginator = Paginator(employees, 5)
+    paginator = Paginator(employees, 10)
     page_number = request.GET.get('page')
     page_obj = paginator.get_page(page_number)
     context = {

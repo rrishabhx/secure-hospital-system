@@ -19,16 +19,18 @@
                     <thead>
                     <th scope="col">Patient</th>
                     <th scope="col">Claim Amount</th>
-                    <th scope="col">Diagnosis</th>
+                    <th scope="col">Diagnosis Date</th>
+                    <th scope="col">Diagnosed By</th>
                     <th scope="col">Insurance Amount Available</th>
                     <th scope="col">Approved</th>
                     </thead>
                     <tbody>
                     {% for claim in claims %}
                         <tr>
-                            <td>{{ claim.insured_patient.patient.user.username }}</td>
+                            <td>{{ claim.insured_patient.patient }}</td>
                             <td>{{ claim.claim_amount }}</td>
-                            <td>{{ claim.diagnosis }}</td>
+                            <td>{{ claim.diagnosis.appointment.scheduled_date }}</td>
+                            <td>{{ claim.diagnosis.doctor }}</td>
                             <td>{{ claim.insured_patient.amount_available }}</td>
                             <td>
                                 {% if claim.status != None %}
@@ -57,15 +59,17 @@
                     <thead>
                     <th scope="col">Patient</th>
                     <th scope="col">Claim Amount</th>
-                    <th scope="col">Diagnosis</th>
+                    <th scope="col">Diagnosis Date</th>
+                    <th scope="col">Diagnosed By</th>
                     <th scope="col">Approved</th>
                     </thead>
                     <tbody>
                     {% for claim in old_claims %}
                         <tr>
-                            <td>{{ claim.insured_patient.patient.user.username }}</td>
+                            <td>{{ claim.insured_patient.patient }}</td>
                             <td>{{ claim.claim_amount }}</td>
-                            <td>{{ claim.diagnosis }}</td>
+                            <td>{{ claim.diagnosis.appointment.scheduled_date }}</td>
+                            <td>{{ claim.diagnosis.doctor }}</td>
                             <td>{{ claim.status|yesno:"Yes,No" }}</td>
                         </tr>
                     {% endfor %}

@@ -9,7 +9,7 @@
             <h2>Employees</h2>
         </div>
         <div class="col text-end">
-            <button class="btn btn-info" onclick="newEmployee()">Create New Employee</button>
+            <button class="btn btn-info" onclick="newEmployee()">Create New User</button>
         </div>
 
     </div>
@@ -21,7 +21,7 @@
                 {% csrf_token %}
                 <div class="row">
                     <div class="col">
-                        <h3>Create New Employee</h3>
+                        <h3>Create New User</h3>
                     </div>
                     <div class="col text-end">
                         <button class="btn btn-primary">Submit</button>
@@ -51,7 +51,7 @@
                     <tbody>
                     {% for user in employees %}
                         <tr>
-                            <td>{{ user.user_type }}</td>
+                            <td>{{ user.user_type|upper }}</td>
                             <td>
                                 <a href="{% url 'administrators:employees-detail' user.username %}">{{ user.username }}</a>
                             </td>

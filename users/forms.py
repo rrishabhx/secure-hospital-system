@@ -7,7 +7,7 @@ from .models import User, Code
 class UserRegisterForm(UserCreationForm):
     email = forms.EmailField()
     date_of_birth = forms.DateField(label='What is your birth date?', widget=forms.DateInput(attrs={'type': 'date'}),
-                                    required=False)
+                                    required=True)
 
     class Meta:
         model = User

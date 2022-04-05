@@ -1,5 +1,7 @@
+import ast
 import logging
 
+import requests
 from django.contrib.auth.decorators import login_required
 from django.core.mail import send_mail
 
@@ -167,7 +169,6 @@ def transactions(request):
 
 
 def verify_patient(request, hfunc):
-    messages.info(request, "If you don't receive OTP, please verify/update your Email in profile page")
     form = CodeForm(request.POST or None)
     pk = request.session.get('pk')
 
@@ -196,6 +197,7 @@ def verify_patient(request, hfunc):
         messages.warning(request, "Internal Server Error. Try logging-in Again...")
         return redirect('patients:home')
 
+    messages.info(request, "If you don't receive OTP, please verify/update your Email in profile page")
     return render(request, 'users/verify.html', {'form': form})
 
 
@@ -296,8 +298,32 @@ def receipt(request):
     context = {'transactions': []}
     try:
         x = model.objects.filter(approved='t', completed='t', patient=request.user.patientprofile)
+        generateHreq(x, request)
         for i in x.iterator():
             context['transactions'].append(i)
     except:
         print('some issue')
     return render(request, 'patients/receipt.html', context)
+
+
+def generateHreq(y, request):
+    try:
+        URL = 'http://ec2-54-176-204-18.us-west-1.compute.amazonaws.com:8080/api/queryallcars'
+        r = requests.get(url=URL)
+        js = r.json()
+        l = []
+        e = ast.literal_eval(js['response'])
+        for i in e:
+            d = {'patient': '', 'amount': '', 'staff': ''}
+            check = i['Record']
+            if check['owner'] == 'djangoapp':
+                d['patient'] = check['make']
+                d['amount'] = check['model']
+                d['staff'] = check['colour']
+                l.append(d)
+
+        if len(y) != len(l):
+            print("Transaction mismatch")
+
+    except Exception as e:
+        print(e)

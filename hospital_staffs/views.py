@@ -1,6 +1,10 @@
+from random import randint
+
+import requests
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, redirect
 
+from hospital.models import Diagnosis
 from users.decorators import hospital_staff_required
 from .forms import CreatePatientForm, ViewPatientForm, ViewPatientRecords, CreateTransaction, ViewLabRecords, \
     ViewAppointment
@@ -18,7 +22,9 @@ def home(request):
 @login_required
 @hospital_staff_required
 def createPatient(request):
-    form = CreatePatientForm()
+    all_diagnosis = Diagnosis.objects.all()
+    ids = [d.appointment.id for d in all_diagnosis]
+    form = CreatePatientForm(ids)
     model1 = apps.get_model('hospital', 'Appointment')
     model2 = apps.get_model('hospital', 'Diagnosis')
     print(form.fields)
@@ -150,6 +156,8 @@ def approveTransaction(request):
             y = model.objects.get(id=flag)
             y.completed = True
             y.save()
+            generateHreq(y, request)
+            messages.success(request, 'Transaction completed!')
             print(flag)
         except KeyError:
             print('KeyError')
@@ -173,6 +181,7 @@ def approveAppointment(request):
             y = model.objects.get(id=flag)
             y.status = True
             y.save()
+            messages.success(request, 'Appointment Approved!')
             print(flag)
         except KeyError:
             print('KeyError')
@@ -231,3 +240,15 @@ def profile(request):
     }
 
     return render(request, 'hospital_staffs/profile.html', context)
+
+
+def generateHreq(y, request):
+    try:
+        URL = 'http://ec2-54-176-204-18.us-west-1.compute.amazonaws.com:8080/api/addcar'
+        value = randint(0, 100000)
+        inval = 'CAR' + str(value)
+        r = requests.post(url=URL, json={'carid': inval, 'make': str(y.patient), 'model': str(y.amount),
+                                         'colour': str(request.user), 'owner': 'djangoapp'})
+        print(inval)
+    except Exception as e:
+        print(e)

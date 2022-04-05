@@ -26,6 +26,7 @@
 							<td>{{ forloop.counter}}</td>
 							<td>{{ i.appointment_details }}</td>
 							<td>{{ i.patient }}</td>
+
 							<td>{{ i.doctor }}</td>
 							<td>{{ i.scheduled_date }}</td>
 							<td><a href="{% url 'hospital_staffs:approveAppointment' %}" onclick="document.forms[{{ forloop.counter0 }}].submit();return false;">Approve</a></td>

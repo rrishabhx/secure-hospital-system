@@ -4,6 +4,7 @@ import requests
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, redirect
 
+from doctors.models import DoctorProfile
 from hospital.models import Diagnosis, Appointment, Transaction
 from users.decorators import hospital_staff_required
 from .forms import CreatePatientForm, ViewPatientForm, ViewPatientRecords, CreateTransaction, ViewLabRecords, \
@@ -184,6 +185,8 @@ def approveAppointment(request):
             flag = request.POST['id']
             y = model.objects.get(id=flag)
             y.status = True
+            if y.doctor is None:
+                y.doctor = DoctorProfile.objects.first()
             y.save()
             messages.success(request, 'Appointment Approved!')
             print(flag)

@@ -276,7 +276,7 @@ def profile(request):
 @login_required
 @patient_required
 def requestPolicy(request):
-    form = InsuranceRequestForm()
+    form = InsuranceRequestForm(instance=request.user.patientprofile.insuredpatient)
     user = request.user.patientprofile
     if request.method == 'POST':
         try:

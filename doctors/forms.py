@@ -18,6 +18,11 @@ class UpdatePatientForm(ModelForm):
         model = apps.get_model('hospital', 'Diagnosis')
         fields = ('patient',)
 
+    def __init__(self, plist, *args, **kwargs):
+        super(UpdatePatientForm, self).__init__(*args, **kwargs)
+        pmodel = apps.get_model('patients', 'PatientProfile')
+        self.fields['patient'].queryset = pmodel.objects.filter(pk__in=plist)
+
 
 class ViewLabRecords(ModelForm):
     class Meta:

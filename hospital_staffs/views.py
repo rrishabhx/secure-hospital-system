@@ -4,7 +4,7 @@ import requests
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, redirect
 
-from hospital.models import Diagnosis
+from hospital.models import Diagnosis, Appointment
 from users.decorators import hospital_staff_required
 from .forms import CreatePatientForm, ViewPatientForm, ViewPatientRecords, CreateTransaction, ViewLabRecords, \
     ViewAppointment

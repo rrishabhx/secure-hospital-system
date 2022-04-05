@@ -28,12 +28,12 @@
 {% if checklist %}
         <table class="table">
             <thead>
-                <th scope="col">Record</th>
+                <th scope="col">Details</th>
                 <th scope="col">Prescription </th>
                 <th scope="col">Diagnosis</th>
                 <th scope="col">Doctor</th>
-				<th scope="col">LabTest Recommended</th>
-				<th scope="col">Approve</th>
+				<th scope="col">Recommend Lab Tests</th>
+				<th scope="col">Update</th>
             </thead>
             <tbody>
                 {% for i in records %}
@@ -42,12 +42,12 @@
 					<form id="myform{{ forloop.counter }}" method="POST">
 							{% csrf_token %}
 							<input type="hidden" name="id" value={{i.id}} />
-							<td>{{ forloop.counter}}</td>
+							<td>{{ i.appointment.appointment_details }}</td>
 							<td><input type="text" name="prescription" value="{{i.prescription}}"/></td>
 							<td><input type="text" name="details" value="{{ i.details }}" /></td>
 							<td>{{ i.doctor }}</td>
 							<td><input type="text" name="lab" value="{{ i.lab_tests_recommended }}" /></td>
-							<td><a href="{% url 'doctors:prescriptions' %}" onclick="document.forms[{{ forloop.counter }}].submit();return false;">Approve</a></td>
+							<td><a href="{% url 'doctors:prescriptions' %}" onclick="document.forms[{{ forloop.counter }}].submit();return false;">Update</a></td>
 					  </form>
                 </tr>
                 {% endfor %}

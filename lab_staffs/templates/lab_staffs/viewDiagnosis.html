@@ -9,20 +9,22 @@
         <thead>
         <th scope="col">Patient</th>
         <th scope="col">Doctor</th>
-        <th scope="col">lab_tests_recommended</th>
+        <th scope="col">Recommended Lab Tests</th>
+        <th scope="col">Status</th>
         </thead>
         <tbody>
         {% for dia in diagnosis %}
             <tr>
-            <form id="approve-options" method="POST" action="approveordeny/">
+            <form id="approve-options" method="POST" action="{% url 'lab_staffs:approve_deny' %}">
                 {% csrf_token %}
-                <td>{{ dia.patient.user.first_name }} {{ dia.patient.user.last_name }}</td>
-                <td>{{ dia.doctor.user.first_name }} {{ dia.doctor.user.last_name }} </td>
-                <td>{{ dia.lab_tests_recommended }}
+                <td>{{ dia.patient }}</td>
+                <td>{{ dia.doctor }} </td>
+                <td>{{ dia.lab_tests_recommended }}</td>
+                <td>
                 <input name="dia" type="hidden" onclick="" value="{{ dia.patient.user }}">
                 <input name="app_id" type="hidden" value="{{ dia.appointment_id }}">
-                <input name="Approve" type="submit" value="Approve">
-                <input name="Deny" type="submit" onclick="" value="Deny">
+                <input name="Approve" type="submit" class="btn btn-success" value="Approve">
+                <input name="Deny" type="submit" class="btn btn-danger" onclick="" value="Deny">
                 </td>
             </form>
             </tr>

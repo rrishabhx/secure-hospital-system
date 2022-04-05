@@ -42,7 +42,14 @@ def home(request):
 @login_required
 @doctor_required
 def prescriptions(request):
-    form = UpdatePatientForm()
+    diag = apps.get_model('hospital', 'Diagnosis')
+    user = request.user.doctorprofile
+    plist = []
+    for i in diag.objects.all():
+        if i.doctor == user:
+            plist.append(i.patient.pk)
+    print(plist, 'hello')
+    form = UpdatePatientForm(plist)
     context = {'form': form, 'records': [], 'checklist': False}
     if request.method == 'POST' and 'patient' not in request.POST:
         model = apps.get_model('hospital', 'Diagnosis')
@@ -63,7 +70,10 @@ def prescriptions(request):
             if 'lab' in request.POST:
                 if not request.POST['lab']:
                     y.lab_tests_recommended = None
-                y.lab_tests_recommended = request.POST['lab']
+                else:
+                    if not request.POST['lab'] == 'None':
+                        y.lab_tests_recommended = request.POST['lab']
+
             y.save()
         except KeyError:
             print('KeyError')
@@ -71,19 +81,19 @@ def prescriptions(request):
             render(request, 'doctors/prescriptions.html', context)
     if request.method == 'POST' and 'patient' in request.POST:
         user = request.user.doctorprofile
-        form = UpdatePatientForm(request.POST)
-        if form.is_valid():
-            model = apps.get_model('hospital', 'Diagnosis')
-            try:
-                x = model.objects.filter(patient=request.POST['patient'], doctor=user)
-                context['records'] = []
-                for i in x.iterator():
-                    context['records'].append(i)
-                    context['checklist'] = True
-            except Exception as e:
-                print('Some issue')
-            finally:
-                render(request, 'doctors/prescriptions.html', context)
+        # form = UpdatePatientForm(request.POST)
+        # if form.is_valid():
+        model = apps.get_model('hospital', 'Diagnosis')
+        try:
+            x = model.objects.filter(patient=request.POST['patient'], doctor=user)
+            context['records'] = []
+            for i in x.iterator():
+                context['records'].append(i)
+                context['checklist'] = True
+        except Exception as e:
+            print('Some issue')
+        finally:
+            render(request, 'doctors/prescriptions.html', context)
     return render(request, 'doctors/prescriptions.html', context)
 
 

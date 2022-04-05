@@ -4,7 +4,6 @@ from . import views
 app_name = 'lab_staffs'
 
 urlpatterns = [
-    # path('', views.home, name='labstaff-home'),
     path('', views.home, name='home'),
     path('viewdiagnosis/', views.viewDiagnosis, name='viewDiagnosis'),
     path('viewdiagnosis/approveordeny/', views.approve_or_deny, name='approve_deny'),

@@ -1,25 +1,28 @@
 from django.forms import ModelForm, forms
-from hospital.models import LabTest
+from hospital.models import LabTest, Diagnosis
 
 
-class labTestForm(ModelForm):
+class LabTestCreateForm(ModelForm):
     class Meta:
         model = LabTest
-        fields = ('doctor', 'patient', 'diagnosis', 'lab_test_report')
+        fields = ('diagnosis', 'lab_test_report')
+
+    def __init__(self, *args, **kwargs):
+        super(LabTestCreateForm, self).__init__(*args, **kwargs)
+        self.fields['diagnosis'].queryset = Diagnosis.objects.filter(lab_test_status__isnull=True,
+                                                                     lab_tests_recommended__isnull=False)
 
     def clean_diagnosis(self):
         diagnosis = self.cleaned_data['diagnosis']
-        patients = self.cleaned_data['patient']
         exist = LabTest.objects.filter(diagnosis=diagnosis).exists()
 
         if exist:
             raise forms.ValidationError('lab test already exist')
-        elif diagnosis.patient.user_id != patients.user_id:
-            raise forms.ValidationError('Please select the matched diagnosis')
+
         return diagnosis
 
 
-class labTestUpdateForm(ModelForm):
+class LabTestUpdateForm(ModelForm):
     class Meta:
         model = LabTest
-        fields = ('doctor', 'patient', 'diagnosis', 'lab_test_report')
+        fields = ['lab_test_report']

@@ -19,7 +19,7 @@
             <tbody>
                 {% for app in appointments %}
                 <tr>
-                    <td>{{ app.status }}</td>
+                    <td>{{ app.status|yesno:"Approved,Denied,Pending" }}</td>
                     <td>{{ app.appointment_details }}</td>
                     <td>{{ app.patient.user.username }}</td>
                     <td>{{ app.scheduled_date }}</td>

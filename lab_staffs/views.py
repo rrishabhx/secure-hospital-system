@@ -10,7 +10,7 @@ from django.contrib.auth.decorators import login_required
 from users.decorators import lab_staff_required
 from hospital.models import Diagnosis, LabTest
 from patients.models import PatientProfile
-from .forms import labTestForm, labTestUpdateForm
+from .forms import LabTestCreateForm, LabTestUpdateForm
 
 logger = logging.getLogger(__name__)
 
@@ -20,21 +20,14 @@ logger = logging.getLogger(__name__)
 # Create your views here.
 def home(request):
     logger.info(f"Inside home of {request.user}")
-    user = request.user.labstaffprofile
-    logger.info(f"User object: {user}")
-
-    diagnosis = Diagnosis.objects.all()
-
-    context = {"diagnosis": diagnosis}
-
-    return render(request, "lab_staffs/labstaff-home.html", context)
+    return redirect('lab_staffs:viewDiagnosis')
 
 
 @login_required
 @lab_staff_required
 def viewDiagnosis(request):
     logger.info('lab staff viewing diagnosis')
-    diagnosis = Diagnosis.objects.filter(lab_test_status=True)
+    diagnosis = Diagnosis.objects.filter(lab_test_status__isnull=True, lab_tests_recommended__isnull=False)
     context = {'diagnosis': diagnosis}
     return render(request, "lab_staffs/viewDiagnosis.html", context)
 
@@ -45,7 +38,7 @@ def approve_or_deny(request):
     if request.POST:
         if 'Approve' in request.POST:
             logger.info('lab staff approve lab test')
-            messages.success(request, 'Lab test report approve!')
+            messages.success(request, 'Lab test report approved!')
             return redirect('lab_staffs:createReport')
         elif 'Deny' in request.POST:
             logger.info('lab staff deny labtest')
@@ -56,7 +49,7 @@ def approve_or_deny(request):
             userDia = Diagnosis.objects.get(patient=patientProfile, appointment_id=appid)
             userDia.lab_test_status = False
             userDia.save()
-            messages.success(request, 'Lab test report deny!')
+            messages.info(request, 'Lab test report denied!')
     return redirect('lab_staffs:viewDiagnosis')
 
 
@@ -64,8 +57,8 @@ def approve_or_deny(request):
 @lab_staff_required
 def viewReport(request):
     logger.info('lab staff viewing report')
-    report = LabTest.objects.all()
-    context = {'report': report}
+    reports = LabTest.objects.all()
+    context = {'reports': reports}
     return render(request, "lab_staffs/viewReport.html", context)
 
 
@@ -73,13 +66,24 @@ def viewReport(request):
 @lab_staff_required
 def createReport(request):
     if request.POST:
-        createReportForm = labTestForm(request.POST)
+        createReportForm = LabTestCreateForm(request.POST)
         if createReportForm.is_valid():
-            createReportForm.save()
-            logger.info('lab staff create report')
+            lab_test_data = createReportForm.cleaned_data
+            lab_test_data['patient'] = lab_test_data.get('diagnosis').patient
+            lab_test_data['doctor'] = lab_test_data.get('diagnosis').doctor
+
+            lab_tes_obj = LabTest(**lab_test_data)
+            lab_tes_obj.save()
+            lab_tes_obj.diagnosis.lab_test_status = True
+            lab_tes_obj.diagnosis.save()
+
+            messages.success(request, f"Lab Test created for {lab_test_data['patient']}")
             return redirect('lab_staffs:home')
+        else:
+            messages.error(request, f"Please check the input data")
+            return redirect('lab_staffs:createReport')
     else:
-        createReportForm = labTestForm()
+        createReportForm = LabTestCreateForm()
     context = {'createReportForm': createReportForm}
     return render(request, "lab_staffs/createReport.html", context)
 
@@ -97,7 +101,7 @@ def deleteAndUpdateReport(request):
         elif 'Update' in request.POST:
             dia_id = request.POST.get('dia_id')
             lab_test_update = LabTest.objects.get(diagnosis_id=dia_id)
-            lab_test_update_form = labTestUpdateForm(instance=lab_test_update)
+            lab_test_update_form = LabTestUpdateForm(instance=lab_test_update)
             context = {'updateReportForm': lab_test_update_form,
                        'dia_id': dia_id}
             return render(request, 'lab_staffs/updateReport.html', context)
@@ -110,7 +114,7 @@ def updateReport(request, id):
     lab_test_update = LabTest.objects.get(diagnosis_id=id)
     if request.POST:
         print(lab_test_update)
-        update_form = labTestUpdateForm(request.POST, instance=lab_test_update)
+        update_form = LabTestUpdateForm(request.POST, instance=lab_test_update)
         if update_form.is_valid():
             update_form.save()
             logger.info('lab staff update report')

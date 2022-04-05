@@ -295,6 +295,9 @@ def requestPolicy(request):
 @login_required
 @patient_required
 def receipt(request):
+    if request.session.get('code', '00000') != request.user.code.number:
+        return redirect('patients:verify-patient', hfunc='receipt')
+
     model = Transaction
     context = {'transactions': []}
     try:

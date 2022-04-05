@@ -42,7 +42,14 @@ def home(request):
 @login_required
 @doctor_required
 def prescriptions(request):
-    form = UpdatePatientForm()
+    diag = apps.get_model('hospital', 'Diagnosis')
+    user = request.user.doctorprofile
+    plist = []
+    for i in diag.objects.all():
+        if i.doctor == user:
+            plist.append(i.patient.pk)
+    print(plist,'hello')
+    form = UpdatePatientForm(plist)
     context = {'form': form, 'records': [], 'checklist': False}
     if request.method == 'POST' and 'patient' not in request.POST:
         model = apps.get_model('hospital', 'Diagnosis')
@@ -64,6 +71,10 @@ def prescriptions(request):
                 if not request.POST['lab']:
                     y.lab_tests_recommended = None
                 y.lab_tests_recommended = request.POST['lab']
+                if(not y.lab_tests_recommended or request.POST['lab'] == 'None'):
+                    y.lab_test_status = False
+                else:
+                    y.lab_test_status = True
             y.save()
         except KeyError:
             print('KeyError')
@@ -71,7 +82,7 @@ def prescriptions(request):
             render(request, 'doctors/prescriptions.html', context)
     if request.method == 'POST' and 'patient' in request.POST:
         user = request.user.doctorprofile
-        form = UpdatePatientForm(request.POST)
+        form = UpdatePatientForm([],request.POST)
         if form.is_valid():
             model = apps.get_model('hospital', 'Diagnosis')
             try:

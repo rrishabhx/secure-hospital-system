@@ -2,6 +2,9 @@ from django import forms
 from django.forms import ModelForm
 from django.apps import apps
 
+from doctors.models import DoctorProfile
+from hospital.models import LabTest, Diagnosis
+
 
 class ProfileForm(forms.Form):
     username = forms.CharField(

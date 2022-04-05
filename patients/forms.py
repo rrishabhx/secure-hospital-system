@@ -29,7 +29,7 @@ class InsuranceClaimForm(forms.ModelForm):
 
     def __init__(self, patient, *args, **kwargs):
         super(InsuranceClaimForm, self).__init__(*args, **kwargs)
-        self.fields['diagnosis'].queryset = Diagnosis.objects.filter(patient=patient)
+        self.fields['diagnosis'].queryset = Diagnosis.objects.filter(patient=patient, insuranceclaim__isnull=True)
 
 
 class TransactionForm(forms.ModelForm):

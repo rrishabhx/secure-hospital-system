@@ -114,7 +114,7 @@ def insurance(request):
         insured_patient = request.user.patientprofile.insuredpatient
 
     if request.method == 'POST':
-        form = InsuranceClaimForm(request.POST)
+        form = InsuranceClaimForm(patient_profile, request.POST)
         if form.is_valid():
             insurance_claim_data = form.cleaned_data
             if insured_patient:
@@ -148,24 +148,25 @@ def insurance(request):
 @patient_required
 def transactions(request):
     print(f"{request.user}: Transactions page")
-    if request.session.get('code', '00000') != request.user.code.number:
-        return redirect('patients:verify-patient', hfunc='transactions')
-
-    if request.method == 'POST':
-        form = TransactionForm(request.POST)
-        if form.is_valid():
-            data = form.cleaned_data
-            messages.success(request, 'Transaction complete')
-            return redirect('patients:transactions')
-    else:
-        form = TransactionForm()
-
-    context = {
-        'transactions': Transaction.objects.filter(patient=request.user.patientprofile),
-        'form': form
-    }
-
-    return render(request, 'patients/transactions.html', context=context)
+    # if request.session.get('code', '00000') != request.user.code.number:
+    #     return redirect('patients:verify-patient', hfunc='transactions')
+    #
+    # if request.method == 'POST':
+    #     form = TransactionForm(request.POST)
+    #     if form.is_valid():
+    #         data = form.cleaned_data
+    #         messages.success(request, 'Transaction complete')
+    #         return redirect('patients:transactions')
+    # else:
+    #     form = TransactionForm()
+    #
+    # context = {
+    #     'transactions': Transaction.objects.filter(patient=request.user.patientprofile),
+    #     'form': form
+    # }
+    #
+    # return render(request, 'patients/transactions.html', context=context)
+    return redirect('patients:receipt')
 
 
 def verify_patient(request, hfunc):

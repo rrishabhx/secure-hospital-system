@@ -2,7 +2,7 @@ from django.forms import ModelForm
 from django.apps import apps
 from django.db.models import Q
 
-from hospital.models import Appointment
+from hospital.models import Appointment, Diagnosis
 
 
 class CreatePatientForm(ModelForm):
@@ -30,7 +30,11 @@ class ViewPatientRecords(ModelForm):
 class CreateTransaction(ModelForm):
     class Meta:
         model = apps.get_model('hospital', 'Transaction')
-        fields = ('patient', 'diagnosis', 'amount')
+        fields = ('diagnosis', 'amount')
+
+    def __init__(self, *args, **kwargs):
+        super(CreateTransaction, self).__init__(*args, **kwargs)
+        self.fields['diagnosis'].queryset = Diagnosis.objects.filter(transaction__isnull=True)
 
 
 class ViewLabRecords(ModelForm):

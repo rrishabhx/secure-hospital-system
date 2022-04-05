@@ -4,7 +4,7 @@ import requests
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, redirect
 
-from hospital.models import Diagnosis, Appointment
+from hospital.models import Diagnosis, Appointment, Transaction
 from users.decorators import hospital_staff_required
 from .forms import CreatePatientForm, ViewPatientForm, ViewPatientRecords, CreateTransaction, ViewLabRecords, \
     ViewAppointment
@@ -139,8 +139,12 @@ def createTransaction(request):
     if request.method == 'POST':
         form = CreateTransaction(request.POST)
         if form.is_valid():
-            form.save()
-            messages.success(request, 'New Record Created')
+            transaction_data = form.cleaned_data
+            transaction_data['patient'] = transaction_data.get('diagnosis').patient
+            transaction_obj = Transaction(**transaction_data)
+            transaction_obj.save()
+
+            messages.success(request, 'New Transaction Created')
     context = {'form': form}
     return render(request, 'hospital_staffs/createTransaction.html', context)
 
